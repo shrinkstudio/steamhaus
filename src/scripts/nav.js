@@ -68,6 +68,10 @@ function showNav() {
     yPercent: 0,
     duration: 0.4,
     ease: 'power3.out',
+    onComplete: () => {
+      // Remove transform so position:fixed children (mobile menu) work correctly
+      gsap.set(nav, { clearProps: 'transform' });
+    },
   });
 }
 
@@ -93,7 +97,7 @@ export function initNavScrollHide() {
   isScrolled = false;
 
   nav.setAttribute('data-nav-scrolled', window.scrollY > shrinkThreshold ? 'true' : 'false');
-  gsap.set(nav, { yPercent: 0 });
+  gsap.set(nav, { clearProps: 'transform' });
 
   setNavHeightVar();
   navResizeObserver = new ResizeObserver(setNavHeightVar);
@@ -109,7 +113,7 @@ export function initNavScrollHide() {
 
 export function destroyNavScrollHide() {
   if (nav && isHidden) {
-    gsap.set(nav, { yPercent: 0 });
+    gsap.set(nav, { clearProps: 'transform' });
   }
 
   if (tween) {

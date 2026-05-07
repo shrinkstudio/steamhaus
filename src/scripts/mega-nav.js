@@ -377,6 +377,9 @@ export function initMegaNav(scope) {
     if (burger) burger.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
 
+    // Clear any transform on nav so position:fixed children aren't contained
+    gsap.set(menuWrap, { clearProps: 'transform' });
+
     const items = getNavItems();
     const tl = gsap.timeline();
     state.mobileTl = tl;
