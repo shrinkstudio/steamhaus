@@ -186,8 +186,9 @@ export function initMegaNav(scope) {
       },
     });
     state.tl = tl;
-    if (fade.length) tl.to(fade, { autoAlpha: 0, y: -4, duration: DUR.contentOut * 0.7, ease: 'power2.in' }, 0);
-    tl.to(dropContainer, { height: 0, duration: DUR.closeScale, ease: 'power2.in' }, 0.05);
+    if (fade.length) tl.to(fade, { autoAlpha: 0, y: -4, duration: DUR.contentOut, ease: 'power2.in' }, 0);
+    if (el) tl.to(el, { opacity: 0, duration: DUR.contentOut, ease: 'power2.in' }, 0);
+    tl.to(dropContainer, { height: 0, duration: DUR.closeScale, ease: 'power3.inOut' }, DUR.contentOut * 0.5);
     tl.to(backdrop, { autoAlpha: 0, duration: DUR.backdropOut, ease: 'power2.out' }, 0);
     if (el) tl.set(el, { visibility: 'hidden', opacity: 0, pointerEvents: 'none' });
   }
