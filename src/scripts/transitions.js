@@ -7,6 +7,10 @@ import { initModalDelegation, initModals, destroyModals } from './modal.js';
 import { initSliders, destroySliders } from './slider.js';
 import { initInlineVideos, destroyInlineVideos } from './inline-video.js';
 import { initTabs, destroyTabs } from './tabs.js';
+import { initTOC, destroyTOC } from './toc.js';
+import { initSocialShare, destroySocialShare } from './social-share.js';
+import { initMegaNav, destroyMegaNav } from './mega-nav.js';
+import { initNavScrollHide, destroyNavScrollHide } from './nav.js';
 
 gsap.registerPlugin(CustomEase);
 
@@ -44,6 +48,8 @@ function initOnceFunctions() {
   onceFunctionsInitialized = true;
 
   initModalDelegation();
+  initMegaNav();
+  initNavScrollHide();
 }
 
 function initBeforeEnterFunctions(next) {
@@ -58,6 +64,8 @@ function initAfterEnterFunctions(next) {
   if (has('[data-slider="slider"]')) initSliders(nextPage);
   if (has('video[data-video]')) initInlineVideos(nextPage);
   if (has('[data-tabs-component]')) initTabs(nextPage);
+  if (has('[data-toc-source]')) initTOC(nextPage);
+  if (has('[data-social-share]')) initSocialShare(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -184,6 +192,8 @@ barba.hooks.afterLeave(() => {
   destroySliders();
   destroyInlineVideos();
   destroyTabs();
+  destroyTOC();
+  destroySocialShare();
 
   if (hasScrollTrigger) {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
