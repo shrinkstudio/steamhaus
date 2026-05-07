@@ -2,6 +2,12 @@
 // STEAMHAUS PAGE TRANSITIONS
 // -----------------------------------------
 
+import { initAccordions, destroyAccordions } from './accordion.js';
+import { initModalDelegation, initModals, destroyModals } from './modal.js';
+import { initSliders, destroySliders } from './slider.js';
+import { initInlineVideos, destroyInlineVideos } from './inline-video.js';
+import { initTabs, destroyTabs } from './tabs.js';
+
 gsap.registerPlugin(CustomEase);
 
 history.scrollRestoration = "manual";
@@ -37,22 +43,21 @@ function initOnceFunctions() {
   if (onceFunctionsInitialized) return;
   onceFunctionsInitialized = true;
 
-  // Runs once on first load
-  // if (has('[data-something]')) initSomething();
+  initModalDelegation();
 }
 
 function initBeforeEnterFunctions(next) {
   nextPage = next || document;
-
-  // Runs before the enter animation
-  // if (has('[data-something]')) initSomething();
 }
 
 function initAfterEnterFunctions(next) {
   nextPage = next || document;
 
-  // Runs after enter animation completes
-  // if (has('[data-something]')) initSomething();
+  if (has('details')) initAccordions(nextPage);
+  if (has('dialog, [data-modal-panel]')) initModals(nextPage);
+  if (has('[data-slider="slider"]')) initSliders(nextPage);
+  if (has('video[data-video]')) initInlineVideos(nextPage);
+  if (has('[data-tabs-component]')) initTabs(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -174,6 +179,12 @@ barba.hooks.beforeEnter(data => {
 });
 
 barba.hooks.afterLeave(() => {
+  destroyAccordions();
+  destroyModals();
+  destroySliders();
+  destroyInlineVideos();
+  destroyTabs();
+
   if (hasScrollTrigger) {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
   }
@@ -261,6 +272,8 @@ function initLenis() {
     lerp: 0.165,
     wheelMultiplier: 1.25,
   });
+
+  window.__steamhausLenis = lenis;
 
   if (hasScrollTrigger) {
     lenis.on("scroll", ScrollTrigger.update);
