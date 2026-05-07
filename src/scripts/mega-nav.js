@@ -117,7 +117,6 @@ export function initMegaNav(scope) {
     if (backBtn) gsap.set(backBtn, { autoAlpha: 0 });
     if (logo) gsap.set(logo, { autoAlpha: 1 });
     gsap.set(dropContainer, { clearProps: 'height' });
-    gsap.set(dropWrapper, { autoAlpha: 0, pointerEvents: 'none' });
     gsap.set(backdrop, { autoAlpha: 0 });
   }
 
@@ -382,7 +381,7 @@ export function initMegaNav(scope) {
     const tl = gsap.timeline();
     state.mobileTl = tl;
     tl.add(animateBurger(true), 0);
-    tl.set(navList, { autoAlpha: 1 }, 0);
+    tl.to(navList, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' }, 0);
     if (items.length) {
       tl.fromTo(items,
         { autoAlpha: 0, y: 16 },
@@ -417,7 +416,6 @@ export function initMegaNav(scope) {
 
     if (hadPanel && panelEl) {
       tl.to(panelEl, { autoAlpha: 0, duration: 0.3, ease: 'power2.inOut' }, 0.05);
-      tl.set(dropWrapper, { autoAlpha: 0, pointerEvents: 'none' }, 0.35);
       if (backBtn) tl.to(backBtn, { autoAlpha: 0, duration: 0.2, ease: 'power2.in' }, 0.05);
     }
 
@@ -433,8 +431,6 @@ export function initMegaNav(scope) {
 
     const navItems = getNavItems();
     const panelFade = getFade(el);
-
-    gsap.set(dropWrapper, { autoAlpha: 1, pointerEvents: 'auto' });
 
     const tl = gsap.timeline();
     state.mobilePanelTl = tl;
@@ -472,7 +468,6 @@ export function initMegaNav(scope) {
       onComplete() {
         state.mobilePanelActive = null;
         state.mobilePanelTl = null;
-        gsap.set(dropWrapper, { autoAlpha: 0, pointerEvents: 'none' });
       },
     });
     state.mobilePanelTl = tl;
