@@ -9,6 +9,7 @@ import { initInlineVideos, destroyInlineVideos } from './inline-video.js';
 import { initTabs, destroyTabs } from './tabs.js';
 import { initTOC, destroyTOC } from './toc.js';
 import { initSocialShare, destroySocialShare } from './social-share.js';
+import { initContentReveal, destroyContentReveal } from './content-reveal.js';
 import { initMegaNav, destroyMegaNav } from './mega-nav.js';
 import { initNavScrollHide, destroyNavScrollHide } from './nav.js';
 
@@ -66,6 +67,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-tabs-component]')) initTabs(nextPage);
   if (has('[data-toc-source]')) initTOC(nextPage);
   if (has('[data-social-share]')) initSocialShare(nextPage);
+  if (has('[data-reveal-group]')) initContentReveal(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -194,6 +196,7 @@ barba.hooks.afterLeave(() => {
   destroyTabs();
   destroyTOC();
   destroySocialShare();
+  destroyContentReveal();
 
   if (hasScrollTrigger) {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
