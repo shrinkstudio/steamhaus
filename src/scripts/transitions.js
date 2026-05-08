@@ -67,7 +67,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-tabs-component]')) initTabs(nextPage);
   if (has('[data-toc-source]')) initTOC(nextPage);
   if (has('[data-social-share]')) initSocialShare(nextPage);
-  if (has('[data-theme-section]')) initNavTheme(nextPage);
+  initNavTheme(nextPage);
 
   if (hasLenis) {
     lenis.resize();
