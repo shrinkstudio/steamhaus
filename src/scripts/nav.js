@@ -12,6 +12,7 @@ let shrinkThreshold = 10;
 let isScrolled = false;
 let tween = null;
 let navResizeObserver = null;
+let navTopOffset = 0;
 
 function onScroll({ scroll, direction }) {
   if (!nav) return;
@@ -54,6 +55,7 @@ function hideNav() {
   if (tween) tween.kill();
   tween = gsap.to(nav, {
     yPercent: -100,
+    y: -navTopOffset,
     duration: 0.4,
     ease: 'power3.inOut',
   });
@@ -66,6 +68,7 @@ function showNav() {
   if (tween) tween.kill();
   tween = gsap.to(nav, {
     yPercent: 0,
+    y: 0,
     duration: 0.4,
     ease: 'power3.out',
     onComplete: () => {
@@ -95,6 +98,8 @@ export function initNavScrollHide() {
   lastScrollY = window.scrollY;
   isHidden = false;
   isScrolled = false;
+
+  navTopOffset = parseFloat(getComputedStyle(nav).top) || 0;
 
   nav.setAttribute('data-nav-scrolled', window.scrollY > shrinkThreshold ? 'true' : 'false');
   gsap.set(nav, { clearProps: 'transform' });

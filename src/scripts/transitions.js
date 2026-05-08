@@ -11,6 +11,7 @@ import { initTOC, destroyTOC } from './toc.js';
 import { initSocialShare, destroySocialShare } from './social-share.js';
 import { initMegaNav, destroyMegaNav } from './mega-nav.js';
 import { initNavScrollHide, destroyNavScrollHide } from './nav.js';
+import { initNavTheme, destroyNavTheme } from './nav-theme.js';
 
 gsap.registerPlugin(CustomEase);
 
@@ -66,6 +67,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-tabs-component]')) initTabs(nextPage);
   if (has('[data-toc-source]')) initTOC(nextPage);
   if (has('[data-social-share]')) initSocialShare(nextPage);
+  if (has('[data-theme-section]')) initNavTheme(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -194,6 +196,7 @@ barba.hooks.afterLeave(() => {
   destroyTabs();
   destroyTOC();
   destroySocialShare();
+  destroyNavTheme();
 
   if (hasScrollTrigger) {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
