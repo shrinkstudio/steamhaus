@@ -97,12 +97,7 @@ function runPageOnceAnimation(next) {
 
 function runPageLeaveAnimation(current, next) {
   const transitionWrap = document.querySelector("[data-transition-wrap]");
-  const transitionPanel = transitionWrap.querySelector("[data-transition-panel]");
-  const transitionLabel = transitionWrap.querySelector("[data-transition-label]");
-  const transitionLabelText = transitionWrap.querySelector("[data-transition-label-text]");
-
-  const nextPageName = next.getAttribute("data-page-name");
-  if (transitionLabelText) transitionLabelText.innerText = nextPageName || "Hi there";
+  const transitionDark = transitionWrap.querySelector("[data-transition-dark]");
 
   const tl = gsap.timeline({
     onComplete: () => {
@@ -114,42 +109,34 @@ function runPageLeaveAnimation(current, next) {
     return tl.set(current, { autoAlpha: 0 });
   }
 
-  tl.set(transitionPanel, {
-    autoAlpha: 1
-  }, 0);
+  tl.set(transitionWrap, {
+    zIndex: 2
+  });
 
-  tl.set(next, {
-    autoAlpha: 0
-  }, 0);
-
-  tl.fromTo(transitionPanel, {
-    yPercent: 0
-  }, {
-    yPercent: -100,
-    duration: 0.8,
-  }, 0);
-
-  tl.fromTo(transitionLabel, {
+  tl.fromTo(transitionDark, {
     autoAlpha: 0
   }, {
-    autoAlpha: 1
-  }, "<+=0.2");
+    autoAlpha: 0.8,
+    duration: 1.2,
+    ease: "parallax"
+  }, 0);
 
   tl.fromTo(current, {
     y: "0vh"
   }, {
-    y: "-15vh",
-    duration: 0.8,
+    y: "-25vh",
+    duration: 1.2,
+    ease: "parallax",
   }, 0);
+
+  tl.set(transitionDark, {
+    autoAlpha: 0,
+  });
 
   return tl;
 }
 
 function runPageEnterAnimation(next) {
-  const transitionWrap = document.querySelector("[data-transition-wrap]");
-  const transitionPanel = transitionWrap.querySelector("[data-transition-panel]");
-  const transitionLabel = transitionWrap.querySelector("[data-transition-label]");
-
   const tl = gsap.timeline();
 
   if (reducedMotion) {
@@ -159,37 +146,19 @@ function runPageEnterAnimation(next) {
     return new Promise(resolve => tl.call(resolve, null, "pageReady"));
   }
 
-  tl.add("startEnter", 1.25);
+  tl.add("startEnter", 0);
 
   tl.set(next, {
-    autoAlpha: 1,
-  }, "startEnter");
+    zIndex: 3
+  });
 
-  tl.fromTo(transitionPanel, {
-    yPercent: -100,
+  tl.fromTo(next, {
+    y: "100vh"
   }, {
-    yPercent: -200,
-    duration: 1,
-    overwrite: "auto",
-    immediateRender: false
-  }, "startEnter");
-
-  tl.set(transitionPanel, {
-    autoAlpha: 0
-  }, ">");
-
-  tl.fromTo(transitionLabel, {
-    autoAlpha: 1
-  }, {
-    autoAlpha: 0,
-    duration: 0.4,
-    overwrite: "auto",
-    immediateRender: false
-  }, "startEnter+=0.1");
-
-  tl.from(next, {
-    y: "15vh",
-    duration: 1,
+    y: "0vh",
+    duration: 1.2,
+    clearProps: "all",
+    ease: "parallax"
   }, "startEnter");
 
   tl.add("pageReady");
