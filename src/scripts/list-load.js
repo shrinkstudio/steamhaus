@@ -127,6 +127,10 @@ function initInstance(listEl, scope) {
     if (isLoading || !nextUrl || destroyed) return Promise.resolve(false);
     isLoading = true;
     listEl.classList.add(loadingClass);
+    if (buttonEl) {
+      buttonEl.classList.add(loadingClass);
+      buttonEl.setAttribute('aria-busy', 'true');
+    }
 
     return fetchDoc(nextUrl)
       .then(function (doc) {
@@ -160,6 +164,10 @@ function initInstance(listEl, scope) {
       .then(function (result) {
         isLoading = false;
         listEl.classList.remove(loadingClass);
+        if (buttonEl) {
+          buttonEl.classList.remove(loadingClass);
+          buttonEl.removeAttribute('aria-busy');
+        }
         return result;
       });
   }
