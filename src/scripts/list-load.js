@@ -97,8 +97,13 @@ function initInstance(listEl, scope) {
   var buttonHandler = null;
   var buttonEl = null;
 
-  // Hide native pagination
-  if (paginationWrap) paginationWrap.style.display = 'none';
+  // Hide native pagination controls (prev button, page count) but keep wrapper visible
+  if (paginationWrap) {
+    var prevBtn = paginationWrap.querySelector('.w-pagination-previous');
+    var pageCount = paginationWrap.querySelector('.w-page-count');
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (pageCount) pageCount.style.display = 'none';
+  }
 
   var totalVisible = itemContainer.querySelectorAll(':scope > .w-dyn-item').length;
 
