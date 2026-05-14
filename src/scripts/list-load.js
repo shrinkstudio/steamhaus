@@ -73,11 +73,21 @@ function refreshLayout() {
 
 function initInstance(listEl, scope) {
   var mode = listEl.getAttribute('data-list-load');
-  var itemContainer = listEl.querySelector('.w-dyn-items');
-  var paginationWrap = listEl.querySelector('.w-pagination-wrapper');
+
+  // Support attribute on .w-dyn-list (wrapper) OR .w-dyn-items (list itself)
+  var wrapper;
+  var itemContainer;
+  if (listEl.classList.contains('w-dyn-items')) {
+    itemContainer = listEl;
+    wrapper = listEl.closest('.w-dyn-list') || listEl.parentElement;
+  } else {
+    itemContainer = listEl.querySelector('.w-dyn-items');
+    wrapper = listEl;
+  }
   if (!itemContainer) return null;
 
-  var nextUrl = getNextUrl(listEl);
+  var paginationWrap = wrapper.querySelector('.w-pagination-wrapper');
+  var nextUrl = getNextUrl(wrapper);
   var loadingClass = listEl.getAttribute('data-list-loading-class') || 'is-loading';
   var stagger = parseInt(listEl.getAttribute('data-list-stagger') || '0', 10);
   var instance = listEl.getAttribute('data-list-instance') || null;
@@ -117,15 +127,24 @@ function initInstance(listEl, scope) {
       .then(function (doc) {
         if (destroyed) return false;
 
-        var fetchedList = findMatchingList(doc, instance);
-        if (!fetchedList) {
+        var fetchedEl = findMatchingList(doc, instance);
+        if (!fetchedEl) {
           nextUrl = null;
           return false;
         }
 
-        var c = fetchedList.querySelector('.w-dyn-items');
-        var items = c ? Array.from(c.querySelectorAll(':scope > .w-dyn-item')) : [];
-        nextUrl = getNextUrl(fetchedList);
+        // Resolve item container + wrapper on fetched page (same logic as init)
+        var fetchedItems, fetchedWrapper;
+        if (fetchedEl.classList.contains('w-dyn-items')) {
+          fetchedItems = fetchedEl;
+          fetchedWrapper = fetchedEl.closest('.w-dyn-list') || fetchedEl.parentElement;
+        } else {
+          fetchedItems = fetchedEl.querySelector('.w-dyn-items');
+          fetchedWrapper = fetchedEl;
+        }
+
+        var items = fetchedItems ? Array.from(fetchedItems.querySelectorAll(':scope > .w-dyn-item')) : [];
+        nextUrl = getNextUrl(fetchedWrapper);
         appendItems(items);
         return items.length > 0;
       })
