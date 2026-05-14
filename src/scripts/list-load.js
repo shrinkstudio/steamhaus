@@ -92,7 +92,7 @@ function animateItems(items, staggerMs) {
   gsap.to(items, {
     autoAlpha: 1,
     y: 0,
-    duration: 0.6,
+    duration: 1,
     stagger: staggerMs / 1000,
     ease: 'steamhaus',
   });
