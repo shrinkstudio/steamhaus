@@ -17,6 +17,28 @@
 
 var pageCache = {};
 var cleanups = [];
+var styleInjected = false;
+
+function injectSpinnerStyles() {
+  if (styleInjected) return;
+  styleInjected = true;
+  var style = document.createElement('style');
+  style.textContent =
+    '[data-list-element="button"].is-loading{' +
+      'position:relative;pointer-events:none;' +
+    '}' +
+    '[data-list-element="button"].is-loading>*{' +
+      'visibility:hidden;' +
+    '}' +
+    '[data-list-element="button"].is-loading::after{' +
+      'content:"";position:absolute;top:50%;left:50%;' +
+      'width:1.25em;height:1.25em;margin:-0.625em 0 0 -0.625em;' +
+      'border:2px solid currentColor;border-right-color:transparent;' +
+      'border-radius:50%;animation:list-load-spin .6s linear infinite;' +
+    '}' +
+    '@keyframes list-load-spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+}
 
 function fetchDoc(url) {
   if (pageCache[url]) return pageCache[url];
@@ -251,6 +273,7 @@ export function initListLoad(scope) {
   scope = scope || document;
   var lists = scope.querySelectorAll('[data-list-load]');
   if (!lists.length) return;
+  injectSpinnerStyles();
 
   lists.forEach(function (listEl) {
     var cleanup = initInstance(listEl, scope);
