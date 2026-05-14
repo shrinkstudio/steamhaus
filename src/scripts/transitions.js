@@ -12,6 +12,7 @@ import { initSocialShare, destroySocialShare } from './social-share.js';
 import { initContentReveal, destroyContentReveal } from './content-reveal.js';
 import { initCmsNest, destroyCmsNest } from './cms-nest.js';
 import { initListLoad, destroyListLoad } from './list-load.js';
+import { initFormValidate, destroyFormValidate } from './form-validate.js';
 import { initMegaNav, destroyMegaNav } from './mega-nav.js';
 import { initNavScrollHide, destroyNavScrollHide } from './nav.js';
 
@@ -72,6 +73,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-reveal-group]')) initContentReveal(nextPage);
   if (has('[data-nest="target"]')) initCmsNest(nextPage);
   if (has('[data-list-load]')) initListLoad(nextPage);
+  if (has('[data-form-validate]')) initFormValidate(nextPage);
 
   if (hasLenis) {
     lenis.resize();
@@ -203,6 +205,7 @@ barba.hooks.afterLeave(() => {
   destroyContentReveal();
   destroyCmsNest();
   destroyListLoad();
+  destroyFormValidate();
 
   if (hasScrollTrigger) {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
