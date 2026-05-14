@@ -30,14 +30,22 @@ function injectSpinnerStyles() {
     '[data-list-element="button"].is-loading>*{' +
       'visibility:hidden;' +
     '}' +
-    '[data-list-element="button"].is-loading::after{' +
-      'content:"";position:absolute;top:50%;left:50%;' +
-      'width:1.25em;height:1.25em;margin:-0.625em 0 0 -0.625em;' +
-      'border:2px solid currentColor;border-right-color:transparent;' +
-      'border-radius:50%;animation:list-load-spin .6s linear infinite;' +
+    '[data-list-spinner]{' +
+      'position:absolute;top:50%;left:50%;' +
+      'transform:translate(-50%,-50%);' +
+      'font-size:1.25em;line-height:1;' +
+      'animation:list-load-spin .7s linear infinite;' +
+      'visibility:visible!important;' +
     '}' +
-    '@keyframes list-load-spin{to{transform:rotate(360deg)}}';
+    '@keyframes list-load-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}';
   document.head.appendChild(style);
+}
+
+function createSpinner() {
+  var el = document.createElement('i');
+  el.className = 'ph ph-spinner-gap';
+  el.setAttribute('data-list-spinner', '');
+  return el;
 }
 
 function fetchDoc(url) {
@@ -152,6 +160,7 @@ function initInstance(listEl, scope) {
     if (buttonEl) {
       buttonEl.classList.add(loadingClass);
       buttonEl.setAttribute('aria-busy', 'true');
+      buttonEl.appendChild(createSpinner());
     }
 
     return fetchDoc(nextUrl)
@@ -189,6 +198,8 @@ function initInstance(listEl, scope) {
         if (buttonEl) {
           buttonEl.classList.remove(loadingClass);
           buttonEl.removeAttribute('aria-busy');
+          var spinner = buttonEl.querySelector('[data-list-spinner]');
+          if (spinner) spinner.remove();
         }
         return result;
       });
