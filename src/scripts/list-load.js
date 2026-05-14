@@ -88,11 +88,11 @@ function findMatchingList(doc, instance) {
 
 function animateItems(items, staggerMs) {
   if (!staggerMs || typeof gsap === 'undefined' || !items.length) return;
-  gsap.set(items, { autoAlpha: 0, y: 20 });
+  gsap.set(items, { autoAlpha: 0, y: 40 });
   gsap.to(items, {
     autoAlpha: 1,
     y: 0,
-    duration: 0.4,
+    duration: 0.6,
     stagger: staggerMs / 1000,
     ease: 'steamhaus',
   });
