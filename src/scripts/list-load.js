@@ -32,12 +32,14 @@ function injectSpinnerStyles() {
     '}' +
     '[data-list-spinner]{' +
       'position:absolute;top:50%;left:50%;' +
-      'transform:translate(-50%,-50%);' +
       'font-size:1.25em;line-height:1;' +
-      'animation:list-load-spin .7s linear infinite;' +
       'visibility:visible!important;' +
+      'animation:list-load-spin .7s linear infinite!important;' +
     '}' +
-    '@keyframes list-load-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}';
+    '@keyframes list-load-spin{' +
+      'from{transform:translate(-50%,-50%) rotate(0deg)}' +
+      'to{transform:translate(-50%,-50%) rotate(360deg)}' +
+    '}';
   document.head.appendChild(style);
 }
 
