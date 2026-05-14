@@ -156,10 +156,12 @@ function initInstance(listEl, scope) {
     buttonEl = findEl(scope, 'button', instance);
 
     if (buttonEl) {
+      buttonEl.setAttribute('data-barba-prevent', 'self');
       if (!nextUrl) buttonEl.style.display = 'none';
 
       buttonHandler = function (e) {
         e.preventDefault();
+        e.stopPropagation();
         loadNextPage().then(function () {
           if (!nextUrl && buttonEl) buttonEl.style.display = 'none';
         });
