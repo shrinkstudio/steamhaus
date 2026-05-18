@@ -72,12 +72,12 @@
   }
   .panel svg { display: block; width: 100%; height: auto; max-height: 100%; }
 
-  /* Positions in % of stage, tight overlap, slight rotation accents */
-  .panel--bars     { top: 0;      left: 6%;    width: 28%; aspect-ratio: 6/5; z-index: 3; transform: rotate(-2deg); }
-  .panel--topology { top: 2%;     right: 0;    width: 44%; aspect-ratio: 1/1; z-index: 2; }
-  .panel--dotgrid  { top: 30%;    left: 18%;   width: 46%; aspect-ratio: 16/9; z-index: 1; opacity: 0.95; transform: rotate(1deg); }
-  .panel--pipeline { top: 58%;    right: 2%;   width: 56%; aspect-ratio: 7/2; z-index: 4; }
-  .panel--terminal { bottom: 0;   left: 0;     width: 60%; z-index: 5; padding: 0.7rem 0.9rem; align-items: stretch; }
+  /* Positions in % of stage — tightened for denser composition */
+  .panel--bars     { top: 4%;   left: 4%;   width: 30%; aspect-ratio: 6/5;  z-index: 3; transform: rotate(-2deg); }
+  .panel--topology { top: 0;    right: 0;   width: 46%; aspect-ratio: 1/1;  z-index: 2; }
+  .panel--dotgrid  { top: 26%;  left: 20%;  width: 50%; aspect-ratio: 16/9; z-index: 1; opacity: 0.95; transform: rotate(1deg); }
+  .panel--pipeline { top: 52%;  right: 0;   width: 58%; aspect-ratio: 7/2;  z-index: 4; }
+  .panel--terminal { bottom: 0; left: 2%;   width: 62%; z-index: 5; padding: 0.7rem 0.9rem; align-items: stretch; }
   .panel--terminal [data-hero-shape="terminal"] { width: 100%; }
 
   /* -------- Responsive: tablet -------- */
