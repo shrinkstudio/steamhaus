@@ -1,0 +1,133 @@
+<!--
+  Steamhaus Hero Visual — composed scene
+  Drop this whole block into a single Webflow HTML Embed inside the hero.
+  Init handled by bundle (transitions.js -> initHeroVisual on [data-hero-visual]).
+-->
+<style>
+  .sh-hero-visual {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 540px;
+    margin-left: auto;
+  }
+  .sh-hero-visual::before {
+    content: ""; position: absolute; inset: 10%;
+    background: radial-gradient(circle at 50% 50%, rgba(231,163,139,0.10), transparent 60%);
+    filter: blur(40px); z-index: 0; pointer-events: none;
+  }
+  .sh-panel {
+    position: absolute;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    padding: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  }
+  .sh-panel svg { display: block; width: 100%; height: auto; max-height: 100%; }
+  .sh-panel--bars     { top: 0;   left: 6%;  width: 28%; aspect-ratio: 6/5; z-index: 3; transform: rotate(-2deg); }
+  .sh-panel--topology { top: 2%;  right: 0;  width: 44%; aspect-ratio: 1/1; z-index: 2; }
+  .sh-panel--dotgrid  { top: 30%; left: 18%; width: 46%; aspect-ratio: 16/9; z-index: 1; opacity: 0.95; transform: rotate(1deg); }
+  .sh-panel--pipeline { top: 58%; right: 2%; width: 56%; aspect-ratio: 7/2; z-index: 4; }
+  .sh-panel--terminal { bottom: 0; left: 0;  width: 60%; z-index: 5; padding: 0.7rem 0.9rem; align-items: stretch; }
+  .sh-panel--terminal [data-hero-shape="terminal"] { width: 100%; }
+  .sh-terminal-text {
+    font-family: ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace;
+    font-size: 0.78rem; line-height: 1.5;
+    color: rgba(255,255,255,0.75);
+    min-height: 6.5rem; width: 100%; overflow: hidden;
+  }
+  .sh-terminal-cursor {
+    display: inline-block;
+    width: 0.5em; height: 0.95em;
+    margin-left: 0.1em;
+    background: #e7a38b;
+    vertical-align: text-bottom;
+  }
+  @media (max-width: 640px) {
+    .sh-panel--bars,
+    .sh-panel--pipeline { display: none; }
+    .sh-panel--topology { width: 56%; }
+    .sh-panel--dotgrid  { top: 36%; left: 4%; width: 70%; }
+    .sh-panel--terminal { width: 88%; }
+  }
+</style>
+
+<div class="sh-hero-visual" data-hero-visual aria-hidden="true">
+
+  <div class="sh-panel sh-panel--bars">
+    <svg viewBox="0 0 120 100" data-hero-shape="bars" data-baseline-y="92">
+      <line x1="6" y1="92" x2="114" y2="92" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <rect data-bar x="12"  y="42" width="14" height="50" rx="2" fill="rgba(255,255,255,0.2)"/>
+      <rect data-bar x="34"  y="27" width="14" height="65" rx="2" fill="rgba(255,255,255,0.2)"/>
+      <rect data-bar x="56"  y="52" width="14" height="40" rx="2" fill="rgba(255,255,255,0.2)"/>
+      <rect data-bar x="78"  y="22" width="14" height="70" rx="2" fill="rgba(255,255,255,0.2)"/>
+      <rect data-bar x="100" y="37" width="14" height="55" rx="2" fill="rgba(255,255,255,0.2)"/>
+    </svg>
+  </div>
+
+  <div class="sh-panel sh-panel--topology">
+    <svg viewBox="0 0 180 180" data-hero-shape="topology">
+      <line data-topo-spoke x1="90" y1="90" x2="90"  y2="20"  stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line data-topo-spoke x1="90" y1="90" x2="150" y2="55"  stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line data-topo-spoke x1="90" y1="90" x2="150" y2="125" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line data-topo-spoke x1="90" y1="90" x2="90"  y2="160" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line data-topo-spoke x1="90" y1="90" x2="30"  y2="125" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line data-topo-spoke x1="90" y1="90" x2="30"  y2="55"  stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <circle data-topo-hub cx="90" cy="90" r="5" fill="rgba(255,255,255,0.4)"/>
+      <circle data-topo-node cx="90"  cy="20"  r="4" fill="rgba(255,255,255,0.15)"/>
+      <circle data-topo-node cx="150" cy="55"  r="4" fill="rgba(255,255,255,0.15)"/>
+      <circle data-topo-node cx="150" cy="125" r="4" fill="rgba(255,255,255,0.15)"/>
+      <circle data-topo-node cx="90"  cy="160" r="4" fill="rgba(255,255,255,0.15)"/>
+      <circle data-topo-node cx="30"  cy="125" r="4" fill="rgba(255,255,255,0.15)"/>
+      <circle data-topo-node cx="30"  cy="55"  r="4" fill="rgba(255,255,255,0.15)"/>
+    </svg>
+  </div>
+
+  <div class="sh-panel sh-panel--dotgrid">
+    <svg viewBox="0 0 200 104" data-hero-shape="dotgrid"></svg>
+  </div>
+
+  <div class="sh-panel sh-panel--pipeline">
+    <svg viewBox="0 0 280 60" data-hero-shape="pipeline">
+      <line x1="30" y1="30" x2="250" y2="30" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <circle data-pipeline-node cx="30"  cy="30" r="6" fill="rgba(255,255,255,0.15)"/>
+      <circle data-pipeline-node cx="85"  cy="30" r="6" fill="rgba(255,255,255,0.15)"/>
+      <circle data-pipeline-node cx="140" cy="30" r="6" fill="rgba(255,255,255,0.15)"/>
+      <circle data-pipeline-node cx="195" cy="30" r="6" fill="rgba(255,255,255,0.15)"/>
+      <circle data-pipeline-node cx="250" cy="30" r="6" fill="rgba(255,255,255,0.15)"/>
+      <circle data-pipeline-pulse cx="30" cy="30" r="4" fill="#e7a38b" opacity="0"/>
+    </svg>
+  </div>
+
+  <div class="sh-panel sh-panel--terminal">
+    <div data-hero-shape="terminal" class="sh-terminal-text">
+      <div data-terminal-output></div>
+      <span data-terminal-cursor class="sh-terminal-cursor"></span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Generate the dotgrid dots at runtime (12x6 = 72 circles)
+  (function () {
+    var grid = document.querySelector('[data-hero-shape="dotgrid"]');
+    if (!grid || grid.querySelector('circle')) return;
+    var ns = 'http://www.w3.org/2000/svg';
+    var cols = 12, rows = 6, sx = 12, sy = 12, sp = 16;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var d = document.createElementNS(ns, 'circle');
+        d.setAttribute('cx', sx + c * sp);
+        d.setAttribute('cy', sy + r * sp);
+        d.setAttribute('r', 1.6);
+        d.setAttribute('fill', '#ffffff');
+        d.setAttribute('opacity', 0.18);
+        grid.appendChild(d);
+      }
+    }
+  })();
+</script>
