@@ -55,12 +55,14 @@ function initInstance(group) {
     items.forEach(function (item) {
       var matches = target === 'all' || item.getAttribute('data-filter-name') === target;
       var current = item.getAttribute('data-filter-status');
+      // Absent status is treated as active (CMS items render with no status)
+      var isCurrentlyActive = !current || current === 'active';
 
-      if (current === 'active' && !matches) {
+      if (isCurrentlyActive && !matches) {
         // Fade out, then hide
         item.setAttribute('data-filter-status', 'transition-out');
         schedule(function () { setItem(item, false); }, transitionDelay);
-      } else if (current !== 'active' && matches) {
+      } else if (!isCurrentlyActive && matches) {
         // Show after the outgoing items have left (avoids layout flicker)
         schedule(function () { setItem(item, true); }, transitionDelay);
       }
@@ -72,10 +74,7 @@ function initInstance(group) {
     });
   }
 
-  // Initial state — if nothing is set, all items active and "all" button pressed
-  items.forEach(function (item) {
-    if (!item.getAttribute('data-filter-status')) setItem(item, true);
-  });
+  // Initial state — buttons only. Items default to visible via CSS (no status needed).
   buttons.forEach(function (button) {
     if (!button.getAttribute('data-filter-status')) setButton(button, false);
   });
