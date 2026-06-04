@@ -12,6 +12,7 @@ import { initSocialShare, destroySocialShare } from './social-share.js';
 import { initContentReveal, destroyContentReveal } from './content-reveal.js';
 import { initCmsNest, destroyCmsNest } from './cms-nest.js';
 import { initListLoad, destroyListLoad } from './list-load.js';
+import { initFilterBasic, destroyFilterBasic } from './filter-basic.js';
 import { initFormValidate, destroyFormValidate } from './form-validate.js';
 import { initHeroVisual, destroyHeroVisual } from './hero-visual.js';
 import { initMegaNav, destroyMegaNav } from './mega-nav.js';
@@ -74,6 +75,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-reveal-group]')) initContentReveal(nextPage);
   if (has('[data-nest="target"]')) initCmsNest(nextPage);
   if (has('[data-list-load]')) initListLoad(nextPage);
+  if (has('[data-filter-group]')) initFilterBasic(nextPage);
   if (has('[data-form-validate]')) initFormValidate(nextPage);
   if (has('[data-hero-visual]')) initHeroVisual(nextPage);
 
@@ -207,6 +209,7 @@ barba.hooks.afterLeave(() => {
   destroyContentReveal();
   destroyCmsNest();
   destroyListLoad();
+  destroyFilterBasic();
   destroyFormValidate();
   destroyHeroVisual();
 
