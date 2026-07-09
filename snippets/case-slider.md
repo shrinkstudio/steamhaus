@@ -32,8 +32,9 @@ Then register it (in your existing GSAP init, or the bundle already calls `gsap.
       └─ label (client name)
 ```
 
-- `[data-case-split]` = text that does the masked line reveal (eyebrow, headline, description).
-- `[data-case-fade]` = supporting content that fades/slides up slightly after the lines (stats, button). Don't split stat numbers into lines — use fade for those.
+- `[data-case-split]` = text that does the masked line reveal (headline, description).
+- `[data-case-fade]` = supporting content that fades/slides up as a unit (eyebrow, stats, button). Don't split stat numbers into lines — use fade.
+- **Eyebrow with a dot:** use `data-case-fade`, NOT `data-case-split`. If the eyebrow has a `::before` dot (or any pseudo-element / icon), splitting it into masked lines animates the text but leaves the dot behind. Fade moves the whole element together so the dot stays attached.
 
 ## Webflow build (CMS-driven)
 
