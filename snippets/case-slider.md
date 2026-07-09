@@ -1,45 +1,55 @@
-# Case Slider — full-screen case-study slider with autoplay tabs
+# Case Slider — full-screen case-study slider (GSAP line reveal + autoplay tabs)
 
-Swiper 11 (fade + parallax) driven by a custom tab nav. Each tab's underline fills over the autoplay duration; clicking a tab jumps to that slide and resets the timer. Module: `src/scripts/case-slider.js`, auto-inits on `[data-case-slider]`.
+Osmo-style **line reveal** (GSAP `SplitText`, masked lines) for the text — the same transition as the Shrink Studio testimonial slider — with an image crossfade and a custom tab nav whose underline fills over the autoplay duration. Module: `src/scripts/case-slider.js`, auto-inits on `[data-case-slider]`.
 
-Swiper 11 is already loaded site-wide (`cdn.jsdelivr.net/npm/swiper@11`), so no extra script needed.
+## ⚠️ Dependency — add SplitText
+
+The site loads GSAP 3.15 + ScrollTrigger, but **not SplitText**. Add this to the Webflow site-wide custom code **before** the bundle script (SplitText is free since GSAP 3.13):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+```
+
+Then register it (in your existing GSAP init, or the bundle already calls `gsap.registerPlugin` where needed — SplitText auto-registers on load in 3.13+). If SplitText is missing the module falls back to a plain crossfade, so nothing breaks.
 
 ## HTML structure
 
 ```
-[data-case-slider]  data-case-delay="5000"      ← section, full-screen (height:100vh)
-├─ .swiper [data-case-swiper]
-│  └─ .swiper-wrapper
-│     └─ .swiper-slide            (× per case study)
-│        ├─ img.case-slide__bg  [data-swiper-parallax="-14%"]
-│        ├─ .case-slide__scrim   (gradient overlay for legibility)
-│        └─ .case-slide__inner   (eyebrow · h2 · desc · Read more · stats)
+[data-case-slider]  data-case-delay="6000"      ← section, full-screen (height:100vh, position:relative, overflow:hidden)
+├─ [data-case-list]                              ← items stack absolutely inside
+│  └─ [data-case-item]           (× per case study)
+│     ├─ img [data-case-bg]                      ← bg image (crossfades)
+│     ├─ scrim div
+│     └─ content:
+│        ├─ [data-case-split]  eyebrow           ← LINE-REVEALS (repeat per text block)
+│        ├─ [data-case-split]  h2
+│        ├─ [data-case-split]  desc
+│        ├─ [data-case-fade]   Read-more link    ← fades up (repeat as needed)
+│        └─ [data-case-fade]   stats block
 └─ [data-case-tabs]
-   └─ button[data-case-tab]      (× per case study — SAME count/order as slides)
-      ├─ .case-tab__track > .case-tab__progress [data-case-tab-progress]
+   └─ [data-case-tab]           (× per case study — SAME count/order as items)
+      ├─ track > [data-case-tab-progress]        ← fill (scaleX, transform-origin:left)
       └─ label (client name)
 ```
 
+- `[data-case-split]` = text that does the masked line reveal (eyebrow, headline, description).
+- `[data-case-fade]` = supporting content that fades/slides up slightly after the lines (stats, button). Don't split stat numbers into lines — use fade for those.
+
 ## Webflow build (CMS-driven)
 
-Both the slides **and** the tabs are Collection Lists bound to the **same Case Studies collection, sorted identically** — so slide N lines up with tab N automatically.
+Slides **and** tabs are two Collection Lists on the **same Case Studies collection, sorted identically** — slide N lines up with tab N.
 
-1. **Section** — full-screen (`height: 100vh`, `position: relative`, `overflow: hidden`). Custom attribute `data-case-slider`. Optional `data-case-delay` (ms, default 6000).
-2. **Slides list** — a Collection List. Give the list wrapper the class `swiper` + attribute `data-case-swiper`; give `.w-dyn-items` the `swiper-wrapper` class; give `.w-dyn-item` the `swiper-slide` class. (The bundle's existing `slider.js` unwraps `.w-dyn-*` — but here we keep Swiper's own classes, so map them directly.)
-   - Inside each slide: the bg image with attribute `data-swiper-parallax="-14%"`, a scrim div, then the content (bind eyebrow/headline/desc/stats to CMS fields).
-3. **Tabs list** — a second Collection List (same collection, same sort). Each item is a `button`/link with `data-case-tab`, containing a progress element with `data-case-tab-progress` and the client-name label bound to CMS.
-4. Publish, hard-refresh (service-worker cache).
+1. Section: `height:100vh`, `position:relative`, `overflow:hidden`, attr `data-case-slider` (+ optional `data-case-delay`).
+2. Slides list: give `.w-dyn-list` (or a wrapping div) `data-case-list`; each `.w-dyn-item` = `data-case-item` (position absolute, inset 0). Inside: `data-case-bg` image, scrim, and content with `data-case-split` / `data-case-fade`.
+3. Tabs list: second Collection List (same collection/sort); each item a button with `data-case-tab` containing `[data-case-tab-progress]` + the client-name label.
+4. Publish, hard-refresh.
 
 ## Behaviour
-- Autoplay advances every `data-case-delay` ms; active tab's `[data-case-tab-progress]` fills via `scaleX` (transform-origin left).
-- Click a tab → `slideToLoop` + autoplay resets.
-- `prefers-reduced-motion` → no autoplay; tabs still work as manual nav.
-- Fade + crossfade between slides; bg images parallax-drift.
-
-## Key CSS (see preview/case-slider-test.html for the full styled reference)
-- `.case-tab__progress { transform: scaleX(0); transform-origin: left; background: var(--peach); }`
-- active tab: `.case-tab.is-active` (module toggles this class + `aria-current`).
+- Progress fill **is** the autoplay timer — when a tab's underline finishes filling, it advances.
+- Click a tab → jumps + resets the timer.
+- Pauses when scrolled off-screen (ScrollTrigger).
+- `prefers-reduced-motion` → plain crossfade, no autoplay; tabs still work.
 
 ## Notes
-- No thumbnails — the tabs replace them (client's request).
-- Test page: `preview/case-slider-test.html` (self-contained, Swiper from CDN).
+- Style `[data-case-tab-progress]` with `transform-origin: left` or it fills from centre.
+- Test page (self-contained, GSAP+SplitText from CDN): `preview/case-slider-test.html`.

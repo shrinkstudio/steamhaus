@@ -3,78 +3,60 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Steamhaus — Case Slider test</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<title>Steamhaus — Case Slider (line reveal)</title>
 <style>
-  :root {
-    --peach: #e7a38b;
-    --brand-darkest: #00160e;
-    --ease: cubic-bezier(0.625, 0.05, 0, 1);
-  }
+  :root { --peach: #e7a38b; --brand-darkest: #00160e; --ease: cubic-bezier(0.625,0.05,0,1); }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--brand-darkest); }
   body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
 
   .case-slider { position: relative; width: 100%; height: 100vh; overflow: hidden; }
-  .case-slider .swiper { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .case-slide { position: relative; width: 100%; height: 100%; overflow: hidden; }
-  .case-slide__bg {
-    position: absolute; inset: -8% 0; width: 100%; height: 116%;
-    object-fit: cover; z-index: 0;
-  }
-  .case-slide__scrim {
+  .case-list { position: absolute; inset: 0; }
+  .case-item { position: absolute; inset: 0; }
+  .case-item__bg { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; z-index: 0; }
+  .case-item__scrim {
     position: absolute; inset: 0; z-index: 1;
     background:
       linear-gradient(to right, rgba(0,22,14,0.85) 0%, rgba(0,22,14,0.4) 45%, rgba(0,22,14,0.15) 100%),
       linear-gradient(to top, rgba(0,22,14,0.75) 0%, transparent 45%);
   }
-  .case-slide__inner {
-    position: relative; z-index: 2;
-    max-width: 1280px; margin: 0 auto; height: 100%;
-    padding: 0 2.5rem;
-    display: flex; flex-direction: column; justify-content: center;
+  .case-item__inner {
+    position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; height: 100%;
+    padding: 0 2.5rem; display: flex; flex-direction: column; justify-content: center;
   }
-  .case-slide__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: start; }
+  .case-item__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: start; }
   .eyebrow {
     font-family: ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--peach);
     display: inline-flex; align-items: center; gap: 0.5em; margin-bottom: 1.5rem;
   }
   .eyebrow::before { content: ""; width: 0.4em; height: 0.4em; background: var(--peach); border-radius: 50%; }
-  .case-slide h2 {
-    font-size: clamp(2.2rem, 4vw, 3.6rem); font-weight: 600; letter-spacing: -0.02em;
-    line-height: 1.05; color: #fff; margin: 0 0 1.25rem; max-width: 18ch;
-  }
-  .case-slide__desc { color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.5; max-width: 34rem; margin: 0 0 2rem; }
+  .case-item h2 { font-size: clamp(2.2rem,4vw,3.6rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; color: #fff; margin: 0 0 1.25rem; max-width: 18ch; }
+  .case-item__desc { color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.5; max-width: 34rem; margin: 0 0 2rem; }
   .btn {
-    display: inline-flex; align-items: center; gap: 0.5em;
-    padding: 0.9rem 1.4rem; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 0.5em; padding: 0.9rem 1.4rem; border-radius: 999px;
     font-family: ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-    border: 1px solid rgba(255,255,255,0.25); color: #fff; background: rgba(0,22,14,0.4);
-    text-decoration: none; transition: border-color 250ms var(--ease);
+    border: 1px solid rgba(255,255,255,0.25); color: #fff; background: rgba(0,22,14,0.4); text-decoration: none;
+    transition: border-color 250ms var(--ease);
   }
   .btn:hover { border-color: rgba(255,255,255,0.6); }
   .case-stats { display: flex; gap: 1rem; padding-top: 0.5rem; }
-  .case-stat {
-    background: rgba(0,22,14,0.35); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 0.75rem; padding: 1.25rem 1.5rem; backdrop-filter: blur(4px);
-    min-width: 9rem;
-  }
+  .case-stat { background: rgba(0,22,14,0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1.25rem 1.5rem; backdrop-filter: blur(4px); min-width: 9rem; }
   .case-stat__value { font-size: 2rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.5rem; }
   .case-stat__label { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.3; }
 
-  /* ── Tabs ── */
+  /* SplitText mask lines get overflow hidden automatically via mask:'lines' */
+  .case-line { will-change: transform; }
+
   .case-tabs {
     position: absolute; left: 0; right: 0; bottom: 2.5rem; z-index: 3;
     max-width: 1280px; margin: 0 auto; padding: 0 2.5rem;
     display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.5rem;
   }
   .case-tab {
-    background: none; border: none; cursor: pointer; text-align: left;
-    padding: 0.75rem 0 0; color: rgba(255,255,255,0.55);
-    font-family: ui-monospace, monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
-    transition: color 300ms var(--ease);
-    position: relative;
+    background: none; border: none; cursor: pointer; text-align: left; padding: 0.75rem 0 0;
+    color: rgba(255,255,255,0.55); font-family: ui-monospace, monospace; font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase; transition: color 300ms var(--ease); position: relative;
   }
   .case-tab__track { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.15); overflow: hidden; }
   .case-tab__progress { position: absolute; inset: 0; background: var(--peach); transform: scaleX(0); transform-origin: left center; }
@@ -85,163 +67,166 @@
 <body>
 
 <section class="case-slider" data-case-slider data-case-delay="5000">
+  <div class="case-list" data-case-list>
 
-  <div class="swiper" data-case-swiper>
-    <div class="swiper-wrapper">
-
-      <!-- Slide 1 -->
-      <div class="swiper-slide">
-        <div class="case-slide">
-          <img class="case-slide__bg" data-swiper-parallax="-14%" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2000&auto=format&fit=crop" alt="" />
-          <div class="case-slide__scrim"></div>
-          <div class="case-slide__inner">
-            <div class="case-slide__top">
-              <div>
-                <div class="eyebrow" data-swiper-parallax="-40">Utilities Business</div>
-                <h2 data-swiper-parallax="-60">Giving frontline agents instant, AI-powered customer insights</h2>
-                <p class="case-slide__desc" data-swiper-parallax="-30">A next-generation utility business uses IoT-connected solar and digital services to reach hundreds of thousands of households and small businesses.</p>
-                <a class="btn" href="#" data-swiper-parallax="-20">Read more ↳</a>
-              </div>
-              <div class="case-stats" data-swiper-parallax="-20">
-                <div class="case-stat"><div class="case-stat__value">14×</div><div class="case-stat__label">Deploy frequency uplift</div></div>
-                <div class="case-stat"><div class="case-stat__value">11</div><div class="case-stat__label">Product teams now on the IDP</div></div>
-              </div>
-            </div>
+    <!-- Item 1 -->
+    <div class="case-item" data-case-item>
+      <img class="case-item__bg" data-case-bg src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2000&auto=format&fit=crop" alt="" />
+      <div class="case-item__scrim"></div>
+      <div class="case-item__inner">
+        <div class="case-item__top">
+          <div>
+            <div class="eyebrow" data-case-split>Utilities Business</div>
+            <h2 data-case-split>Giving frontline agents instant, AI-powered customer insights</h2>
+            <p class="case-item__desc" data-case-split>A next-generation utility business uses IoT-connected solar and digital services to reach hundreds of thousands of households.</p>
+            <a class="btn" href="#" data-case-fade>Read more ↳</a>
+          </div>
+          <div class="case-stats" data-case-fade>
+            <div class="case-stat"><div class="case-stat__value">14×</div><div class="case-stat__label">Deploy frequency uplift</div></div>
+            <div class="case-stat"><div class="case-stat__value">11</div><div class="case-stat__label">Product teams now on the IDP</div></div>
           </div>
         </div>
       </div>
-
-      <!-- Slide 2 -->
-      <div class="swiper-slide">
-        <div class="case-slide">
-          <img class="case-slide__bg" data-swiper-parallax="-14%" src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2000&auto=format&fit=crop" alt="" />
-          <div class="case-slide__scrim"></div>
-          <div class="case-slide__inner">
-            <div class="case-slide__top">
-              <div>
-                <div class="eyebrow" data-swiper-parallax="-40">Modulr Finance</div>
-                <h2 data-swiper-parallax="-60">Payments infrastructure that scales without the ops burden</h2>
-                <p class="case-slide__desc" data-swiper-parallax="-30">An embedded-payments platform modernised its AWS estate to ship faster and keep pace with regulatory change.</p>
-                <a class="btn" href="#" data-swiper-parallax="-20">Read more ↳</a>
-              </div>
-              <div class="case-stats" data-swiper-parallax="-20">
-                <div class="case-stat"><div class="case-stat__value">↓73%</div><div class="case-stat__label">Change-failure rate</div></div>
-                <div class="case-stat"><div class="case-stat__value">9</div><div class="case-stat__label">Services extracted</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 3 -->
-      <div class="swiper-slide">
-        <div class="case-slide">
-          <img class="case-slide__bg" data-swiper-parallax="-14%" src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?q=80&w=2000&auto=format&fit=crop" alt="" />
-          <div class="case-slide__scrim"></div>
-          <div class="case-slide__inner">
-            <div class="case-slide__top">
-              <div>
-                <div class="eyebrow" data-swiper-parallax="-40">Sperry Rail</div>
-                <h2 data-swiper-parallax="-60">Making the world's railways safer, on a platform they can ship on</h2>
-                <p class="case-slide__desc" data-swiper-parallax="-30">Cloud-native delivery for safety-critical rail signalling — from quarterly releases to daily deploys without compromising compliance.</p>
-                <a class="btn" href="#" data-swiper-parallax="-20">Read more ↳</a>
-              </div>
-              <div class="case-stats" data-swiper-parallax="-20">
-                <div class="case-stat"><div class="case-stat__value">14×</div><div class="case-stat__label">Deploy frequency uplift</div></div>
-                <div class="case-stat"><div class="case-stat__value">↓51%</div><div class="case-stat__label">Change-failure rate</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 4 -->
-      <div class="swiper-slide">
-        <div class="case-slide">
-          <img class="case-slide__bg" data-swiper-parallax="-14%" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop" alt="" />
-          <div class="case-slide__scrim"></div>
-          <div class="case-slide__inner">
-            <div class="case-slide__top">
-              <div>
-                <div class="eyebrow" data-swiper-parallax="-40">Auden</div>
-                <h2 data-swiper-parallax="-60">A modern estate, ready for the next product line</h2>
-                <p class="case-slide__desc" data-swiper-parallax="-30">Platform engineering and landing-zone hardening let a fintech launch a new product on the same estate in four months.</p>
-                <a class="btn" href="#" data-swiper-parallax="-20">Read more ↳</a>
-              </div>
-              <div class="case-stats" data-swiper-parallax="-20">
-                <div class="case-stat"><div class="case-stat__value">4mo</div><div class="case-stat__label">New product line shipped</div></div>
-                <div class="case-stat"><div class="case-stat__value">100%</div><div class="case-stat__label">Client-owned AWS accounts</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Item 2 -->
+    <div class="case-item" data-case-item>
+      <img class="case-item__bg" data-case-bg src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2000&auto=format&fit=crop" alt="" />
+      <div class="case-item__scrim"></div>
+      <div class="case-item__inner">
+        <div class="case-item__top">
+          <div>
+            <div class="eyebrow" data-case-split>Modulr Finance</div>
+            <h2 data-case-split>Payments infrastructure that scales without the ops burden</h2>
+            <p class="case-item__desc" data-case-split>An embedded-payments platform modernised its AWS estate to ship faster and keep pace with regulatory change.</p>
+            <a class="btn" href="#" data-case-fade>Read more ↳</a>
+          </div>
+          <div class="case-stats" data-case-fade>
+            <div class="case-stat"><div class="case-stat__value">↓73%</div><div class="case-stat__label">Change-failure rate</div></div>
+            <div class="case-stat"><div class="case-stat__value">9</div><div class="case-stat__label">Services extracted</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="case-item" data-case-item>
+      <img class="case-item__bg" data-case-bg src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?q=80&w=2000&auto=format&fit=crop" alt="" />
+      <div class="case-item__scrim"></div>
+      <div class="case-item__inner">
+        <div class="case-item__top">
+          <div>
+            <div class="eyebrow" data-case-split>Sperry Rail</div>
+            <h2 data-case-split>Making the world's railways safer, on a platform they can ship on</h2>
+            <p class="case-item__desc" data-case-split>Cloud-native delivery for safety-critical rail signalling — from quarterly releases to daily deploys without compromising compliance.</p>
+            <a class="btn" href="#" data-case-fade>Read more ↳</a>
+          </div>
+          <div class="case-stats" data-case-fade>
+            <div class="case-stat"><div class="case-stat__value">14×</div><div class="case-stat__label">Deploy frequency uplift</div></div>
+            <div class="case-stat"><div class="case-stat__value">↓51%</div><div class="case-stat__label">Change-failure rate</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="case-item" data-case-item>
+      <img class="case-item__bg" data-case-bg src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop" alt="" />
+      <div class="case-item__scrim"></div>
+      <div class="case-item__inner">
+        <div class="case-item__top">
+          <div>
+            <div class="eyebrow" data-case-split>Auden</div>
+            <h2 data-case-split>A modern estate, ready for the next product line</h2>
+            <p class="case-item__desc" data-case-split>Platform engineering and landing-zone hardening let a fintech launch a new product on the same estate in four months.</p>
+            <a class="btn" href="#" data-case-fade>Read more ↳</a>
+          </div>
+          <div class="case-stats" data-case-fade>
+            <div class="case-stat"><div class="case-stat__value">4mo</div><div class="case-stat__label">New product line shipped</div></div>
+            <div class="case-stat"><div class="case-stat__value">100%</div><div class="case-stat__label">Client-owned AWS accounts</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Tabs -->
   <div class="case-tabs" data-case-tabs>
-    <button class="case-tab" data-case-tab type="button">
-      <span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>
-      Utilities Business
-    </button>
-    <button class="case-tab" data-case-tab type="button">
-      <span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>
-      Modulr Finance
-    </button>
-    <button class="case-tab" data-case-tab type="button">
-      <span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>
-      Sperry Rail
-    </button>
-    <button class="case-tab" data-case-tab type="button">
-      <span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>
-      Auden
-    </button>
+    <button class="case-tab" data-case-tab type="button"><span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>Utilities Business</button>
+    <button class="case-tab" data-case-tab type="button"><span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>Modulr Finance</button>
+    <button class="case-tab" data-case-tab type="button"><span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>Sperry Rail</button>
+    <button class="case-tab" data-case-tab type="button"><span class="case-tab__track"><span class="case-tab__progress" data-case-tab-progress></span></span>Auden</button>
   </div>
-
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script>
-// ── inlined copy of src/scripts/case-slider.js (for standalone preview) ──
+gsap.registerPlugin(SplitText, ScrollTrigger);
+// ── inlined copy of src/scripts/case-slider.js ──
 (function () {
-  const root = document.querySelector('[data-case-slider]');
-  const swiperEl = root.querySelector('[data-case-swiper], .swiper');
-  const tabs = Array.from(root.querySelectorAll('[data-case-tab]'));
-  const delay = parseInt(root.getAttribute('data-case-delay'), 10) || 6000;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const progressEls = tabs.map((t) => t.querySelector('[data-case-tab-progress]'));
-
-  function setActive(realIndex) {
-    tabs.forEach((tab, i) => {
-      const on = i === realIndex;
-      tab.classList.toggle('is-active', on);
-      tab.setAttribute('aria-current', on ? 'true' : 'false');
-      if (progressEls[i] && !on) progressEls[i].style.transform = 'scaleX(0)';
+  const wrap = document.querySelector('[data-case-slider]');
+  const list = wrap.querySelector('[data-case-list]');
+  const items = Array.from(list.querySelectorAll('[data-case-item]'));
+  const tabs = Array.from(wrap.querySelectorAll('[data-case-tab]'));
+  const hasSplit = typeof SplitText !== 'undefined';
+  const duration = (parseInt(wrap.getAttribute('data-case-delay'),10)||6000)/1000;
+  const progressEls = tabs.map((t)=>t.querySelector('[data-case-tab-progress]'));
+  let reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let active=0, animating=false, progressTween=null;
+  const slides = items.map((item)=>({
+    item, bg:item.querySelector('[data-case-bg]'),
+    splitEls:Array.from(item.querySelectorAll('[data-case-split]')),
+    fadeEls:Array.from(item.querySelectorAll('[data-case-fade]')),
+    splits:[], lines(){return this.splits.flatMap(s=>s.lines||[]);}
+  }));
+  if(hasSplit&&!reduceMotion){
+    slides.forEach((slide,i)=>{
+      slide.splits=slide.splitEls.map(el=>SplitText.create(el,{
+        type:'lines',mask:'lines',linesClass:'case-line',autoSplit:true,
+        onSplit(self){gsap.set(self.lines,{yPercent:i===active?0:110});}
+      }));
     });
   }
-
-  const swiper = new Swiper(swiperEl, {
-    effect: 'fade', fadeEffect: { crossFade: true }, parallax: true,
-    loop: true, speed: 800, allowTouchMove: true,
-    autoplay: reduced ? false : { delay, disableOnInteraction: false },
-    on: {
-      init(sw) { setActive(sw.realIndex); },
-      slideChange(sw) { setActive(sw.realIndex); },
-      autoplayTimeLeft(sw, _t, progress) {
-        const el = progressEls[sw.realIndex];
-        if (el) el.style.transform = `scaleX(${(1 - progress).toFixed(4)})`;
-      },
-    },
+  slides.forEach((slide,i)=>{
+    const on=i===active;
+    gsap.set(slide.item,{autoAlpha:on?1:0,pointerEvents:on?'auto':'none'});
+    if(slide.bg)gsap.set(slide.bg,{autoAlpha:on?1:0});
+    if(slide.fadeEls.length)gsap.set(slide.fadeEls,{autoAlpha:on?1:0,y:on?0:14});
   });
-
-  tabs.forEach((tab, i) => tab.addEventListener('click', () => {
-    if (swiper.realIndex === i) return;
-    progressEls.forEach((p) => p && (p.style.transform = 'scaleX(0)'));
-    swiper.slideToLoop(i);
-    if (!reduced && swiper.autoplay) { swiper.autoplay.stop(); swiper.autoplay.start(); }
-  }));
+  function setTab(i){tabs.forEach((tab,k)=>{const on=k===i;tab.classList.toggle('is-active',on);tab.setAttribute('aria-current',on?'true':'false');if(progressEls[k]&&!on)gsap.set(progressEls[k],{scaleX:0});});}
+  setTab(active);
+  function play(){
+    if(progressTween)progressTween.kill();
+    const el=progressEls[active];
+    if(el)gsap.set(el,{scaleX:0,transformOrigin:'left center'});
+    if(reduceMotion)return;
+    progressTween=gsap.to(el||{},{scaleX:1,duration,ease:'none',onComplete:()=>goTo((active+1)%slides.length)});
+  }
+  function goTo(next){
+    if(animating||next===active)return; animating=true;
+    if(progressTween)progressTween.kill();
+    const out=slides[active], inc=slides[next];
+    progressEls.forEach((p,k)=>{if(p&&k!==next)gsap.set(p,{scaleX:0});});
+    const finish=()=>{gsap.set(out.item,{autoAlpha:0,pointerEvents:'none'});gsap.set(inc.item,{pointerEvents:'auto'});active=next;setTab(active);animating=false;play();};
+    if(reduceMotion||!hasSplit){gsap.timeline({onComplete:finish}).to(out.item,{autoAlpha:0,duration:0.4,ease:'power2'},0).fromTo(inc.item,{autoAlpha:0},{autoAlpha:1,duration:0.4,ease:'power2'},0);setTab(next);return;}
+    const outLines=out.lines(), incLines=inc.lines();
+    gsap.set(inc.item,{autoAlpha:1,pointerEvents:'auto'});
+    gsap.set(incLines,{yPercent:110});
+    if(inc.bg)gsap.set(inc.bg,{autoAlpha:0});
+    if(inc.fadeEls.length)gsap.set(inc.fadeEls,{autoAlpha:0,y:14});
+    setTab(next);
+    const tl=gsap.timeline({onComplete:finish});
+    tl.to(outLines,{yPercent:-110,duration:0.6,ease:'power4.inOut',stagger:{amount:0.25}},0);
+    if(out.bg)tl.to(out.bg,{autoAlpha:0,duration:0.6,ease:'power2.inOut'},0);
+    if(out.fadeEls.length)tl.to(out.fadeEls,{autoAlpha:0,y:-10,duration:0.4,ease:'power2.in'},0);
+    tl.to(incLines,{yPercent:0,duration:0.7,ease:'power4.inOut',stagger:{amount:0.4}},'>-=0.3');
+    if(inc.bg)tl.to(inc.bg,{autoAlpha:1,duration:0.6,ease:'power2.inOut'},'<');
+    if(inc.fadeEls.length)tl.to(inc.fadeEls,{autoAlpha:1,y:0,duration:0.5,ease:'power3.out'},'<+0.15');
+  }
+  tabs.forEach((tab,i)=>tab.addEventListener('click',()=>goTo(i)));
+  play();
 })();
 </script>
 </body>
