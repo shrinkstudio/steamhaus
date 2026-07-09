@@ -48,7 +48,7 @@ function initInstance(container) {
     cursorRadius: num(container, 'data-cursor-radius', 500),
     bulgeStrength: num(container, 'data-bulge-strength', 67),
     glowRadius: num(container, 'data-glow-radius', 160),
-    glowColor: str(container, 'data-glow-color', '#002f1e'),
+    glowColor: str(container, 'data-glow-color', ''), // empty = no cursor glow (opt-in)
     gradientFrom: str(container, 'data-gradient-from', 'rgba(153, 164, 160, 0.30)'), // brand-300
     gradientTo: str(container, 'data-gradient-to', 'rgba(102, 118, 113, 0.18)'),    // brand-400
     sparkle: bool(container, 'data-sparkle', false),
@@ -68,6 +68,12 @@ function initInstance(container) {
   const ctx = canvas.getContext('2d', { alpha: true });
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const hasGlow =
+    !!opts.glowColor &&
+    opts.glowColor !== 'none' &&
+    opts.glowColor !== 'transparent' &&
+    opts.glowRadius > 0;
 
   let dots = [];
   let size = { w: 0, h: 0 };
@@ -206,8 +212,8 @@ function initInstance(container) {
     }
     ctx.fill();
 
-    // pointer glow (over dots)
-    if (glowOpacity > 0.01 && mouse.x > -9000) {
+    // pointer glow (over dots) — opt-in only
+    if (hasGlow && glowOpacity > 0.01 && mouse.x > -9000) {
       const g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, opts.glowRadius);
       g.addColorStop(0, opts.glowColor);
       g.addColorStop(1, 'transparent');
