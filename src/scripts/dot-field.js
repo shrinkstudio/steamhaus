@@ -49,8 +49,8 @@ function initInstance(container) {
     bulgeStrength: num(container, 'data-bulge-strength', 67),
     glowRadius: num(container, 'data-glow-radius', 160),
     glowColor: str(container, 'data-glow-color', ''), // empty = no cursor glow (opt-in)
-    gradientFrom: str(container, 'data-gradient-from', 'rgba(153, 164, 160, 0.60)'), // brand-300
-    gradientTo: str(container, 'data-gradient-to', 'rgba(102, 118, 113, 0.42)'),    // brand-400
+    gradientFrom: str(container, 'data-gradient-from', 'rgba(153, 164, 160, 0.45)'), // brand-300
+    gradientTo: str(container, 'data-gradient-to', 'rgba(102, 118, 113, 0.30)'),    // brand-400
     sparkle: bool(container, 'data-sparkle', false),
     waveAmplitude: num(container, 'data-wave-amplitude', 0),
   };
