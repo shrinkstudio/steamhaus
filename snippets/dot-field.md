@@ -17,12 +17,12 @@ All optional. Defaults use the brand palette on `#00160E`.
 
 | Attribute | Default | Effect |
 |---|---|---|
-| `data-dot-radius` | `1.5` | Dot size (px) |
-| `data-dot-spacing` | `14` | Gap between dots (px) |
+| `data-dot-radius` | `3` | Dot size (px) |
+| `data-dot-spacing` | `16` | Gap between dots (px) |
 | `data-bulge-strength` | `67` | How far dots push from the cursor |
 | `data-cursor-radius` | `500` | Cursor influence radius (px). Lower = tighter bulge |
-| `data-gradient-from` | `rgba(153,164,160,0.30)` (brand-300) | Dot colour, top-left |
-| `data-gradient-to` | `rgba(102,118,113,0.18)` (brand-400) | Dot colour, bottom-right |
+| `data-gradient-from` | `rgba(153,164,160,0.60)` (brand-300) | Dot colour, top-left |
+| `data-gradient-to` | `rgba(102,118,113,0.42)` (brand-400) | Dot colour, bottom-right |
 | `data-sparkle` | `false` | Occasional larger "twinkle" dots |
 | `data-wave-amplitude` | `0` | Ambient idle wave (0 = off) |
 | `data-glow-color` | *(empty = off)* | Cursor glow colour — **opt-in only**. Set a colour to enable |

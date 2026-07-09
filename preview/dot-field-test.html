@@ -26,14 +26,7 @@
 </head>
 <body>
 
-<section class="section"
-  data-dot-field
-  data-dot-radius="1.6"
-  data-dot-spacing="16"
-  data-bulge-strength="70"
-  data-cursor-radius="480"
-  data-gradient-from="rgba(153,164,160,0.34)"
-  data-gradient-to="rgba(102,118,113,0.16)">
+<section class="section" data-dot-field>
   <div class="section__content">
     <div class="eyebrow">Interactive background</div>
     <h2>Move your cursor across the field.</h2>
@@ -50,14 +43,14 @@ function bool(el, a, f){const v=el.getAttribute(a);if(v==null)return f;return v=
 
 function initInstance(container) {
   const opts = {
-    dotRadius: num(container,'data-dot-radius',1.5),
-    dotSpacing: num(container,'data-dot-spacing',14),
+    dotRadius: num(container,'data-dot-radius',3),
+    dotSpacing: num(container,'data-dot-spacing',16),
     cursorRadius: num(container,'data-cursor-radius',500),
     bulgeStrength: num(container,'data-bulge-strength',67),
     glowRadius: num(container,'data-glow-radius',160),
     glowColor: str(container,'data-glow-color',''),
-    gradientFrom: str(container,'data-gradient-from','rgba(153,164,160,0.30)'),
-    gradientTo: str(container,'data-gradient-to','rgba(102,118,113,0.18)'),
+    gradientFrom: str(container,'data-gradient-from','rgba(153,164,160,0.60)'),
+    gradientTo: str(container,'data-gradient-to','rgba(102,118,113,0.42)'),
     sparkle: bool(container,'data-sparkle',false),
     waveAmplitude: num(container,'data-wave-amplitude',0),
   };
