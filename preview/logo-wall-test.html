@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Logo Wall test</title>
+<style>
+  :root { --peach:#e7a38b; --brand-darkest:#00160e; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--brand-darkest); }
+  body { font-family: ui-sans-serif, system-ui, sans-serif; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:4rem 2rem; }
+
+  .wall { max-width: 1100px; width: 100%; }
+  .wall__label { font-family: ui-monospace, monospace; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color: var(--peach); margin-bottom:2rem; text-align:center; }
+
+  .logo-list { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+  .logo-item {
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 0.6rem;
+    background: rgba(255,255,255,0.02); aspect-ratio: 3/2;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* the swap happens inside this — clip the slide */
+  .logo-target-parent { position: relative; overflow: hidden; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .logo-target {
+    font-family: ui-monospace, monospace; font-size: 0.95rem; letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.6); font-weight: 500;
+  }
+  /* reserve items feed the cycling pool — hidden from the grid */
+  .logo-item.is-reserve { display: none; }
+  @media (max-width: 700px) { .logo-list { grid-template-columns: repeat(3, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="wall" data-logo-wall-cycle-init data-logo-wall-loop-delay="1.5" data-logo-wall-duration="0.9">
+  <div class="wall__label">Trusted by · cycling logo wall</div>
+  <div class="logo-list" data-logo-wall-list>
+    <!-- 6 visible slots -->
+    <div class="logo-item" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>Sperry Rail</div></div></div>
+    <div class="logo-item" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>Thredd</div></div></div>
+    <div class="logo-item" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>addresscloud</div></div></div>
+    <div class="logo-item" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>Modulr</div></div></div>
+    <div class="logo-item" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>Auden</div></div></div>
+    <div class="logo-item" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>NCC Group</div></div></div>
+    <!-- reserve items (display:none) — their logos feed the pool that cycles in -->
+    <div class="logo-item is-reserve" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>Paytrix</div></div></div>
+    <div class="logo-item is-reserve" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>iCabbi</div></div></div>
+    <div class="logo-item is-reserve" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>e-bate</div></div></div>
+    <div class="logo-item is-reserve" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>Regatta</div></div></div>
+    <div class="logo-item is-reserve" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>SalaryFinance</div></div></div>
+    <div class="logo-item is-reserve" data-logo-wall-item><div class="logo-target-parent" data-logo-wall-target-parent><div class="logo-target" data-logo-wall-target>RFiDentikit</div></div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+// ── inlined copy of src/scripts/logo-wall.js ──
+(function () {
+  const root = document.querySelector('[data-logo-wall-cycle-init]');
+  const list = root.querySelector('[data-logo-wall-list]');
+  const items = Array.from(list.querySelectorAll('[data-logo-wall-item]'));
+  const loopDelay = parseFloat(root.getAttribute('data-logo-wall-loop-delay')) || 1.5;
+  const duration = parseFloat(root.getAttribute('data-logo-wall-duration')) || 0.9;
+  const shuffleFront = root.getAttribute('data-logo-wall-shuffle') !== 'false';
+  const originalTargets = items.map(i => i.querySelector('[data-logo-wall-target]')).filter(Boolean);
+  let visibleItems=[], visibleCount=0, pool=[], pattern=[], patternIndex=0, tl=null;
+  const isVisible = el => window.getComputedStyle(el).display !== 'none';
+  function shuffleArray(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function setup(){
+    if(tl)tl.kill();
+    visibleItems=items.filter(isVisible); visibleCount=visibleItems.length;
+    pattern=shuffleArray(Array.from({length:visibleCount},(_,i)=>i)); patternIndex=0;
+    items.forEach(item=>item.querySelectorAll('[data-logo-wall-target]').forEach(o=>o.remove()));
+    pool=originalTargets.map(n=>n.cloneNode(true));
+    let front,rest;
+    if(shuffleFront){const s=shuffleArray(pool);front=s.slice(0,visibleCount);rest=shuffleArray(s.slice(visibleCount));}
+    else{front=pool.slice(0,visibleCount);rest=shuffleArray(pool.slice(visibleCount));}
+    pool=front.concat(rest);
+    for(let i=0;i<visibleCount;i++){const p=visibleItems[i].querySelector('[data-logo-wall-target-parent]')||visibleItems[i];p.appendChild(pool.shift());}
+    tl=gsap.timeline({repeat:-1,repeatDelay:loopDelay}); tl.call(swapNext); tl.play();
+  }
+  function swapNext(){
+    const nowCount=items.filter(isVisible).length;
+    if(nowCount!==visibleCount){setup();return;}
+    if(!pool.length)return;
+    const idx=pattern[patternIndex%visibleCount]; patternIndex++;
+    const container=visibleItems[idx];
+    const parent=container.querySelector('[data-logo-wall-target-parent]')||container.querySelector('*:has(> [data-logo-wall-target])')||container;
+    if(parent.querySelectorAll('[data-logo-wall-target]').length>1)return;
+    const current=parent.querySelector('[data-logo-wall-target]');
+    const incoming=pool.shift();
+    gsap.set(incoming,{yPercent:50,autoAlpha:0}); parent.appendChild(incoming);
+    if(current){gsap.to(current,{yPercent:-50,autoAlpha:0,duration,ease:'expo.inOut',onComplete:()=>{current.remove();pool.push(current);}});}
+    gsap.to(incoming,{yPercent:0,autoAlpha:1,duration,delay:0.1,ease:'expo.inOut'});
+  }
+  setup();
+  ScrollTrigger.create({trigger:root,start:'top bottom',end:'bottom top',onEnter:()=>tl.play(),onLeave:()=>tl.pause(),onEnterBack:()=>tl.play(),onLeaveBack:()=>tl.pause()});
+  document.addEventListener('visibilitychange',()=>document.hidden?tl.pause():tl.play());
+})();
+</script>
+</body>
+</html>

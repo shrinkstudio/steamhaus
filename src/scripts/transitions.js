@@ -13,6 +13,7 @@ import { initContentReveal, destroyContentReveal } from './content-reveal.js';
 import { initCaseSlider, destroyCaseSlider } from './case-slider.js';
 import { initCopyClip, destroyCopyClip } from './copy-clip.js';
 import { initDotField, destroyDotField } from './dot-field.js';
+import { initLogoWall, destroyLogoWall } from './logo-wall.js';
 import { initCmsNest, destroyCmsNest } from './cms-nest.js';
 import { initListLoad, destroyListLoad } from './list-load.js';
 import { initFilterBasic, destroyFilterBasic } from './filter-basic.js';
@@ -81,6 +82,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-case-slider]')) initCaseSlider(nextPage);
   if (has('[data-copy="trigger"], [data-copy="link"]')) initCopyClip(nextPage);
   if (has('[data-dot-field]')) initDotField(nextPage);
+  if (has('[data-logo-wall-cycle-init]')) initLogoWall(nextPage);
   if (has('[data-filter-group]')) initFilterBasic(nextPage);
   if (has('[data-form-validate]')) initFormValidate(nextPage);
   if (has('[data-hero-visual]')) initHeroVisual(nextPage);
@@ -218,6 +220,7 @@ barba.hooks.afterLeave(() => {
   destroyCaseSlider();
   destroyCopyClip();
   destroyDotField();
+  destroyLogoWall();
   destroyFilterBasic();
   destroyFormValidate();
   destroyHeroVisual();
