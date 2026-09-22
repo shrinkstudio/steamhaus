@@ -85,25 +85,14 @@ function initAfterEnterFunctions(next) {
   if (has('[data-form-validate]')) initFormValidate(nextPage);
   if (has('[data-hero-visual]')) initHeroVisual(nextPage);
 
-  // Nav + mega-nav live INSIDE the Barba container, so Barba swaps them on every
-  // navigation. Destroy the old instances, then re-init on the new page's DOM
-  // (same pattern as Buff's sidenav). Init-once left listeners bound to the
-  // removed node, which is why the scrolled-state green bg and the dropdown
-  // stopped working after a transition.
+  // Nav lives inside the Barba container (swapped each nav), so re-init per page
   destroyMegaNav();
   destroyNavScrollHide();
   if (document.querySelector('[data-menu-wrap]')) {
     initMegaNav(nextPage);
     initNavScrollHide();
   }
-
-  if (hasLenis) {
-    lenis.resize();
-  }
-
-  if (hasScrollTrigger) {
-    ScrollTrigger.refresh();
-  }
+  // lenis.resize + ScrollTrigger.refresh handled once, deferred, in afterEnter hook
 }
 
 
@@ -147,6 +136,8 @@ function runPageLeaveAnimation(current, next) {
     ease: "parallax"
   }, 0);
 
+  tl.set(current, { willChange: "transform" }, 0);
+
   tl.fromTo(current, {
     y: "0vh"
   }, {
@@ -175,7 +166,8 @@ function runPageEnterAnimation(next) {
   tl.add("startEnter", 0);
 
   tl.set(next, {
-    zIndex: 3
+    zIndex: 3,
+    willChange: "transform"
   });
 
   tl.fromTo(next, {
@@ -253,7 +245,7 @@ barba.hooks.afterEnter(data => {
   }
 
   if (hasScrollTrigger) {
-    ScrollTrigger.refresh();
+    requestAnimationFrame(() => ScrollTrigger.refresh());
   }
 });
 

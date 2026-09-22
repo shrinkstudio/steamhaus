@@ -549,6 +549,10 @@ export function initMegaNav(scope) {
     }, 150);
   }
 
+  function handleBurgerClick() {
+    state.mobileMenuOpen ? closeMobileMenu() : openMobileMenu();
+  }
+
   // EVENT BINDING
   toggles.forEach((btn) => {
     btn.addEventListener('mouseenter', handleToggleEnter);
@@ -563,7 +567,7 @@ export function initMegaNav(scope) {
   if (backdrop) backdrop.addEventListener('click', closeDropdown);
   document.addEventListener('keydown', handleEscape);
   document.addEventListener('click', handleDocClick);
-  if (burger) burger.addEventListener('click', () => state.mobileMenuOpen ? closeMobileMenu() : openMobileMenu());
+  if (burger) burger.addEventListener('click', handleBurgerClick);
   if (backBtn) backBtn.addEventListener('click', closeMobilePanel);
   window.addEventListener('resize', handleResize);
 
@@ -587,6 +591,8 @@ export function initMegaNav(scope) {
     if (backdrop) backdrop.removeEventListener('click', closeDropdown);
     document.removeEventListener('keydown', handleEscape);
     document.removeEventListener('click', handleDocClick);
+    if (burger) burger.removeEventListener('click', handleBurgerClick);
+    if (backBtn) backBtn.removeEventListener('click', closeMobilePanel);
     window.removeEventListener('resize', handleResize);
 
     menuWrap.setAttribute('data-menu-open', 'false');

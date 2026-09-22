@@ -9,6 +9,10 @@ let revertCtx = null;
 export function initContentReveal(scope) {
   scope = scope || document;
 
+  // Whole module is ScrollTrigger-based; if it's absent, leave content visible
+  // rather than throwing (which would halt the rest of the init chain).
+  if (typeof ScrollTrigger === 'undefined') return;
+
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const ctx = gsap.context(() => {

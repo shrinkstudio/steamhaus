@@ -54,7 +54,7 @@ function getSwiperConfig(element) {
   const grabCursor = element.dataset.grabCursor;
   config.grabCursor = grabCursor !== "false";
 
-  const componentWrapper = element.closest('[data-slider="component"]');
+  const componentWrapper = element.closest('[data-slider="component"]') || element;
 
   const nextEl = componentWrapper.querySelector('[data-slider="next"]');
   const prevEl = componentWrapper.querySelector('[data-slider="previous"]');
