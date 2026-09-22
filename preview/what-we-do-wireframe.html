@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — What We Do · Wireframe</title>
+<style>
+  :root {
+    --bg: #f5f5f3;
+    --ink: #1a1a1a;
+    --ink-2: #555;
+    --ink-3: #888;
+    --line: #cbcbc6;
+    --line-2: #e2e2dc;
+    --hot: #c25a3c;
+    --note-bg: #fffcef;
+    --note-line: #e8d690;
+    --section-stripe: #ededea;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.4;
+    font-size: 14px;
+  }
+
+  /* Page label band */
+  .pagebar {
+    background: var(--ink);
+    color: white;
+    padding: 0.6rem 2rem;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .pagebar__crumb { color: rgba(255,255,255,0.6); }
+  .pagebar__crumb b { color: white; }
+
+  /* Section wrapper */
+  .wf {
+    position: relative;
+    padding: 2.5rem 2rem;
+    border-bottom: 1px dashed var(--line);
+  }
+  .wf:nth-child(even) { background: var(--section-stripe); }
+  .wf__num {
+    position: absolute;
+    top: 1rem; left: 0.75rem;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    background: var(--bg);
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--line);
+  }
+  .wf__container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 3rem; padding-right: 3rem;
+  }
+  .wf__title {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hot);
+    margin-bottom: 0.4rem;
+  }
+  .wf__hint {
+    color: var(--ink-3);
+    font-style: italic;
+    margin-bottom: 1.25rem;
+    max-width: 50rem;
+  }
+
+  /* Placeholder boxes */
+  .ph {
+    border: 1px dashed var(--line);
+    background: white;
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink-2);
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+  }
+  .ph--lg {
+    padding: 2.5rem 1.2rem;
+    font-size: 22px;
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .ph--xl {
+    padding: 4rem 1.2rem;
+    font-size: 36px;
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-align: left;
+  }
+  .ph--sub {
+    padding: 1.25rem 1.2rem;
+    font-size: 14px;
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  .ph--btn {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    background: white;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .ph--btn-primary {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+  .ph--eyebrow {
+    display: inline-block;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hot);
+    background: white;
+    margin-bottom: 1rem;
+  }
+
+  /* Grid helpers */
+  .row { display: grid; gap: 0.85rem; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: repeat(3, 1fr); }
+  .row-4 { grid-template-columns: repeat(4, 1fr); }
+  .row-5 { grid-template-columns: repeat(5, 1fr); }
+
+  /* Pillar card placeholder */
+  .pcard {
+    border: 1.5px dashed var(--line);
+    background: white;
+    padding: 1.25rem;
+    display: flex; flex-direction: column;
+    min-height: 22rem;
+    gap: 0.75rem;
+  }
+  .pcard__top {
+    display: flex; justify-content: space-between;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 0.5rem;
+  }
+  .pcard__title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0.5rem 0 0.25rem;
+  }
+  .pcard__desc {
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  .pcard__items {
+    border-top: 1px dashed var(--line);
+    padding-top: 0.75rem;
+  }
+  .pcard__items-label {
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.5rem;
+  }
+  .pcard__item {
+    display: flex; justify-content: space-between;
+    padding: 0.35rem 0;
+    border-bottom: 1px dotted var(--line-2);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .pcard__item:last-child { border-bottom: none; }
+  .pcard__item-meta {
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+  }
+  .pcard__link {
+    margin-top: 0.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--hot);
+  }
+
+  /* Map column placeholder */
+  .mcol {
+    border: 1.5px dashed var(--line);
+    background: white;
+    padding: 1.1rem;
+  }
+  .mcol__head {
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    display: flex; justify-content: space-between;
+  }
+  .mcol__pillar {
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .mcol__title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .mcol__type {
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.5rem;
+  }
+  .mitem {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    margin-bottom: 0.35rem;
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--bg);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .mitem--coming { opacity: 0.5; }
+  .mitem--flagship {
+    border-color: var(--hot);
+    background: #fff6f2;
+  }
+  .mitem__meta {
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+  }
+
+  /* Annotation */
+  .note {
+    background: var(--note-bg);
+    border-left: 3px solid var(--note-line);
+    padding: 0.7rem 0.9rem;
+    margin-top: 1.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .note b { color: var(--ink); font-weight: 600; }
+  .note .cms {
+    display: inline-block;
+    padding: 1px 5px;
+    background: white;
+    border: 1px solid var(--note-line);
+    border-radius: 3px;
+    margin: 0 1px;
+    color: var(--hot);
+    font-weight: 600;
+  }
+  .note .field {
+    color: var(--ink);
+    background: white;
+    padding: 1px 4px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-size: 10px;
+  }
+
+  /* Motif strip wireframe */
+  .motif {
+    display: flex; gap: 1rem;
+    align-items: center;
+    border: 1px dashed var(--line);
+    padding: 0.75rem 1rem;
+    background: white;
+    margin-top: 1.25rem;
+  }
+  .motif__lbl {
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .motif__v {
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--hot);
+    font-weight: 500;
+  }
+  .motif__arr { color: var(--ink-3); }
+
+  /* Why section */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .why-q {
+    background: white;
+    border-left: 3px solid var(--hot);
+    padding: 1rem 1.25rem;
+  }
+
+  /* CTA strip */
+  .cta-strip {
+    background: var(--ink);
+    color: white;
+    padding: 1.5rem 2rem;
+    text-align: center;
+  }
+  .cta-strip .ph {
+    border-color: rgba(255,255,255,0.3);
+    background: transparent;
+    color: white;
+  }
+  .cta-strip .ph--btn-primary {
+    background: white;
+    color: var(--ink);
+    border-color: white;
+  }
+</style>
+</head>
+<body>
+
+<div class="pagebar">
+  <span class="pagebar__crumb">Steamhaus / Wireframe v1</span>
+  <span><b>/what-we-do</b> · The hub</span>
+  <span class="pagebar__crumb">Low-fi · structural</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     1 · HERO
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="wf">
+  <div class="wf__num">01</div>
+  <div class="wf__container">
+    <div class="wf__title">Hero · architectural statement</div>
+    <div class="wf__hint">Lands the three-pillar architecture in one screen. No pitch, no metrics — just the shape of the offering, named.</div>
+
+    <span class="ph--eyebrow">[ Eyebrow · "What we do" ]</span>
+    <div class="ph ph--xl">[ H1 — architectural statement ]<br>e.g. "Three pillars. One estate."</div>
+    <div class="ph ph--sub">[ Sub paragraph · 2 sentences explaining the three-part offering. e.g. "An AWS estate is a system, not a project. We build it, modernise it, and run it — so AI investment turns into working systems."]</div>
+
+    <div class="motif">
+      <span class="motif__lbl">The motif →</span>
+      <span class="motif__v">Build it</span>
+      <span class="motif__arr">→</span>
+      <span class="motif__v">Modernise it</span>
+      <span class="motif__arr">→</span>
+      <span class="motif__v">Run it</span>
+      <span class="motif__lbl" style="margin-left:auto">"Get AI-ready, stay AI-ready"</span>
+    </div>
+
+    <div class="note">
+      <b>Source:</b> static content on the What We Do page. Headline/sub locked at build time — these are positioning copy, not CMS content. <br>
+      <b>Motif strip</b> surfaces the brief's "Get AI-ready, stay AI-ready" structurally without making it a headline (brief rule: motif is never the headline). <br>
+      <b>No CMS bindings here.</b>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     2 · THREE PILLAR CARDS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="wf">
+  <div class="wf__num">02</div>
+  <div class="wf__container">
+    <div class="wf__title">Three Pillar cards · routing</div>
+    <div class="wf__hint">The main wayfinding device. Three substantial cards — each one a route into a pillar. The items underneath the heading (Foundations / Accelerators / Tiers) come from CMS so the cards stay current automatically.</div>
+
+    <!-- Section header pattern (matches existing site) -->
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;align-items:end;margin-bottom:2.5rem;padding:1.5rem;border:1px dashed var(--line);background:white">
+      <div>
+        <span class="ph--eyebrow" style="margin-bottom:0.75rem">[ Eyebrow · e.g. "The pillars" / "Pick a route" ]</span>
+        <div style="font-size:32px;font-weight:600;letter-spacing:-0.02em;line-height:1.05;color:var(--ink)">
+          [ Section H2 · 4–6 words ]<br>
+          <span style="color:var(--ink-3);font-size:13px;font-family:ui-monospace,monospace;font-weight:400;letter-spacing:0.05em;line-height:1.5">e.g. "Pick where the pressure sits."</span>
+        </div>
+      </div>
+      <div style="font-size:14px;color:var(--ink-2);line-height:1.55;align-self:end">
+        [ Sub paragraph · 2–3 sentences explaining the three pillars' relationship — and that the reader should pick one to start ]<br>
+        <span style="color:var(--ink-3);font-style:italic;font-size:12px">e.g. "Each pillar is a full discipline. Foundations are productised, fixed-price engagements; Accelerators are AI-driven transformations; Managed Service keeps it all running. Most clients touch all three eventually — start where the pressure is now."</span>
+      </div>
+    </div>
+
+    <div class="row row-3">
+
+      <div class="pcard">
+        <div class="pcard__top">
+          <span>[ pillar.number ]</span>
+          <span>[ pillar.verb ]</span>
+        </div>
+        <div class="pcard__title">[ pillar.name ]<br><span style="font-weight:400;color:var(--ink-3);font-size:11px;font-family:ui-monospace,monospace">e.g. Platform</span></div>
+        <div class="pcard__desc">[ pillar.outcome · short paragraph from CMS — what this pillar gets you ]</div>
+        <div class="pcard__items">
+          <div class="pcard__items-label">↻ Collection list · filter Foundations.pillar = this</div>
+          <div class="pcard__item"><span>Foundation 01 name</span><span class="pcard__item-meta">N wks</span></div>
+          <div class="pcard__item"><span>Foundation 02 name</span><span class="pcard__item-meta">N wks</span></div>
+          <div class="pcard__item"><span>Foundation 03 name</span><span class="pcard__item-meta">N wks</span></div>
+          <div class="pcard__item"><span>Foundation 04 name</span><span class="pcard__item-meta">N wks</span></div>
+          <div class="pcard__item"><span>★ Flagship Foundation</span><span class="pcard__item-meta" style="color:var(--hot)">★</span></div>
+          <div class="pcard__link">Explore [Pillar] →</div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard__top">
+          <span>[ pillar.number ]</span>
+          <span>[ pillar.verb ]</span>
+        </div>
+        <div class="pcard__title">[ pillar.name ]<br><span style="font-weight:400;color:var(--ink-3);font-size:11px;font-family:ui-monospace,monospace">e.g. Modernisation</span></div>
+        <div class="pcard__desc">[ pillar.outcome ]</div>
+        <div class="pcard__items">
+          <div class="pcard__items-label">↻ Collection list · filter Accelerators.pillar = this</div>
+          <div class="pcard__item"><span>Accelerator 01</span><span class="pcard__item-meta" style="color:var(--hot)">Live</span></div>
+          <div class="pcard__item"><span>Accelerator 02</span><span class="pcard__item-meta" style="color:var(--hot)">Live</span></div>
+          <div class="pcard__item" style="opacity:0.5"><span>Accelerator 03</span><span class="pcard__item-meta">Coming</span></div>
+          <div class="pcard__item" style="opacity:0.5"><span>Accelerator 04</span><span class="pcard__item-meta">Coming</span></div>
+          <div class="pcard__link">Explore [Pillar] →</div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard__top">
+          <span>[ pillar.number ]</span>
+          <span>[ pillar.verb ]</span>
+        </div>
+        <div class="pcard__title">[ pillar.name ]<br><span style="font-weight:400;color:var(--ink-3);font-size:11px;font-family:ui-monospace,monospace">e.g. AWS Managed Service</span></div>
+        <div class="pcard__desc">[ pillar.outcome ]</div>
+        <div class="pcard__items">
+          <div class="pcard__items-label">⚙ Static · 2 tiers (never grows)</div>
+          <div class="pcard__item"><span>Optimise</span><span class="pcard__item-meta">Lighter</span></div>
+          <div class="pcard__item"><span>Operate</span><span class="pcard__item-meta">Full service</span></div>
+          <div class="pcard__link">Explore [Pillar] →</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="note">
+      <b>Source:</b> three Pillar cards render from <span class="cms">Pillars</span> collection (3 items).<br>
+      Each card pulls: <span class="field">name</span> <span class="field">number</span> <span class="field">verb</span> <span class="field">outcome</span><br>
+      The list inside each card filters on <span class="field">Foundations.pillar = this</span> or <span class="field">Accelerators.pillar = this</span>.<br>
+      The Managed Service card has only 2 items (Optimise / Operate) — these are hand-coded into the card (or stored as a small repeating field). <b>Never grows past 2.</b><br>
+      <b>Click target:</b> the whole card links to <span class="field">/pillars/{slug}</span> — the pillar's detail page.
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     3 · FULL MAP
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="wf">
+  <div class="wf__num">03</div>
+  <div class="wf__container">
+    <div class="wf__title">Full map · at-a-glance overview</div>
+    <div class="wf__hint">For the CTO who landed here cold from LinkedIn or a referral. They want the whole shape on one page before drilling in. Honest about what's Live vs Coming.</div>
+
+    <div class="row row-3">
+
+      <div class="mcol">
+        <div class="mcol__head">
+          <div>
+            <div class="mcol__pillar">[ pillar 01 · verb ]</div>
+            <div class="mcol__title">[ pillar.name ]</div>
+          </div>
+          <span class="mcol__pillar" style="color:var(--hot)">View →</span>
+        </div>
+        <div class="mcol__type">5 Foundations · productised, fixed-price</div>
+        <div class="mitem">[ Foundation 01 ] <span class="mitem__meta">N wks · Live</span></div>
+        <div class="mitem">[ Foundation 02 ] <span class="mitem__meta">N wks · Live</span></div>
+        <div class="mitem">[ Foundation 03 ] <span class="mitem__meta">N wks · Live</span></div>
+        <div class="mitem">[ Foundation 04 ] <span class="mitem__meta">N wks · Live</span></div>
+        <div class="mitem mitem--flagship">[ ★ Flagship Foundation ] <span class="mitem__meta" style="color:var(--hot)">★ Flagship</span></div>
+      </div>
+
+      <div class="mcol">
+        <div class="mcol__head">
+          <div>
+            <div class="mcol__pillar">[ pillar 02 · verb ]</div>
+            <div class="mcol__title">[ pillar.name ]</div>
+          </div>
+          <span class="mcol__pillar" style="color:var(--hot)">View →</span>
+        </div>
+        <div class="mcol__type">Accelerators · phased by evidence</div>
+        <div class="mitem">[ Accelerator 01 ] <span class="mitem__meta">Live</span></div>
+        <div class="mitem">[ Accelerator 02 ] <span class="mitem__meta">Live</span></div>
+        <div class="mitem mitem--coming">[ Accelerator 03 ] <span class="mitem__meta">As case studies land</span></div>
+        <div class="mitem mitem--coming">[ Accelerator 04 ] <span class="mitem__meta">As case studies land</span></div>
+        <div class="mitem mitem--coming">[ Accelerator 05 ] <span class="mitem__meta">As case studies land</span></div>
+      </div>
+
+      <div class="mcol">
+        <div class="mcol__head">
+          <div>
+            <div class="mcol__pillar">[ pillar 03 · verb ]</div>
+            <div class="mcol__title">[ pillar.name ]</div>
+          </div>
+          <span class="mcol__pillar" style="color:var(--hot)">View →</span>
+        </div>
+        <div class="mcol__type">Two tiers · AI-native, consumption-priced</div>
+        <div class="mitem" style="flex-direction:column;align-items:flex-start;gap:3px;padding:0.85rem">
+          <strong style="font-size:13px;color:var(--ink)">Optimise</strong>
+          <span style="font-size:11px;color:var(--ink-2)">Resell + AWS consumption optimisation. Senior engineers on call.</span>
+        </div>
+        <div class="mitem" style="flex-direction:column;align-items:flex-start;gap:3px;padding:0.85rem">
+          <strong style="font-size:13px;color:var(--ink)">Operate</strong>
+          <span style="font-size:11px;color:var(--ink-2)">Full service. Agents and Claude do the work, senior engineers over the top.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="note">
+      <b>Source:</b> the columns are 3 instances of a <b>Pillar Map Column</b> component.<br>
+      Inside each: a Collection List filtered by <span class="field">Foundations.pillar = this</span> or <span class="field">Accelerators.pillar = this</span>. Sorted by <span class="field">display_order</span>.<br>
+      Status badge ("Live" / "Coming") comes from the <span class="field">Accelerator.status</span> Option field (live | coming). The "coming" treatment is purely CSS — opacity + no link href.<br>
+      Tiers in the 3rd column are static (only 2, never grows).<br>
+      <b>Decision needed:</b> do we want pillars 1 and 2 to also use the tiered "rich item" treatment like column 3, or keep them as flat rows like shown? Recommend flat — pillars 1 & 2 have enough items that rich rows would make the column too tall.
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     4 · WHY THREE PILLARS
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="wf">
+  <div class="wf__num">04</div>
+  <div class="wf__container">
+    <div class="wf__title">Why three pillars · light explainer</div>
+    <div class="wf__hint">Short. Answers the "why this structure" question without selling. Links to the thesis essay where the real depth lives.</div>
+
+    <div class="why-grid">
+      <div>
+        <span class="ph--eyebrow">[ Eyebrow · "Why three" ]</span>
+        <div class="ph ph--lg">[ H2 · 4-6 word headline ]<br>e.g. "Get AI-ready, stay AI-ready."</div>
+        <div class="ph ph--sub">[ 2 short paragraphs — the system argument: estate is alive, the three jobs need to work together, that's why we treat them as one offering structured as three ]</div>
+        <span class="ph ph--btn">[ → Read the thesis ]</span>
+      </div>
+
+      <div class="why-q">
+        <div style="font-size:16px;line-height:1.5;color:var(--ink);margin-bottom:0.75rem">"[ Pull-quote from the thesis essay · 2-3 sentences with one phrase highlighted in accent colour ]"</div>
+        <div style="font-family:ui-monospace,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3)">[ Attribution · "From the Steamhaus thesis · 2026" ]</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Source:</b> left column is static positioning copy on the What We Do page. <br>
+      Right column pull-quote pulls from <span class="cms">Insights</span> — specifically the thesis essay. <span class="field">insights.pull_quote</span> field on the thesis item, plus <span class="field">insights.title</span> and <span class="field">insights.published</span> for attribution.<br>
+      <b>Why this works:</b> the same pull-quote can appear on Home, What We Do, and other pillar pages — all reading from the same Insights record. Update once, propagates everywhere.
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     5 · CTA BAND
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="wf">
+  <div class="wf__num">05</div>
+  <div class="wf__container">
+    <div class="wf__title">CTA band · Assessment</div>
+    <div class="wf__hint">The brief mandates the AI-Readiness Assessment as the persistent primary CTA. End every page on it.</div>
+
+    <div class="cta-strip">
+      <div style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:0.5rem">[ Eyebrow ]</div>
+      <div style="font-size:24px;font-weight:600;letter-spacing:-0.01em;margin-bottom:0.75rem">[ H2 · contextual CTA — e.g. "Find out which pillar to start with." ]</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);max-width:32rem;margin:0 auto 1rem;">[ Sub · one sentence explaining the Assessment + outcome ]</div>
+      <span class="ph ph--btn ph--btn-primary">[ Book the AI-Readiness Assessment ]</span>
+    </div>
+
+    <div class="note">
+      <b>Source:</b> reusable global component. Could live as a CMS-driven section so the eyebrow / H2 / sub can be customised per page, or just static if all pages use the same copy.<br>
+      <b>Recommendation:</b> make it a reusable Webflow component with prop overrides so each Pillar page can have a tailored CTA H2 (e.g. Platform page says "Find out where your platform sits" — Modernisation says "Find out which transformation fits").
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CMS REQUIREMENTS SUMMARY (page-wide annotation)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="wf" style="background:#262422;color:white">
+  <div class="wf__num" style="background:#262422;color:#888;border-color:#444">⚙</div>
+  <div class="wf__container">
+    <div class="wf__title" style="color:#e7a38b">CMS bindings used by this page</div>
+    <div class="wf__hint" style="color:#bbb;font-style:italic">Reading the page top to bottom, here's exactly what the CMS needs to deliver.</div>
+
+    <table style="width:100%;border-collapse:collapse;color:#ddd;font-family:ui-monospace,monospace;font-size:12px;margin-top:1rem">
+      <thead>
+        <tr style="border-bottom:1px solid #444;text-align:left">
+          <th style="padding:0.5rem;color:#888;font-weight:500;letter-spacing:0.1em">Section</th>
+          <th style="padding:0.5rem;color:#888;font-weight:500;letter-spacing:0.1em">Collection</th>
+          <th style="padding:0.5rem;color:#888;font-weight:500;letter-spacing:0.1em">Fields / filter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">01 · Hero</td>
+          <td style="padding:0.5rem;color:#888">Static</td>
+          <td style="padding:0.5rem;color:#aaa">— (positioning copy locked at build)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">02 · Pillar cards (×3)</td>
+          <td style="padding:0.5rem;color:#e7a38b">Pillars</td>
+          <td style="padding:0.5rem;color:#aaa">name, number, verb, outcome, slug · ordered by display_order</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">02 · Inside Platform card</td>
+          <td style="padding:0.5rem;color:#e7a38b">Foundations</td>
+          <td style="padding:0.5rem;color:#aaa">name, duration, is_flagship · filter pillar.slug = "platform"</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">02 · Inside Modernisation card</td>
+          <td style="padding:0.5rem;color:#e7a38b">Accelerators</td>
+          <td style="padding:0.5rem;color:#aaa">name, status · filter pillar.slug = "modernisation"</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">02 · Inside Managed Service card</td>
+          <td style="padding:0.5rem;color:#888">Static</td>
+          <td style="padding:0.5rem;color:#aaa">2 tiers · hardcoded (Optimise / Operate)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">03 · Full map (×3 cols)</td>
+          <td style="padding:0.5rem;color:#e7a38b">Pillars + Foundations + Accelerators</td>
+          <td style="padding:0.5rem;color:#aaa">Same as 02, fuller item display</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">04 · Why three (left)</td>
+          <td style="padding:0.5rem;color:#888">Static</td>
+          <td style="padding:0.5rem;color:#aaa">— (explainer copy)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #333">
+          <td style="padding:0.5rem">04 · Pull-quote</td>
+          <td style="padding:0.5rem;color:#e7a38b">Insights</td>
+          <td style="padding:0.5rem;color:#aaa">pull_quote, title, published · filter slug = "ai-readiness-thesis"</td>
+        </tr>
+        <tr>
+          <td style="padding:0.5rem">05 · CTA band</td>
+          <td style="padding:0.5rem;color:#888">Static / component prop</td>
+          <td style="padding:0.5rem;color:#aaa">— (reusable Webflow component)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:1.5rem;padding:0.85rem;background:#1a1816;border:1px dashed #444;font-family:ui-monospace,monospace;font-size:11px;color:#bbb;line-height:1.55">
+      <span style="color:#e7a38b">DECISIONS PENDING →</span><br>
+      · Confirm field names on <span style="color:#e7a38b">Pillars</span> (name, number, verb, outcome, slug, display_order, SEO bundle)<br>
+      · Confirm <span style="color:#e7a38b">Foundations.pillar</span> is a Reference to Pillars (so the filter works)<br>
+      · Confirm <span style="color:#e7a38b">Accelerators.pillar</span> is a Reference to Pillars + Accelerators.status is an Option field (live | coming)<br>
+      · Confirm whether to rename existing collections (Services → Pillars, Sub-Services → Foundations) or create fresh ones<br>
+      · Confirm Insights schema has <span style="color:#e7a38b">pull_quote</span> field for the thesis pull-quote reuse pattern
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

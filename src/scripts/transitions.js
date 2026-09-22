@@ -58,8 +58,6 @@ function initOnceFunctions() {
   onceFunctionsInitialized = true;
 
   initModalDelegation();
-  initMegaNav();
-  initNavScrollHide();
 }
 
 function initBeforeEnterFunctions(next) {
@@ -86,6 +84,18 @@ function initAfterEnterFunctions(next) {
   if (has('[data-filter-group]')) initFilterBasic(nextPage);
   if (has('[data-form-validate]')) initFormValidate(nextPage);
   if (has('[data-hero-visual]')) initHeroVisual(nextPage);
+
+  // Nav + mega-nav live INSIDE the Barba container, so Barba swaps them on every
+  // navigation. Destroy the old instances, then re-init on the new page's DOM
+  // (same pattern as Buff's sidenav). Init-once left listeners bound to the
+  // removed node, which is why the scrolled-state green bg and the dropdown
+  // stopped working after a transition.
+  destroyMegaNav();
+  destroyNavScrollHide();
+  if (document.querySelector('[data-menu-wrap]')) {
+    initMegaNav(nextPage);
+    initNavScrollHide();
+  }
 
   if (hasLenis) {
     lenis.resize();

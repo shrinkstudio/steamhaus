@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — AWS Managed Service v1</title>
+<link rel="stylesheet" href="/_shared.css" />
+<style>
+  /* ── Not a ticket queue ── */
+  .anti { display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; align-items: start; }
+  .anti__statement { font-size: 1.7rem; line-height: 1.3; letter-spacing: -0.01em; color: var(--white); }
+  .anti__statement em { color: var(--peach); font-style: normal; }
+  .anti__list { display: grid; gap: 0.75rem; }
+  .anti__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .anti__row:last-child { border: none; }
+  .anti__cell { font-size: 0.95rem; line-height: 1.4; }
+  .anti__cell.them { color: rgba(255,255,255,0.4); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.2); }
+  .anti__cell.us { color: var(--peach); }
+  .anti__cell.us::before { content: "✓ "; font-weight: 600; }
+
+  /* ── Two tiers ── */
+  .tiers { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .tier { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .tier--operate { background: radial-gradient(120% 100% at 50% 0%, rgba(231,163,139,0.08), transparent 70%), rgba(255,255,255,0.02); border-color: rgba(231,163,139,0.3); }
+  .tier__label { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .tier--operate .tier__label { color: var(--peach); }
+  .tier h3 { font-size: 2rem; }
+  .tier__desc { color: rgba(255,255,255,0.65); line-height: 1.55; }
+  .tier__list { display: grid; gap: 0.85rem; margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; }
+  .tier__item { display: flex; gap: 0.75rem; font-size: 0.92rem; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .tier__item::before { content: "✓"; color: var(--peach); font-weight: 600; }
+  .tier__foot { margin-top: auto; padding-top: 1.5rem; }
+
+  /* ── Consumption pricing proof ── */
+  .pricing { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 3.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .pricing__statement { font-size: 1.9rem; line-height: 1.25; letter-spacing: -0.02em; color: var(--white); }
+  .pricing__statement em { color: var(--peach); font-style: normal; }
+  .pricing__body { color: rgba(255,255,255,0.65); line-height: 1.6; }
+  .pricing__body p { margin-bottom: 1rem; }
+  .pricing__tag { display: inline-block; margin-top: 0.5rem; font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--peach); padding: 0.4rem 0.9rem; border: 1px solid rgba(231,163,139,0.3); border-radius: 999px; background: rgba(231,163,139,0.06); }
+
+  /* ── How it runs (3 col) ── */
+  .runs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .run { padding: 1.75rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; background: rgba(255,255,255,0.02); }
+  .run__num { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--peach); margin-bottom: 0.75rem; }
+  .run__name { font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+  .run__desc { color: rgba(255,255,255,0.55); font-size: 0.9rem; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="container">What We Do · <span>AWS Managed Service</span></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow no-dot">Pillar 03 · AWS Managed Service</div>
+    <h1>AI-native managed service. Consumption priced.</h1>
+    <p class="hero__sub">Frontier agents and Claude do the work. Senior engineers sit over the top. You pay for AWS consumption, not a headcount — a model only possible because agents deliver it. Not a ticket queue. No peer offers this.</p>
+    <div class="hero__ctas">
+      <a href="#" class="btn btn--primary">Talk to us ↗</a>
+      <a href="#" class="btn btn--ghost">Book the Assessment ↗</a>
+    </div>
+    <div class="hero__meta">
+      <span><strong>2</strong> tiers · Optimise + Operate</span>
+      <span>Consumption-priced</span>
+      <span>Run by agents</span>
+    </div>
+  </div>
+</section>
+
+<!-- NOT A TICKET QUEUE -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The model</div>
+        <h2>Not a ticket queue.</h2>
+      </div>
+      <p class="s__head-sub">Traditional managed service scales with headcount — more tickets, more people, bigger bill. Ours scales with automation. That difference shows up everywhere.</p>
+    </div>
+
+    <div class="anti">
+      <div class="anti__statement">
+        A managed service priced on headcount has every incentive to <em>grow the headcount</em>. Ours is priced on consumption — so our incentive is the same as yours: a leaner, better-run estate.
+      </div>
+      <div class="anti__list">
+        <div class="anti__row">
+          <div class="anti__cell them">Tickets in a queue, humans working down the list</div>
+          <div class="anti__cell us">Agents handle the toil, engineers handle the judgment</div>
+        </div>
+        <div class="anti__row">
+          <div class="anti__cell them">Priced per seat / per ticket / per head</div>
+          <div class="anti__cell us">Priced on AWS consumption</div>
+        </div>
+        <div class="anti__row">
+          <div class="anti__cell them">Bill grows as your estate grows</div>
+          <div class="anti__cell us">Incentive aligned — leaner estate, lower bill</div>
+        </div>
+        <div class="anti__row">
+          <div class="anti__cell them">"Support" / "FinOps" SLAs</div>
+          <div class="anti__cell us">Senior engineers accountable for the estate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT RUNS -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">How it runs</div>
+        <h2>Agents below. Engineers on top.</h2>
+      </div>
+      <p class="s__head-sub">The work that used to need a team of operators now runs largely on agents and Claude — with senior engineers accountable for everything that matters.</p>
+    </div>
+    <div class="runs">
+      <div class="run"><div class="run__num">01</div><div class="run__name">Agents do the toil</div><div class="run__desc">Patching, scaling, cost optimisation, routine remediation — handled by AWS frontier agents and Claude, continuously.</div></div>
+      <div class="run"><div class="run__num">02</div><div class="run__name">Engineers do the judgment</div><div class="run__desc">Architecture decisions, incident command, anything where being wrong is expensive. Senior people, accountable.</div></div>
+      <div class="run"><div class="run__num">03</div><div class="run__name">You see both</div><div class="run__desc">Full visibility into what the agents did and what the engineers decided. No black box, no opaque ticket queue.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TWO TIERS -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The two tiers</div>
+        <h2>Optimise. Or Operate.</h2>
+      </div>
+      <p class="s__head-sub">Start lighter, or hand us the whole estate. Resell capability sits inside Optimise — it's not a separate product.</p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier__label">Tier 01 · Lighter touch</div>
+        <h3>Optimise</h3>
+        <p class="tier__desc">For teams that run their own estate but want consumption under control and senior expertise on call. Includes AWS resell.</p>
+        <div class="tier__list">
+          <div class="tier__item">AWS consumption optimisation, continuously</div>
+          <div class="tier__item">AWS resell — your spend, our rates and management</div>
+          <div class="tier__item">Senior engineers on call for architecture and incidents</div>
+          <div class="tier__item">Agent-driven cost + security monitoring</div>
+        </div>
+        <div class="tier__foot"><a href="#" class="btn btn--ghost">Talk to us ↗</a></div>
+      </div>
+
+      <div class="tier tier--operate">
+        <div class="tier__label">Tier 02 · The full service</div>
+        <h3>Operate</h3>
+        <p class="tier__desc">Hand us the estate. Agents and Claude run the day-to-day; senior engineers own the outcomes. The AI-native managed service in full.</p>
+        <div class="tier__list">
+          <div class="tier__item">Everything in Optimise</div>
+          <div class="tier__item">Full operational ownership — run by agents, engineer-supervised</div>
+          <div class="tier__item">Continuous remediation, patching, scaling</div>
+          <div class="tier__item">Incident command with senior engineers accountable</div>
+          <div class="tier__item">Consumption-based pricing — no per-head bill</div>
+        </div>
+        <div class="tier__foot"><a href="#" class="btn btn--primary">Talk to us ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSUMPTION PRICING AS PROOF -->
+<section class="s">
+  <div class="container">
+    <div class="pricing">
+      <div class="pricing__statement">
+        A fee tied to consumption is only possible <em>because agents deliver it.</em>
+      </div>
+      <div class="pricing__body">
+        <p>Try pricing a human-run managed service on consumption — you can't. The economics only work if the people cost doesn't scale with the work. Ours doesn't, because agents do the volume.</p>
+        <p>So the pricing model isn't a packaging choice. It's the proof the service is genuinely AI-native. No headcount-priced competitor can match it without rebuilding how they deliver.</p>
+        <span class="pricing__tag">Consumption-priced = AI-native, proven</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content: center; display: inline-flex;">Ready?</div>
+    <h2>Keep your estate AI-ready, run by agents.</h2>
+    <p class="cta-band__sub">Talk to us about Optimise or Operate — or start with an AI-Readiness Assessment to see what running the estate this way would mean for you.</p>
+    <div class="cta-band__actions">
+      <a href="#" class="btn btn--primary">Talk to us ↗</a>
+      <a href="#" class="btn btn--ghost">Book the Assessment ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="container">© Steamhaus · Manchester · UK</div></footer>
+</body>
+</html>

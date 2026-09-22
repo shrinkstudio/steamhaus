@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — AI-DLC Foundation</title>
+<link rel="stylesheet" href="/_shared.css" />
+<style>
+  /* ── Hero with spec card ── */
+  .hero__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 4rem; align-items: end; }
+  .hero__pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .pill { font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; border-radius: 999px; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.08); }
+  .pill--peach { background: rgba(231,163,139,0.1); color: var(--peach); border-color: rgba(231,163,139,0.3); }
+  .spec { background: rgba(255,255,255,0.03); border: 1px solid rgba(231,163,139,0.25); border-radius: 0.75rem; padding: 1.75rem; }
+  .spec__row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0; border-bottom: 1px dashed rgba(255,255,255,0.08); font-family: ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .spec__row:last-child { border: none; }
+  .spec__row span:first-child { color: rgba(255,255,255,0.5); }
+  .spec__row span:last-child { color: var(--white); }
+  .spec__row span.peach { color: var(--peach); }
+
+  /* ── What you get ── */
+  .getgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 3rem; }
+  .get { display: flex; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .get__check { color: var(--peach); font-weight: 600; padding-top: 0.1rem; }
+  .get__text strong { display: block; color: var(--white); margin-bottom: 0.25rem; }
+  .get__text span { color: rgba(255,255,255,0.6); font-size: 0.92rem; line-height: 1.5; }
+
+  /* ── Method phases ── */
+  .method { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .mphase { padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; background: rgba(255,255,255,0.02); }
+  .mphase__week { font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--peach); margin-bottom: 0.75rem; }
+  .mphase__name { font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+  .mphase__desc { color: rgba(255,255,255,0.55); font-size: 0.88rem; line-height: 1.5; }
+
+  /* ── Governance (AI-DLC specific) ── */
+  .gov { background: radial-gradient(80% 100% at 0% 0%, rgba(231,163,139,0.05), transparent 60%), rgba(255,255,255,0.025); border: 1px solid rgba(231,163,139,0.2); border-radius: 0.75rem; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .gov__left h2 { margin-bottom: 1rem; }
+  .gov__left p { color: rgba(255,255,255,0.65); line-height: 1.6; }
+  .gov__frameworks { display: grid; gap: 0.85rem; }
+  .gov__fw-label { font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+  .gov__fw { display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; color: rgba(255,255,255,0.8); padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .gov__fw:last-child { border: none; }
+  .gov__fw::before { content: "✓"; color: var(--peach); font-weight: 600; }
+  .gov__fw small { color: rgba(255,255,255,0.45); font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.06em; margin-left: auto; }
+
+  /* ── Outcomes ── */
+  .outs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; overflow: hidden; }
+  .out { padding: 2.5rem; border-right: 1px solid rgba(255,255,255,0.08); }
+  .out:last-child { border: none; }
+  .out__value { font-size: 3rem; font-weight: 600; color: var(--peach); letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 1rem; }
+  .out__label { font-size: 1rem; color: rgba(255,255,255,0.8); line-height: 1.4; margin-bottom: 0.75rem; }
+  .out__source { font-family: ui-monospace, monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+
+  /* ── Marketplace ── */
+  .marketplace { background: radial-gradient(100% 100% at 100% 0%, rgba(231,163,139,0.06), transparent 60%), rgba(255,255,255,0.025); border: 1px solid rgba(231,163,139,0.25); border-radius: 0.75rem; padding: 3rem; display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; align-items: center; }
+  .marketplace h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+  .marketplace__body { color: rgba(255,255,255,0.65); line-height: 1.55; }
+  .marketplace__actions { display: flex; flex-direction: column; gap: 1rem; }
+  .marketplace__funding { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); line-height: 1.5; padding-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.1); }
+  .marketplace__funding strong { color: var(--peach); font-weight: 500; }
+
+  /* ── FAQ ── */
+  .faq-list { display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .faq { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1.75rem 0; }
+  .faq__q { font-size: 1.2rem; font-weight: 600; color: var(--white); letter-spacing: -0.01em; margin-bottom: 1rem; display: flex; gap: 1rem; }
+  .faq__q-mark { font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--peach); padding-top: 0.2rem; }
+  .faq__a { color: rgba(255,255,255,0.7); line-height: 1.6; padding-left: 2.1rem; max-width: 52rem; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="container">What We Do · Platform · Foundations · <span>AI-DLC</span></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div>
+        <div class="eyebrow no-dot">★ Flagship Foundation · Platform</div>
+        <h1>Governed AI-augmented delivery.</h1>
+        <div class="hero__pills">
+          <span class="pill pill--peach">FCA-ready</span>
+          <span class="pill pill--peach">DORA-aligned</span>
+          <span class="pill">Fixed scope</span>
+          <span class="pill">Fixed price</span>
+        </div>
+        <p class="hero__sub">AI-DLC is where Claude and AWS frontier agents build alongside your engineers — under the governance, audit trail and policy controls a regulated CISO can actually sign off. Productised, fixed-price, proven blueprint, customised to your estate.</p>
+        <div class="hero__ctas">
+          <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+          <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="spec__row"><span>Type</span><span>Foundation</span></div>
+        <div class="spec__row"><span>Pillar</span><span>Platform</span></div>
+        <div class="spec__row"><span>Duration</span><span>8–12 weeks</span></div>
+        <div class="spec__row"><span>Scope</span><span>Fixed</span></div>
+        <div class="spec__row"><span>Price</span><span>Fixed (from quote)</span></div>
+        <div class="spec__row"><span>AWS Marketplace</span><span class="peach">Listed</span></div>
+        <div class="spec__row"><span>AWS funding</span><span class="peach">Eligible</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE OUTCOME / WHO IT'S FOR -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The outcome</div>
+        <h2>AI in your delivery — without losing your auditor.</h2>
+      </div>
+      <p class="s__head-sub">For regulated engineering organisations that want the velocity of AI-augmented delivery but can't accept the governance gaps that usually come with it. AI-DLC closes that gap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">What you get</div>
+        <h2>Fixed scope. No surprises.</h2>
+      </div>
+      <p class="s__head-sub">A productised engagement means you see exactly what's delivered before you commit. Here's the scope.</p>
+    </div>
+    <div class="getgrid">
+      <div class="get"><span class="get__check">✓</span><span class="get__text"><strong>Governed AI delivery pipeline</strong><span>Claude + AWS agents wired into your SDLC with policy gates, not bolted on the side.</span></span></div>
+      <div class="get"><span class="get__check">✓</span><span class="get__text"><strong>Full audit trail</strong><span>Every AI-generated change logged, attributable and reviewable — built for your compliance team.</span></span></div>
+      <div class="get"><span class="get__check">✓</span><span class="get__text"><strong>Policy &amp; guardrail framework</strong><span>SCPs, IAM and delivery policies that constrain what AI tooling can touch and where.</span></span></div>
+      <div class="get"><span class="get__check">✓</span><span class="get__text"><strong>Human-in-the-loop controls</strong><span>Review gates calibrated to risk — more oversight where being wrong is expensive.</span></span></div>
+      <div class="get"><span class="get__check">✓</span><span class="get__text"><strong>Regulatory mapping</strong><span>The delivery model mapped to your framework — DORA, FCA, NHS Digital, GovAssure.</span></span></div>
+      <div class="get"><span class="get__check">✓</span><span class="get__text"><strong>Team enablement + handover</strong><span>Your engineers trained to run it. Documented decisions, no black box.</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- THE METHOD -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The method</div>
+        <h2>How the engagement runs.</h2>
+      </div>
+      <p class="s__head-sub">8–12 weeks, four phases. Customised to your estate and your regulator, but the shape is proven.</p>
+    </div>
+    <div class="method">
+      <div class="mphase"><div class="mphase__week">Weeks 1–2</div><div class="mphase__name">Assess</div><div class="mphase__desc">Map your SDLC, risk profile and regulatory obligations. Identify where AI delivery fits and where it can't.</div></div>
+      <div class="mphase"><div class="mphase__week">Weeks 3–6</div><div class="mphase__name">Build guardrails</div><div class="mphase__desc">Stand up the policy framework, audit trail and human-in-the-loop gates. The controls come before the velocity.</div></div>
+      <div class="mphase"><div class="mphase__week">Weeks 6–10</div><div class="mphase__name">Pilot delivery</div><div class="mphase__desc">Run AI-augmented delivery on a real workstream, under governance. Prove it to your compliance team with evidence.</div></div>
+      <div class="mphase"><div class="mphase__week">Weeks 10–12</div><div class="mphase__name">Handover</div><div class="mphase__desc">Roll out, train your teams, document every decision. You own the model — we don't hold the keys.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GOVERNANCE (AI-DLC specific) -->
+<section class="s">
+  <div class="container">
+    <div class="gov">
+      <div class="gov__left">
+        <div class="eyebrow">Regulated-sector fit</div>
+        <h2 style="margin-top:1rem">Built for the regulator in the room.</h2>
+        <p>Most AI-delivery tooling assumes a startup's risk appetite. AI-DLC assumes yours: an auditor who needs evidence, a regulator who needs mapping, and a CISO who personally signs off. We built the governance first, then the velocity.</p>
+      </div>
+      <div class="gov__frameworks">
+        <div class="gov__fw-label">Mapped to</div>
+        <div class="gov__fw">Financial services <small>DORA · PRA · FCA</small></div>
+        <div class="gov__fw">Healthcare <small>ICO · NHS Digital</small></div>
+        <div class="gov__fw">Public sector <small>GovAssure</small></div>
+        <div class="gov__fw">Critical national infrastructure <small>NIS</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Real outcomes</div>
+        <h2>What it's delivered.</h2>
+      </div>
+      <p class="s__head-sub">Per-engagement figures. Real numbers, never aggregated into a vanity stat.</p>
+    </div>
+    <div class="outs">
+      <div class="out"><div class="out__value">3×</div><div class="out__label">Delivery throughput, under full governance</div><div class="out__source">FS client · 2026</div></div>
+      <div class="out"><div class="out__value">100%</div><div class="out__label">AI-generated changes audit-trailed and attributable</div><div class="out__source">By design</div></div>
+      <div class="out"><div class="out__value">First</div><div class="out__label">Governed AI-delivery pipeline its CISO signed off</div><div class="out__source">FS client · 2026</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETPLACE -->
+<section class="s">
+  <div class="container">
+    <div class="marketplace">
+      <div>
+        <div class="eyebrow">Procurement</div>
+        <h3 style="margin-top:1rem">Buy it through AWS Marketplace.</h3>
+        <p class="marketplace__body">AI-DLC is a listed AWS Marketplace product. Procure against your existing AWS commit — it counts toward your spend, and most engagements qualify for AWS funding.</p>
+        <div class="marketplace__funding"><strong>AWS funding:</strong> eligible where applicable. We handle the funding application as part of the Assess phase.</div>
+      </div>
+      <div class="marketplace__actions">
+        <a href="#" class="btn btn--primary">View on AWS Marketplace ↗</a>
+        <a href="#" class="btn btn--ghost">Check funding eligibility ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Questions</div>
+        <h2>What regulated CTOs ask first.</h2>
+      </div>
+      <p class="s__head-sub">Straight answers — and the questions search and AI assistants surface around governed AI delivery.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>How is this different from just giving engineers Copilot or Claude?</div><div class="faq__a">Handing engineers an AI assistant with no governance is exactly what your auditor is worried about — ungoverned, unattributable changes hitting production. AI-DLC wraps AI-augmented delivery in policy gates, a full audit trail, and human-in-the-loop controls calibrated to risk. The velocity is similar; the difference is you can prove what happened and why.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>Will our compliance team actually sign this off?</div><div class="faq__a">That's the whole design goal. We build the governance framework before the delivery velocity, map it to your specific regulatory obligations (DORA, FCA, NHS Digital, GovAssure), and pilot it on a real workstream so your compliance team reviews evidence, not slides. We've taken this through CISO sign-off in financial services.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>What's fixed about a "fixed-price" engagement?</div><div class="faq__a">The scope and the price. AI-DLC is a productised Foundation — a proven blueprint, customised per client. You see exactly what's delivered (the six scope items above) and what it costs before you commit. It runs 8–12 weeks. No open-ended day-rate creep.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>Are we locked into Steamhaus afterwards?</div><div class="faq__a">No. The governed delivery model lands in your AWS accounts, documented, with your team trained to run it. There's no Steamhaus control plane to stay subscribed to. If you want us to keep running it, that's the Managed Service — but it's a choice, not a lock-in.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>Does AWS funding really cover this?</div><div class="faq__a">Most AI-DLC engagements qualify for AWS funding given the platform and modernisation work involved. We assess eligibility and handle the application during the Assess phase — it's built into the engagement, not left for you to chase.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content: center; display: inline-flex;">Start here</div>
+    <h2>See whether AI-DLC fits your governance.</h2>
+    <p class="cta-band__sub">The AI-Readiness Assessment checks whether your estate and regulatory profile suit AI-DLC — fixed-price, ~3 weeks, with AWS funding eligibility checked.</p>
+    <div class="cta-band__actions">
+      <a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a>
+      <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="container">© Steamhaus · Manchester · UK</div></footer>
+</body>
+</html>

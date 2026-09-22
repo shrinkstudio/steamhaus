@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — What We Do v1</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --brand-darkest: #00160e;
+    --brand-darker: #001b12;
+    --brand: #002f1e;
+    --brand-dark: #152023;
+    --brand-light: #334941;
+    --brand-lighter: #667671;
+    --brand-lightest: #e6e8e7;
+    --peach: #e7a38b;
+    --peach-darker: #d68f76;
+    --white: #ffffff;
+    --mid-gray-1: #dfddd6;
+    --mid-gray-2: #888680;
+    --ease: cubic-bezier(0.625, 0.05, 0, 1);
+    --max-w: 1280px;
+    --pad-x: 2.5rem;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--brand-darker);
+    color: var(--brand-lightest);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding-left: var(--pad-x); padding-right: var(--pad-x);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--peach);
+    display: inline-flex; align-items: center; gap: 0.5em;
+  }
+  .eyebrow::before {
+    content: ""; width: 0.4em; height: 0.4em;
+    background: var(--peach); border-radius: 50%;
+  }
+  .eyebrow.no-dot::before { display: none; }
+  h1, h2, h3, h4 {
+    margin: 0; font-weight: 600; letter-spacing: -0.02em; line-height: 1.05;
+  }
+  h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); }
+  h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.08; }
+  h3 { font-size: 1.5rem; line-height: 1.15; }
+  p { margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--white);
+    transition: all 250ms var(--ease); cursor: pointer;
+  }
+  .btn:hover { border-color: rgba(255,255,255,0.45); }
+  .btn--primary {
+    background: var(--peach); color: var(--brand-darkest);
+    border-color: var(--peach);
+  }
+  .btn--primary:hover { background: var(--peach-darker); border-color: var(--peach-darker); }
+  .btn--ghost { background: transparent; }
+
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: rgba(0, 22, 14, 0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem var(--pad-x);
+    max-width: var(--max-w); margin: 0 auto;
+  }
+  .nav__logo { font-size: 1.15rem; font-weight: 600; }
+  .nav__links {
+    display: flex; gap: 2rem; align-items: center;
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+  }
+  .nav__link { cursor: pointer; transition: color 250ms var(--ease); }
+  .nav__link:hover { color: var(--peach); }
+  .nav__link.active { color: var(--peach); }
+  .nav__link .caret { margin-left: 0.3em; opacity: 0.6; }
+  .nav__cta { padding: 0.7rem 1.1rem; font-size: 0.72rem; }
+
+  /* ── Hero ─────────────────────────────────────── */
+  section.hero {
+    padding: 6rem 0 4rem;
+    background:
+      radial-gradient(80% 60% at 50% 0%, rgba(231,163,139,0.06), transparent 60%),
+      linear-gradient(to bottom, var(--brand-darker), var(--brand));
+  }
+  .hero__head {
+    max-width: 48rem;
+  }
+  .hero h1 {
+    margin: 1.5rem 0;
+    max-width: 20ch;
+  }
+  .hero__sub {
+    color: rgba(255,255,255,0.7);
+    font-size: 1.15rem; line-height: 1.55;
+    max-width: 36rem;
+    margin-bottom: 0;
+  }
+
+  /* ── Motif strip ──────────────────────────────── */
+  .motif {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .motif__label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .motif__verbs {
+    display: flex; gap: 2rem; align-items: center;
+    flex-wrap: wrap;
+  }
+  .motif__verb {
+    font-family: ui-monospace, monospace;
+    font-size: 0.95rem; letter-spacing: 0.06em;
+    color: var(--peach);
+  }
+  .motif__arrow {
+    color: rgba(255,255,255,0.35);
+    font-family: ui-monospace, monospace;
+  }
+
+  /* ── Pillars (substantial cards) ─────────────── */
+  section.pillars {
+    padding: 6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .pillars__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .pillar-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    padding: 2.5rem;
+    display: flex; flex-direction: column;
+    transition: all 300ms var(--ease);
+    cursor: pointer;
+    min-height: 32rem;
+  }
+  .pillar-card:hover {
+    border-color: rgba(231,163,139,0.5);
+    background: rgba(231,163,139,0.04);
+  }
+  .pillar-card__head {
+    display: flex; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .pillar-card__num {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--peach);
+  }
+  .pillar-card__verb {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .pillar-card__title h3 {
+    font-size: 2.2rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    line-height: 1.05;
+  }
+  .pillar-card__outcome {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    margin-top: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .pillar-card__items {
+    margin-top: auto;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.5rem;
+  }
+  .pillar-card__items-label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1rem;
+  }
+  .pillar-card__items-list {
+    display: grid; gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .pillar-card__item {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.05);
+  }
+  .pillar-card__item:last-child { border-bottom: none; }
+  .pillar-card__item-status {
+    font-family: ui-monospace, monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .pillar-card__item-status.flagship { color: var(--peach); }
+  .pillar-card__cta {
+    color: var(--peach);
+    font-family: ui-monospace, monospace;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    display: inline-flex; gap: 0.3em;
+  }
+
+  /* ── At-a-glance map (all foundations + accelerators) ─── */
+  section.map {
+    padding: 6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: var(--brand-darkest);
+  }
+  .map__head {
+    max-width: 48rem;
+    margin-bottom: 4rem;
+  }
+  .map__head h2 { margin: 1rem 0; }
+  .map__sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    max-width: 36rem;
+  }
+  .map__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .map-col {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 0.75rem;
+    padding: 2rem;
+  }
+  .map-col__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .map-col__pillar {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .map-col__title {
+    font-size: 1.4rem; font-weight: 600;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+  .map-col__pillar-link {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--peach);
+  }
+  .map-col__type-label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 0.85rem;
+  }
+  .map-col__items {
+    display: grid; gap: 0.5rem;
+  }
+  .map-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.85rem 1rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 0.4rem;
+    transition: all 200ms var(--ease);
+    cursor: pointer;
+  }
+  .map-item:hover {
+    background: rgba(231,163,139,0.04);
+    border-color: rgba(231,163,139,0.3);
+  }
+  .map-item--flagship {
+    background: rgba(231,163,139,0.05);
+    border-color: rgba(231,163,139,0.25);
+  }
+  .map-item__name {
+    font-size: 0.95rem;
+    color: var(--white);
+  }
+  .map-item__flag {
+    font-family: ui-monospace, monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--peach);
+  }
+  .map-item__meta {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .map-item--coming { opacity: 0.6; cursor: default; }
+
+  /* Run It column (different structure) */
+  .map-col--run .map-col__items { gap: 1rem; }
+  .map-tier {
+    padding: 1.5rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 0.5rem;
+  }
+  .map-tier__name {
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .map-tier__sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+  }
+
+  /* ── Why three pillars (light explainer) ─────── */
+  section.why {
+    padding: 6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .why__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .why__copy h2 {
+    margin: 1rem 0 1.5rem;
+  }
+  .why__copy p {
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  .why__quote {
+    border-left: 2px solid var(--peach);
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    background: rgba(255,255,255,0.015);
+    border-radius: 0 0.4rem 0.4rem 0;
+  }
+  .why__quote-text {
+    font-size: 1.15rem; line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 1rem;
+  }
+  .why__quote-text em { color: var(--peach); font-style: normal; }
+  .why__quote-attr {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* CTA band */
+  .cta-band {
+    padding: 5rem 0;
+    background: var(--brand-darkest);
+    border-top: 1px solid rgba(231,163,139,0.15);
+    text-align: center;
+  }
+  .cta-band h2 { margin: 1rem 0; max-width: 40rem; margin-left: auto; margin-right: auto; }
+  .cta-band__sub {
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+    max-width: 36rem; margin-left: auto; margin-right: auto;
+  }
+
+  footer {
+    padding: 3rem 0;
+    background: var(--brand-darkest);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HERO · architectural statement
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__head">
+      <div class="eyebrow no-dot">What we do</div>
+      <h1>Three pillars.<br>One estate.</h1>
+      <p class="hero__sub">An AWS estate is a system, not a project. We build it, modernise it, and run it — so AI investment turns into working systems, not stalled pilots.</p>
+    </div>
+
+    <div class="motif">
+      <span class="motif__label">The motif</span>
+      <div class="motif__verbs">
+        <span class="motif__verb">Build it</span>
+        <span class="motif__arrow">→</span>
+        <span class="motif__verb">Modernise it</span>
+        <span class="motif__arrow">→</span>
+        <span class="motif__verb">Run it</span>
+      </div>
+      <span class="motif__label" style="margin-left: auto;">Get AI-ready, stay AI-ready</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     THE THREE PILLARS · substantial cards
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="pillars">
+  <div class="container">
+    <div class="pillars__grid">
+
+      <a href="/platform-v1.html" class="pillar-card">
+        <div class="pillar-card__head">
+          <span class="pillar-card__num">01 / Pillar</span>
+          <span class="pillar-card__verb">Build it</span>
+        </div>
+        <div class="pillar-card__title">
+          <h3>Platform</h3>
+          <p class="pillar-card__outcome">The governed AWS foundation AI and engineers can build on. Landing zone, container platforms, an IDP, governance, operational maturity.</p>
+        </div>
+        <div class="pillar-card__items">
+          <div class="pillar-card__items-label">5 Foundations · fixed-price</div>
+          <div class="pillar-card__items-list">
+            <div class="pillar-card__item">
+              <span>Secure Landing Zone</span>
+              <span class="pillar-card__item-status">6 weeks</span>
+            </div>
+            <div class="pillar-card__item">
+              <span>Amazon EKS</span>
+              <span class="pillar-card__item-status">8 weeks</span>
+            </div>
+            <div class="pillar-card__item">
+              <span>Amazon ECS</span>
+              <span class="pillar-card__item-status">6 weeks</span>
+            </div>
+            <div class="pillar-card__item">
+              <span>Platform Engineering (IDP)</span>
+              <span class="pillar-card__item-status">10 weeks</span>
+            </div>
+            <div class="pillar-card__item">
+              <span>AI-DLC</span>
+              <span class="pillar-card__item-status flagship">★ Flagship</span>
+            </div>
+          </div>
+          <span class="pillar-card__cta">Explore Platform →</span>
+        </div>
+      </a>
+
+      <a href="#" class="pillar-card">
+        <div class="pillar-card__head">
+          <span class="pillar-card__num">02 / Pillar</span>
+          <span class="pillar-card__verb">Modernise it</span>
+        </div>
+        <div class="pillar-card__title">
+          <h3>Modernisation</h3>
+          <p class="pillar-card__outcome">Judgment-led modernisation delivered through AI-driven Accelerators. Across infrastructure, applications and data — the decomposition decisions hold the value.</p>
+        </div>
+        <div class="pillar-card__items">
+          <div class="pillar-card__items-label">Accelerators · phased by evidence</div>
+          <div class="pillar-card__items-list">
+            <div class="pillar-card__item">
+              <span>VMware Exit</span>
+              <span class="pillar-card__item-status flagship">Live</span>
+            </div>
+            <div class="pillar-card__item">
+              <span>.NET &amp; SQL Modernisation</span>
+              <span class="pillar-card__item-status flagship">Live</span>
+            </div>
+            <div class="pillar-card__item map-item--coming">
+              <span style="opacity:0.7">Mainframe Exit</span>
+              <span class="pillar-card__item-status">Coming</span>
+            </div>
+            <div class="pillar-card__item map-item--coming">
+              <span style="opacity:0.7">Oracle Modernisation</span>
+              <span class="pillar-card__item-status">Coming</span>
+            </div>
+            <div class="pillar-card__item map-item--coming">
+              <span style="opacity:0.7">Monolith Decomposition</span>
+              <span class="pillar-card__item-status">Coming</span>
+            </div>
+          </div>
+          <span class="pillar-card__cta">Explore Modernisation →</span>
+        </div>
+      </a>
+
+      <a href="#" class="pillar-card">
+        <div class="pillar-card__head">
+          <span class="pillar-card__num">03 / Pillar</span>
+          <span class="pillar-card__verb">Run it</span>
+        </div>
+        <div class="pillar-card__title">
+          <h3>AWS Managed Service</h3>
+          <p class="pillar-card__outcome">AI-native, consumption-priced. Frontier agents and Claude do the work, senior engineers over the top. Not a ticket queue.</p>
+        </div>
+        <div class="pillar-card__items">
+          <div class="pillar-card__items-label">Two tiers</div>
+          <div class="pillar-card__items-list">
+            <div class="pillar-card__item">
+              <span>Optimise</span>
+              <span class="pillar-card__item-status">Resell + consumption</span>
+            </div>
+            <div class="pillar-card__item">
+              <span>Operate</span>
+              <span class="pillar-card__item-status">Full service</span>
+            </div>
+          </div>
+          <span class="pillar-card__cta">Explore Managed Service →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     AT-A-GLANCE MAP · everything under What We Do
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="map">
+  <div class="container">
+    <div class="map__head">
+      <div class="eyebrow">The full map</div>
+      <h2>Everything that sits under What We Do.</h2>
+      <p class="map__sub">For the CTO who lands here cold and wants the whole shape in one view. Three Pillars. Productised forms beneath each one. Honest about what's live and what's coming.</p>
+    </div>
+
+    <div class="map__grid" style="grid-template-columns: 1fr 1fr 1fr;">
+
+      <!-- Build it -->
+      <div class="map-col">
+        <div class="map-col__head">
+          <div>
+            <div class="map-col__pillar">01 · Build it</div>
+            <div class="map-col__title">Platform</div>
+          </div>
+          <a href="/platform-v1.html" class="map-col__pillar-link">View →</a>
+        </div>
+        <div class="map-col__type-label">5 Foundations · productised, fixed-price</div>
+        <div class="map-col__items">
+          <a href="#" class="map-item">
+            <span class="map-item__name">Secure Landing Zone</span>
+            <span class="map-item__meta">6 wks · Live</span>
+          </a>
+          <a href="#" class="map-item">
+            <span class="map-item__name">Amazon EKS</span>
+            <span class="map-item__meta">8 wks · Live</span>
+          </a>
+          <a href="#" class="map-item">
+            <span class="map-item__name">Amazon ECS</span>
+            <span class="map-item__meta">6 wks · Live</span>
+          </a>
+          <a href="#" class="map-item">
+            <span class="map-item__name">Platform Engineering (IDP)</span>
+            <span class="map-item__meta">10 wks · Live</span>
+          </a>
+          <a href="#" class="map-item map-item--flagship">
+            <span class="map-item__name">AI-DLC</span>
+            <span class="map-item__flag">★ Flagship</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Modernise it -->
+      <div class="map-col">
+        <div class="map-col__head">
+          <div>
+            <div class="map-col__pillar">02 · Modernise it</div>
+            <div class="map-col__title">Modernisation</div>
+          </div>
+          <a href="#" class="map-col__pillar-link">View →</a>
+        </div>
+        <div class="map-col__type-label">Accelerators · phased by evidence</div>
+        <div class="map-col__items">
+          <a href="#" class="map-item">
+            <span class="map-item__name">VMware Exit</span>
+            <span class="map-item__meta">Live</span>
+          </a>
+          <a href="#" class="map-item">
+            <span class="map-item__name">.NET &amp; SQL Modernisation</span>
+            <span class="map-item__meta">Live</span>
+          </a>
+          <div class="map-item map-item--coming">
+            <span class="map-item__name">Mainframe Exit</span>
+            <span class="map-item__meta">As case studies land</span>
+          </div>
+          <div class="map-item map-item--coming">
+            <span class="map-item__name">Oracle Modernisation</span>
+            <span class="map-item__meta">As case studies land</span>
+          </div>
+          <div class="map-item map-item--coming">
+            <span class="map-item__name">Monolith Decomposition</span>
+            <span class="map-item__meta">As case studies land</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Run it -->
+      <div class="map-col map-col--run">
+        <div class="map-col__head">
+          <div>
+            <div class="map-col__pillar">03 · Run it</div>
+            <div class="map-col__title">AWS Managed Service</div>
+          </div>
+          <a href="#" class="map-col__pillar-link">View →</a>
+        </div>
+        <div class="map-col__type-label">Two tiers · AI-native, consumption-priced</div>
+        <div class="map-col__items">
+          <div class="map-tier">
+            <div class="map-tier__name">Optimise</div>
+            <div class="map-tier__sub">Lighter touch. Resell + AWS consumption optimisation. Senior engineers on call.</div>
+          </div>
+          <div class="map-tier">
+            <div class="map-tier__name">Operate</div>
+            <div class="map-tier__sub">The full service. Frontier agents and Claude do the work, senior engineers over the top.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     WHY THREE PILLARS · light explainer (links to thesis)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="why">
+  <div class="container">
+    <div class="why__grid">
+      <div class="why__copy">
+        <div class="eyebrow">Why three</div>
+        <h2>Get AI-ready, stay AI-ready.</h2>
+        <p>An AWS estate is a living system. The platform you build today gets modernised as the business changes, and operated as the platform underneath keeps moving. None of those three jobs is a one-off — and any one of them done in isolation breaks the next.</p>
+        <p>So we treat them as one offering, structured as three. Build it. Modernise it. Run it. Each pillar productised where it can be, judgment-led where it can't.</p>
+        <a href="#" class="btn btn--ghost" style="margin-top: 1rem;">Read the thesis ↗</a>
+      </div>
+
+      <div class="why__quote">
+        <p class="why__quote-text">"Whether AI investment pays is decided by the estate it runs on, not the AI itself. The state of the underlying systems <em>decides the outcome</em>."</p>
+        <div class="why__quote-attr">From the Steamhaus thesis · 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content: center; display: inline-flex;">Ready?</div>
+    <h2>Find out which pillar to start with.</h2>
+    <p class="cta-band__sub">A fixed-price AI-Readiness Assessment looks at the whole estate, tells you what's working and what isn't, and points you at the right next step.</p>
+    <a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a>
+  </div>
+</section>
+
+
+<footer>
+  <div class="container">
+    © Steamhaus · Manchester · UK
+  </div>
+</footer>
+
+</body>
+</html>

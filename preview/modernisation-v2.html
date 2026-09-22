@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Modernisation v2 (from MM doc)</title>
+<link rel="stylesheet" href="/_shared.css" />
+<style>
+  .hero h1 { max-width: 20ch; }
+  .hero__meta strong { color: var(--peach); font-weight: 500; }
+
+  /* Challenges (3 boxes) */
+  .challenges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .challenge { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 2.5rem; background: radial-gradient(80% 80% at 0% 0%, rgba(231,163,139,0.03), transparent 60%), rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 1rem; }
+  .challenge__stat { font-size: 2.6rem; font-weight: 600; color: var(--peach); letter-spacing: -0.03em; line-height: 1; }
+  .challenge h3 { font-size: 1.35rem; color: var(--white); line-height: 1.15; }
+  .challenge p { color: rgba(255,255,255,0.6); line-height: 1.55; flex-grow: 1; }
+  .challenge__source { font-family: ui-monospace, monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; }
+
+  /* Journey (3 phases) */
+  .journey { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .phase { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .phase__num { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--peach); }
+  .phase h3 { color: var(--white); font-size: 1.3rem; }
+  .phase__body { color: rgba(255,255,255,0.6); font-size: 0.92rem; line-height: 1.55; flex-grow: 1; }
+  .phase__honest { border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1rem; font-family: ui-monospace, monospace; font-size: 0.68rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+  .phase__honest strong { color: var(--peach); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* Accelerators hub */
+  .accelerators { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .acc { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color 300ms var(--ease); }
+  .acc:hover { border-color: rgba(231,163,139,0.4); }
+  .acc--coming { opacity: 0.55; }
+  .acc__top { display: flex; justify-content: space-between; align-items: center; font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .acc__pain { color: rgba(255,255,255,0.45); }
+  .acc__status.live { color: var(--peach); }
+  .acc__status.coming { color: rgba(255,255,255,0.4); }
+  .acc h3 { color: var(--white); font-size: 1.5rem; }
+  .acc__outcome { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.5; flex-grow: 1; }
+  .acc__link { color: var(--peach); font-family: ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* Engine + driver */
+  .engine-driver { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .ed { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 2.5rem; }
+  .ed--engine { background: radial-gradient(80% 80% at 0% 0%, rgba(231,163,139,0.04), transparent 60%), rgba(255,255,255,0.02); }
+  .ed__label { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--peach); margin-bottom: 1rem; }
+  .ed h3 { font-size: 1.6rem; margin-bottom: 1rem; }
+  .ed__body { color: rgba(255,255,255,0.65); line-height: 1.55; margin-bottom: 1.75rem; }
+  .ed__tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tool-pill { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.08em; padding: 0.4rem 0.8rem; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+  .ed__principle { display: grid; gap: 1rem; }
+  .ed__principle-item { display: flex; gap: 0.75rem; font-size: 0.92rem; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .ed__principle-item::before { content: "→"; color: var(--peach); }
+
+  /* Outcome stats */
+  .outcomes-band { background: var(--brand-darkest); }
+  .outcomes-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; overflow: hidden; }
+  .outcome-cell { padding: 2.5rem; border-right: 1px solid rgba(255,255,255,0.08); }
+  .outcome-cell:last-child { border-right: none; }
+  .outcome-cell__value { font-size: 3rem; font-weight: 600; color: var(--peach); letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 0.85rem; }
+  .outcome-cell__label { color: rgba(255,255,255,0.75); line-height: 1.4; margin-bottom: 0.75rem; }
+  .outcome-cell__source { font-family: ui-monospace, monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+
+  /* Why Steamhaus + badges */
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .why-card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 2.5rem; transition: border-color 300ms var(--ease); }
+  .why-card:hover { border-color: rgba(231,163,139,0.4); }
+  .why-card__num { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--peach); margin-bottom: 1.25rem; }
+  .why-card h3 { font-size: 1.6rem; color: var(--white); margin-bottom: 0.85rem; line-height: 1.1; }
+  .why-card p { color: rgba(255,255,255,0.6); line-height: 1.55; }
+  .badges { margin-top: 2.5rem; padding-top: 2.5rem; border-top: 1px solid rgba(255,255,255,0.08); }
+  .badges__label { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 1.5rem; }
+  .badges__row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+  .badge { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.6rem; padding: 1.25rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; min-height: 6rem; background: rgba(255,255,255,0.02); }
+  .badge__icon { width: 1.75rem; height: 1.75rem; border-radius: 0.35rem; background: rgba(231,163,139,0.15); border: 1px solid rgba(231,163,139,0.3); }
+  .badge__name { font-family: ui-monospace, monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.7); line-height: 1.3; text-align: center; }
+
+  /* Case slider (static) */
+  .caseflow { position: relative; height: 82vh; min-height: 560px; overflow: hidden; border-radius: 0.75rem; }
+  .caseflow__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .caseflow__scrim { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,22,14,0.85), rgba(0,22,14,0.4) 45%, rgba(0,22,14,0.15)), linear-gradient(to top, rgba(0,22,14,0.75), transparent 45%); }
+  .caseflow__inner { position: relative; z-index: 2; height: 100%; padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
+  .caseflow__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: start; }
+  .caseflow h3 { font-size: clamp(1.8rem, 3vw, 2.8rem); color: #fff; margin: 1.25rem 0; max-width: 18ch; line-height: 1.1; }
+  .caseflow__desc { color: rgba(255,255,255,0.8); font-size: 1.05rem; line-height: 1.5; max-width: 30rem; margin-bottom: 2rem; }
+  .caseflow__stats { display: flex; gap: 1rem; }
+  .caseflow__stat { background: rgba(0,22,14,0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1.25rem 1.5rem; min-width: 9rem; }
+  .caseflow__stat-value { font-size: 2rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.5rem; }
+  .caseflow__stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .caseflow__tabs { position: absolute; left: 3rem; right: 3rem; bottom: 2.5rem; z-index: 3; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.5rem; }
+  .caseflow__tab { padding: 0.75rem 0 0; color: rgba(255,255,255,0.55); font-family: ui-monospace, monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; position: relative; }
+  .caseflow__tab.on { color: #fff; }
+  .caseflow__tab-track { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.15); overflow: hidden; }
+  .caseflow__tab-fill { position: absolute; inset: 0; background: var(--peach); transform-origin: left; }
+
+  /* FAQ */
+  .faq-list { display: grid; border-top: 1px solid rgba(255,255,255,0.1); }
+  .faq { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1.75rem 0; }
+  .faq__q { font-size: 1.2rem; font-weight: 600; color: var(--white); letter-spacing: -0.01em; margin-bottom: 1rem; display: flex; gap: 1rem; }
+  .faq__q-mark { font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--peach); padding-top: 0.2rem; }
+  .faq__a { color: rgba(255,255,255,0.7); line-height: 1.6; padding-left: 2.1rem; max-width: 54rem; }
+
+  /* Newsletter + footer */
+  .newsletter { padding: 4rem 0; background: var(--brand-darkest); border-top: 1px solid rgba(255,255,255,0.06); }
+  .newsletter__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .newsletter h3 { font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem; }
+  .newsletter p { color: rgba(255,255,255,0.55); font-size: 0.95rem; }
+  .newsletter__form { display: flex; gap: 0.75rem; }
+  .newsletter__input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 0.9rem 1.4rem; color: #fff; font-size: 0.95rem; }
+  .site-footer { padding: 5rem 0 3rem; background: var(--brand-darkest); border-top: 1px solid rgba(255,255,255,0.06); }
+  .site-footer__top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .site-footer h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); max-width: 12ch; margin-bottom: 1.5rem; }
+  .site-footer__col-label { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 1.25rem; }
+  .site-footer__links { display: grid; gap: 0.75rem; }
+  .site-footer__links a { color: rgba(255,255,255,0.7); font-size: 0.95rem; transition: color 200ms var(--ease); }
+  .site-footer__links a:hover { color: var(--peach); }
+  .site-footer__legal { padding-top: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); }
+
+  @media (max-width: 900px) {
+    .challenges, .journey { grid-template-columns: 1fr; }
+    .accelerators, .engine-driver, .why-grid, .newsletter__grid, .caseflow__top { grid-template-columns: 1fr; }
+    .outcomes-grid { grid-template-columns: 1fr 1fr; }
+    .site-footer__top { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow no-dot">Modernisation</div>
+    <h1>Modernisation, decided by judgment.</h1>
+    <p class="hero__sub">Modernisation is an architecture problem before it's a code problem. The decomposition decisions hold the value — AI tooling can't make them for you. We drive; the AI accelerates. Across infrastructure, applications and data.</p>
+    <div class="hero__ctas">
+      <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+      <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+    </div>
+    <div class="hero__meta">
+      <span><strong>2</strong> Accelerators live</span>
+      <span>Infrastructure · Apps · Data</span>
+      <span>AWS funding eligible</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1 · 3 CHALLENGES (new) -->
+<section class="s" style="border-top:none;">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The challenge</div>
+        <h2>Three things keeping the estate stuck.</h2>
+      </div>
+      <p class="s__head-sub">Placeholder challenges — swap for real figures or industry benchmarks. A mix of cost, legacy tech and AI-readiness pain.</p>
+    </div>
+    <div class="challenges">
+      <div class="challenge"><div class="challenge__stat">2–5×</div><h3>The licensing tax climbs</h3><p>VMware, Oracle and Microsoft repricing turn routine renewals into board-level cost lines — and the easy answer gets more expensive every cycle.</p><div class="challenge__source">Illustrative · replace with real figure</div></div>
+      <div class="challenge"><div class="challenge__stat">Legacy</div><h3>Monoliths resist change</h3><p>Applications too entangled to move fast. Every change is slow, risky and expensive — and a lift-and-shift just relocates the problem.</p><div class="challenge__source">Illustrative · replace with real figure</div></div>
+      <div class="challenge"><div class="challenge__stat">Blocked</div><h3>AI can't act on it</h3><p>Unmodernised applications are ones AI tooling can't usefully operate on. Until the portfolio is AI-actionable, the AI investment stalls.</p><div class="challenge__source">Illustrative · replace with real figure</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 · THE JOURNEY (keep) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The journey</div>
+        <h2>Assess. Transition. Handover.</h2>
+      </div>
+      <p class="s__head-sub">No one-click promises. A brownfield estate is brownfield by definition — the value is in the decisions, and we're honest about where the mess is.</p>
+    </div>
+    <div class="journey">
+      <div class="phase"><div class="phase__num">Phase 01</div><h3>Assess</h3><p class="phase__body">AI-driven discovery maps every workload, dependency and licence. We classify each: rehost, replatform, or retire. You get a costed plan with a target architecture, not a spreadsheet of guesses.</p><div class="phase__honest"><strong>Honest about</strong> the workloads that aren't worth moving — sometimes the right call is retire or rebuild.</div></div>
+      <div class="phase"><div class="phase__num">Phase 02</div><h3>Transition</h3><p class="phase__body">Workloads move in waves, lowest-risk first. Where it makes sense we replatform onto native AWS — containers, managed databases — rather than relocating as-is. Each wave is reversible until you sign it off.</p><div class="phase__honest"><strong>Honest about</strong> the brownfield reality — legacy dependencies surface mid-migration. We plan for it.</div></div>
+      <div class="phase"><div class="phase__num">Phase 03</div><h3>Handover</h3><p class="phase__body">The estate lands in your AWS accounts, documented and observable. Your team gets the runbooks and the decisions. Or we keep running it — that's the Managed Service.</p><div class="phase__honest"><strong>Honest about</strong> capability gaps — we flag where your team needs upskilling, and don't leave until it sticks.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 · THE ACCELERATORS (keep) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">How we do it</div>
+        <h2>Named transformation journeys.</h2>
+      </div>
+      <p class="s__head-sub">Each Accelerator is a specific transformation with a known shape. We ship them as case studies land — real proof before we put a name on the menu.</p>
+    </div>
+    <div class="accelerators">
+      <a href="#" class="acc"><div class="acc__top"><span class="acc__pain">Infrastructure</span><span class="acc__status live">● Live</span></div><h3>VMware Exit</h3><p class="acc__outcome">Exit the Broadcom licensing tax. Land cleanly on AWS — modernised where it matters, not just relocated.</p><span class="acc__link">View Accelerator →</span></a>
+      <a href="#" class="acc"><div class="acc__top"><span class="acc__pain">Applications</span><span class="acc__status live">● Live</span></div><h3>.NET &amp; SQL Modernisation</h3><p class="acc__outcome">Break the Microsoft licensing dependency. Move .NET and SQL Server workloads to modern, open, AWS-native stacks.</p><span class="acc__link">View Accelerator →</span></a>
+      <div class="acc acc--coming"><div class="acc__top"><span class="acc__pain">Infrastructure</span><span class="acc__status coming">Coming</span></div><h3>Mainframe Exit</h3><p class="acc__outcome">Retire the mainframe on a defensible timeline. Shipping as a named journey once the case study lands.</p><span class="acc__link" style="color:rgba(255,255,255,0.35)">As case studies land</span></div>
+      <div class="acc acc--coming"><div class="acc__top"><span class="acc__pain">Data</span><span class="acc__status coming">Coming</span></div><h3>Oracle Modernisation</h3><p class="acc__outcome">Move off Oracle licensing onto AWS-native data platforms. Shipping as a named journey once the case study lands.</p><span class="acc__link" style="color:rgba(255,255,255,0.35)">As case studies land</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 · ENGINE + DRIVER (keep) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">How we differentiate</div>
+        <h2>AI is the engine. We drive.</h2>
+      </div>
+      <p class="s__head-sub">The "AI-driven" part isn't a label on a pod. Here's exactly what the tooling does, and exactly where judgment makes the call.</p>
+    </div>
+    <div class="engine-driver">
+      <div class="ed ed--engine">
+        <div class="ed__label">The engine — AWS AI tooling</div>
+        <h3>What the tooling does</h3>
+        <p class="ed__body">AWS Transform analyses estates and codebases at a depth no human team matches — dependency graphs, modernisation-fit scoring, migration planning across thousands of components. Claude drafts the refactors, the IaC, the runbooks.</p>
+        <div class="ed__tools"><span class="tool-pill">AWS Transform</span><span class="tool-pill">Amazon Q Developer</span><span class="tool-pill">Claude</span><span class="tool-pill">Bedrock</span></div>
+      </div>
+      <div class="ed">
+        <div class="ed__label">The driver — Steamhaus judgment</div>
+        <h3>Where we make the call</h3>
+        <div class="ed__principle">
+          <div class="ed__principle-item">The decomposition strategy — what becomes a service, what stays, what's retired.</div>
+          <div class="ed__principle-item">The target architecture — what "good" looks like for this estate, not a generic reference.</div>
+          <div class="ed__principle-item">Sequencing and risk — what moves first, what's reversible, where the brownfield mess hides.</div>
+          <div class="ed__principle-item">Reading the AI critically — knowing when the tooling's recommendation is wrong.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 · OUTCOME STATS (new) -->
+<section class="s outcomes-band">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The outcome</div>
+        <h2>What modernisation pays back.</h2>
+      </div>
+      <p class="s__head-sub">Industry benchmarks or your own per-journey figures. Keep them real — swap the placeholders.</p>
+    </div>
+    <div class="outcomes-grid">
+      <div class="outcome-cell"><div class="outcome-cell__value">↓60%</div><div class="outcome-cell__label">Lower run-rate vs renewed licence</div><div class="outcome-cell__source">Industry benchmark</div></div>
+      <div class="outcome-cell"><div class="outcome-cell__value">3×</div><div class="outcome-cell__label">Faster delivery, post-modernisation</div><div class="outcome-cell__source">Industry benchmark</div></div>
+      <div class="outcome-cell"><div class="outcome-cell__value">40%</div><div class="outcome-cell__label">Workloads replatformed, not rehosted</div><div class="outcome-cell__source">Steamhaus engagements</div></div>
+      <div class="outcome-cell"><div class="outcome-cell__value">0</div><div class="outcome-cell__label">Unplanned outages during cutover</div><div class="outcome-cell__source">Steamhaus engagements</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6 · WHY STEAMHAUS + BADGES (new) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Why Steamhaus</div>
+        <h2>Four things that set us apart.</h2>
+      </div>
+      <p class="s__head-sub">Not what we do — how having all of it, done right, changes the outcome.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-card__num">01</div><h3>Judgment-led decomposition</h3><p>The architecture decisions that hold the value — made by senior engineers, not a generic playbook.</p></div>
+      <div class="why-card"><div class="why-card__num">02</div><h3>End-to-end modernisation</h3><p>Infrastructure, applications and data — not just app modernisation. The whole estate.</p></div>
+      <div class="why-card"><div class="why-card__num">03</div><h3>AI-native, senior-led</h3><p>AWS AI tooling does the volume; senior engineers make the calls. AI in the delivery, judgment over the top.</p></div>
+      <div class="why-card"><div class="why-card__num">04</div><h3>Honest about brownfield</h3><p>No one-click promises. We surface the mess in the assess phase, not mid-migration.</p></div>
+    </div>
+    <div class="badges">
+      <div class="badges__label">Partnerships & credentials</div>
+      <div class="badges__row">
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">AWS Advanced Tier</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">Anthropic · Claude</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">AWS Migration</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">ISO 27001</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">FSQS Registered</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">B Corp</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7 · ASSESSMENT CTA (keep) -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content:center; display:inline-flex;">Ready?</div>
+    <h2>Find out which transformation fits.</h2>
+    <p class="cta-band__sub">The AI-Readiness Assessment looks at your estate across all three layers and tells you where modernisation pays — and which Accelerator, if any, is the right next step.</p>
+    <div class="cta-band__actions"><a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a></div>
+  </div>
+</section>
+
+<!-- SECTION 8 · CASE STUDIES (keep) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">In practice</div>
+        <h2>The Modernisation story.</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">All case studies ↗</a>
+    </div>
+    <div class="caseflow">
+      <img class="caseflow__bg" src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2000&auto=format&fit=crop" alt="" />
+      <div class="caseflow__scrim"></div>
+      <div class="caseflow__inner">
+        <div class="caseflow__top">
+          <div>
+            <div class="eyebrow">Thredd</div>
+            <h3>From an opaque platform to an AI-actionable estate</h3>
+            <p class="caseflow__desc">A decade-old payments monolith, decomposed at the right boundaries so AI tooling can finally operate on it — without a rewrite.</p>
+            <a href="#" class="btn btn--ghost">Read the case study ↗</a>
+          </div>
+          <div class="caseflow__stats">
+            <div class="caseflow__stat"><div class="caseflow__stat-value">9</div><div class="caseflow__stat-label">Services extracted at clean boundaries</div></div>
+            <div class="caseflow__stat"><div class="caseflow__stat-value">62%</div><div class="caseflow__stat-label">Reduction in time-to-merge</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="caseflow__tabs">
+        <div class="caseflow__tab on"><span class="caseflow__tab-track"><span class="caseflow__tab-fill" style="transform:scaleX(0.5)"></span></span>Thredd</div>
+        <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill"></span></span>Sperry Rail</div>
+        <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill"></span></span>Modulr Finance</div>
+        <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill"></span></span>Auden</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9 · FAQ (keep) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Questions</div>
+        <h2>What CTOs ask before committing.</h2>
+      </div>
+      <p class="s__head-sub">Straight answers — also the questions search and AI assistants surface around modernisation.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>How do you decide what to modernise, versus retire or leave?</div><div class="faq__a">In the Assess phase we classify every workload — rehost, replatform, or retire — against cost, risk and how AI-actionable it needs to be. Not everything is worth moving; sometimes the right call is to retire or rebuild. You get a costed plan with the reasoning, not a blanket "migrate everything".</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>Will this break things in production?</div><div class="faq__a">Workloads move in reversible waves, lowest-risk first, and each wave is signed off before the next. We plan for the brownfield reality — legacy dependencies surface mid-migration — rather than pretending they won't. Our delivered engagements run with zero unplanned outages during cutover.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>How much of this does AI actually do?</div><div class="faq__a">AWS Transform does the discovery and dependency mapping across thousands of components — work that would take a human team weeks. Claude drafts refactors, IaC and runbooks. What the AI doesn't do is decide the decomposition strategy or the target architecture — those are judgment calls our senior engineers make, reading the tooling's output critically.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>How is it procured, and is AWS funding available?</div><div class="faq__a">Accelerators are procured through AWS Marketplace and scoped after the assessment. Most qualify for AWS Migration Acceleration Program (MAP) funding, which can offset a significant portion of the cost. We handle the funding application as part of the engagement.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter__grid">
+      <div>
+        <div class="eyebrow" style="margin-bottom:1rem;">Stay in the loop</div>
+        <h3>Join our newsletter</h3>
+        <p>The occasional note on AWS, modernisation and the AI-readiness conversation.</p>
+      </div>
+      <div>
+        <form class="newsletter__form" onsubmit="return false">
+          <input class="newsletter__input" type="email" placeholder="Enter your email" />
+          <button class="btn btn--primary" type="submit">Subscribe ↗</button>
+        </form>
+        <p style="margin-top:0.85rem; font-size:0.8rem; color:rgba(255,255,255,0.4);">By subscribing you agree to our Privacy Policy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <h2>Let's build something great together</h2>
+        <a href="#" class="btn btn--ghost">Contact us ↗</a>
+      </div>
+      <div>
+        <div class="site-footer__col-label">What we do</div>
+        <div class="site-footer__links"><a href="#">AWS Migration</a><a href="#">AWS Modernisation</a><a href="#">Cloud native</a><a href="#">Landing zone</a></div>
+      </div>
+      <div>
+        <div class="site-footer__col-label">Our work</div>
+        <div class="site-footer__links"><a href="#">Lumina Learning</a><a href="#">Sperry Rail</a><a href="#">Modulr Finance</a></div>
+      </div>
+      <div>
+        <div class="site-footer__col-label">Company</div>
+        <div class="site-footer__links"><a href="#">AWS Partnership</a><a href="#">Meet the team</a><a href="#">Terms &amp; Conditions</a><a href="#">Cookie Policy</a></div>
+      </div>
+    </div>
+    <div class="site-footer__legal">
+      <span>© Steamhaus Ltd · Registered in England &amp; Wales · company number 09735923</span>
+      <span>Amazon Web Services partner since 2016</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

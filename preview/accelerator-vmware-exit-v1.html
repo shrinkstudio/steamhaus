@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — VMware Exit · Accelerator</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --brand-darkest: #00160e;
+    --brand-darker: #001b12;
+    --brand: #002f1e;
+    --brand-dark: #152023;
+    --brand-light: #334941;
+    --brand-lighter: #667671;
+    --brand-lightest: #e6e8e7;
+    --peach: #e7a38b;
+    --peach-darker: #d68f76;
+    --white: #ffffff;
+    --mid-gray-1: #dfddd6;
+    --mid-gray-2: #888680;
+    --ease: cubic-bezier(0.625, 0.05, 0, 1);
+    --max-w: 1280px;
+    --pad-x: 2.5rem;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--brand-darker);
+    color: var(--brand-lightest);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding-left: var(--pad-x); padding-right: var(--pad-x);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--peach);
+    display: inline-flex; align-items: center; gap: 0.5em;
+  }
+  .eyebrow::before {
+    content: ""; width: 0.4em; height: 0.4em;
+    background: var(--peach); border-radius: 50%;
+  }
+  .eyebrow.no-dot::before { display: none; }
+  h1, h2, h3, h4 {
+    margin: 0; font-weight: 600; letter-spacing: -0.02em; line-height: 1.05;
+  }
+  h1 { font-size: clamp(2.4rem, 4.6vw, 4.2rem); }
+  h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.08; }
+  h3 { font-size: 1.5rem; line-height: 1.15; }
+  h4 { font-size: 1.1rem; line-height: 1.25; }
+  p { margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    padding: 0.95rem 1.5rem; border-radius: 999px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--white);
+    transition: all 250ms var(--ease); cursor: pointer;
+  }
+  .btn:hover { border-color: rgba(255,255,255,0.45); }
+  .btn--primary {
+    background: var(--peach); color: var(--brand-darkest);
+    border-color: var(--peach);
+  }
+  .btn--primary:hover { background: var(--peach-darker); border-color: var(--peach-darker); }
+  .btn--ghost { background: transparent; }
+
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: rgba(0, 22, 14, 0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem var(--pad-x);
+    max-width: var(--max-w); margin: 0 auto;
+  }
+  .nav__logo { font-size: 1.15rem; font-weight: 600; }
+  .nav__links {
+    display: flex; gap: 2rem; align-items: center;
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+  }
+  .nav__link { cursor: pointer; transition: color 250ms var(--ease); }
+  .nav__link:hover { color: var(--peach); }
+  .nav__link.active { color: var(--peach); }
+  .nav__link .caret { margin-left: 0.3em; opacity: 0.6; }
+  .nav__cta { padding: 0.7rem 1.1rem; font-size: 0.72rem; }
+
+  .crumbs {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 1rem 0;
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+  .crumbs span { color: var(--peach); }
+
+  /* ── Hero · pain → outcome ──────────────────── */
+  section.hero {
+    padding: 5rem 0 6rem;
+    background:
+      radial-gradient(70% 60% at 25% 0%, rgba(231,163,139,0.06), transparent 60%),
+      linear-gradient(to bottom, var(--brand-darker), var(--brand));
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+  .hero h1 { margin: 1.25rem 0; }
+  .hero__sub {
+    color: rgba(255,255,255,0.7);
+    font-size: 1.15rem; line-height: 1.55;
+    margin-bottom: 2.5rem;
+  }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.85rem; }
+  .hero__sidecard {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 1.75rem;
+  }
+  .hero__sidecard-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.85rem 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .hero__sidecard-row:last-child { border-bottom: none; }
+  .hero__sidecard-row span:first-child { color: rgba(255,255,255,0.5); }
+  .hero__sidecard-row span:last-child { color: var(--white); }
+  .hero__sidecard-row span.peach { color: var(--peach); }
+
+  section.s {
+    padding: 7rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .s__head { max-width: 44rem; margin-bottom: 3.5rem; }
+  .s__head h2 { margin-top: 1rem; }
+  .s__head-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 1.05rem; line-height: 1.55;
+    margin-top: 1.25rem;
+  }
+
+  /* ── The pain ────────────────────────────────── */
+  .pain {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .pain__statement {
+    font-size: 1.6rem; line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--white);
+  }
+  .pain__statement em { color: var(--peach); font-style: normal; }
+  .pain__list { display: grid; gap: 1.25rem; }
+  .pain__item {
+    display: flex; gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .pain__item:last-child { border-bottom: none; }
+  .pain__item-num {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.12em;
+    color: var(--peach);
+    padding-top: 0.2rem;
+  }
+  .pain__item-text {
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    font-size: 0.95rem;
+  }
+
+  /* ── The journey · 3 phases ──────────────────── */
+  .journey { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .phase {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    position: relative;
+  }
+  .phase__num {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--peach);
+  }
+  .phase h3 { color: var(--white); font-size: 1.3rem; }
+  .phase__body {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.92rem; line-height: 1.55;
+    flex-grow: 1;
+  }
+  .phase__honest {
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    padding-top: 1rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.68rem; letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+  }
+  .phase__honest strong { color: var(--peach); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* ── Engine + driver ─────────────────────────── */
+  .engine-driver {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .ed {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 2.5rem;
+  }
+  .ed--engine {
+    background: radial-gradient(80% 80% at 0% 0%, rgba(231,163,139,0.04), transparent 60%), rgba(255,255,255,0.02);
+  }
+  .ed__label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--peach);
+    margin-bottom: 1rem;
+  }
+  .ed h3 { font-size: 1.6rem; margin-bottom: 1rem; }
+  .ed__body {
+    color: rgba(255,255,255,0.65);
+    line-height: 1.55;
+    margin-bottom: 1.75rem;
+  }
+  .ed__tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tool-pill {
+    font-family: ui-monospace, monospace;
+    font-size: 0.68rem; letter-spacing: 0.08em;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+  }
+  .ed__principle {
+    display: grid; gap: 1rem;
+  }
+  .ed__principle-item {
+    display: flex; gap: 0.75rem;
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.4;
+  }
+  .ed__principle-item::before { content: "→"; color: var(--peach); }
+
+  /* ── Outcomes ────────────────────────────────── */
+  .outcomes {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .outcome-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .outcome-stat {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.5rem;
+    padding: 1.75rem;
+    background: rgba(255,255,255,0.02);
+  }
+  .outcome-stat__value {
+    font-size: 2.6rem; font-weight: 600;
+    color: var(--peach); letter-spacing: -0.03em; line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .outcome-stat__label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+  }
+  .outcome-quote {
+    border-left: 2px solid var(--peach);
+    padding: 0.5rem 0 0.5rem 1.75rem;
+  }
+  .outcome-quote__text {
+    font-size: 1.25rem; line-height: 1.45;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 1.25rem;
+  }
+  .outcome-quote__attr {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  .outcome-quote__attr strong { color: var(--peach); font-weight: 500; display: block; margin-bottom: 0.25rem; }
+
+  /* ── Marketplace + funding ──────────────────── */
+  .marketplace {
+    background:
+      radial-gradient(100% 100% at 100% 0%, rgba(231,163,139,0.06), transparent 60%),
+      rgba(255,255,255,0.025);
+    border: 1px solid rgba(231,163,139,0.25);
+    border-radius: 0.75rem;
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .marketplace h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+  .marketplace__body { color: rgba(255,255,255,0.65); line-height: 1.55; }
+  .marketplace__actions { display: flex; flex-direction: column; gap: 1rem; }
+  .marketplace__funding {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+  }
+  .marketplace__funding strong { color: var(--peach); font-weight: 500; }
+
+  /* ── FAQ (AEO centrepiece) ──────────────────── */
+  .faq-list { display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .faq {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 1.75rem 0;
+  }
+  .faq__q {
+    font-size: 1.2rem; font-weight: 600;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+    display: flex; gap: 1rem;
+  }
+  .faq__q-mark {
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    color: var(--peach);
+    padding-top: 0.2rem;
+  }
+  .faq__a {
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    padding-left: 2.1rem;
+    max-width: 52rem;
+  }
+
+  .cta-band {
+    padding: 5rem 0;
+    background: var(--brand-darkest);
+    border-top: 1px solid rgba(231,163,139,0.15);
+    text-align: center;
+  }
+  .cta-band h2 { margin: 1rem 0; max-width: 40rem; margin-left: auto; margin-right: auto; }
+  .cta-band__sub {
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 2rem; font-size: 1.05rem;
+    max-width: 36rem; margin-left: auto; margin-right: auto;
+  }
+  .cta-band__actions { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; }
+
+  footer {
+    padding: 3rem 0;
+    background: var(--brand-darkest);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="container">
+    What We Do · Modernisation · <span>VMware Exit</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HERO · pain → outcome
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div>
+        <div class="eyebrow no-dot">Accelerator · Modernisation</div>
+        <h1>Exit the VMware tax. Land cleanly on AWS.</h1>
+        <p class="hero__sub">Broadcom's licensing changes turned a renewal into a board-level cost. We move VMware estates onto AWS — without a lift-and-shift that just relocates the problem. AI-driven analysis does the heavy lifting; senior engineers make the calls.</p>
+        <div class="hero__ctas">
+          <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+          <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+        </div>
+      </div>
+
+      <div class="hero__sidecard">
+        <div class="hero__sidecard-row"><span>Status</span><span class="peach">● Live</span></div>
+        <div class="hero__sidecard-row"><span>Layer</span><span>Infrastructure</span></div>
+        <div class="hero__sidecard-row"><span>Typical timeline</span><span>3–6 months</span></div>
+        <div class="hero__sidecard-row"><span>AWS Marketplace</span><span>Listed</span></div>
+        <div class="hero__sidecard-row"><span>AWS funding</span><span class="peach">Eligible (MAP)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     THE PAIN
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="eyebrow">The pain</div>
+      <h2>You didn't choose this renewal.</h2>
+    </div>
+
+    <div class="pain">
+      <div class="pain__statement">
+        The Broadcom acquisition repriced VMware overnight. What used to be a routine renewal is now a <em>line item your CFO is asking about</em> — and the easy answer (pay it) gets more expensive every cycle.
+      </div>
+      <div class="pain__list">
+        <div class="pain__item">
+          <span class="pain__item-num">01</span>
+          <span class="pain__item-text">Renewal quotes up 2–5×, with bundling that forces you to buy capability you don't use.</span>
+        </div>
+        <div class="pain__item">
+          <span class="pain__item-num">02</span>
+          <span class="pain__item-text">A lift-and-shift to AWS EC2 just moves the workloads — you keep the operational model and miss the modernisation upside.</span>
+        </div>
+        <div class="pain__item">
+          <span class="pain__item-num">03</span>
+          <span class="pain__item-text">Internal teams know the estate but don't have spare cycles to plan and run a migration of this size.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     THE JOURNEY · assess → transition → handover
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="eyebrow">The journey</div>
+      <h2>Assess. Transition. Handover.</h2>
+      <p class="s__head-sub">No one-click promises. A VMware estate is brownfield by definition — the value is in the decisions, and we're honest about where the mess is.</p>
+    </div>
+
+    <div class="journey">
+      <div class="phase">
+        <div class="phase__num">Phase 01</div>
+        <h3>Assess</h3>
+        <p class="phase__body">AI-driven discovery maps every VM, dependency and licence. We classify each workload: rehost, replatform, or retire. You get a costed migration plan with a target architecture, not a spreadsheet of guesses.</p>
+        <div class="phase__honest"><strong>Honest about</strong> the workloads that aren't worth moving — sometimes the right call is to retire or rebuild, not migrate.</div>
+      </div>
+      <div class="phase">
+        <div class="phase__num">Phase 02</div>
+        <h3>Transition</h3>
+        <p class="phase__body">Workloads move in waves, lowest-risk first. Where it makes sense, we replatform onto native AWS — containers, managed databases — rather than relocating VMs as-is. Each wave is reversible until you sign it off.</p>
+        <div class="phase__honest"><strong>Honest about</strong> the brownfield reality — legacy dependencies surface mid-migration. We plan for it; we don't pretend it won't happen.</div>
+      </div>
+      <div class="phase">
+        <div class="phase__num">Phase 03</div>
+        <h3>Handover</h3>
+        <p class="phase__body">The estate lands in your AWS accounts, documented and observable. Your team gets the runbooks, the architecture decisions, and the operational model. Or we keep running it — that's the Managed Service.</p>
+        <div class="phase__honest"><strong>Honest about</strong> capability gaps — we flag where your team will need upskilling, and we don't leave until the handover sticks.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ENGINE + DRIVER · AI-in-delivery proof
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="eyebrow">How the acceleration works</div>
+      <h2>AI is the engine. We drive.</h2>
+      <p class="s__head-sub">The "AI-driven" part isn't a label. Here's exactly what the tooling does, and exactly where human judgment makes the call.</p>
+    </div>
+
+    <div class="engine-driver">
+      <div class="ed ed--engine">
+        <div class="ed__label">The engine — AWS AI tooling</div>
+        <h3>What the tooling does</h3>
+        <p class="ed__body">AWS Transform analyses the VMware estate at a depth no human could match in the time — dependency graphs, licence mapping, migration-fit scoring across thousands of workloads. Claude drafts the migration runbooks and IaC.</p>
+        <div class="ed__tools">
+          <span class="tool-pill">AWS Transform</span>
+          <span class="tool-pill">AWS MGN</span>
+          <span class="tool-pill">Application Migration Service</span>
+          <span class="tool-pill">Claude</span>
+        </div>
+      </div>
+      <div class="ed">
+        <div class="ed__label">The driver — Steamhaus judgment</div>
+        <h3>Where we make the call</h3>
+        <div class="ed__principle">
+          <div class="ed__principle-item">Which workloads to replatform vs rehost vs retire — the decisions that hold the value.</div>
+          <div class="ed__principle-item">The target architecture — what "good" looks like on AWS for your estate, not a generic reference.</div>
+          <div class="ed__principle-item">Wave sequencing and rollback strategy — managing risk on a live estate.</div>
+          <div class="ed__principle-item">Reading the tooling's output critically — knowing when the AI's recommendation is wrong.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     OUTCOMES + QUOTE
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="eyebrow">Real outcomes</div>
+      <h2>What it's delivered.</h2>
+      <p class="s__head-sub">Figures from delivered VMware Exit engagements. Real numbers, per engagement — never aggregated into a vanity stat.</p>
+    </div>
+
+    <div class="outcomes">
+      <div class="outcome-stats">
+        <div class="outcome-stat">
+          <div class="outcome-stat__value">62%</div>
+          <div class="outcome-stat__label">Lower run-rate vs renewed VMware licence</div>
+        </div>
+        <div class="outcome-stat">
+          <div class="outcome-stat__value">4mo</div>
+          <div class="outcome-stat__label">Full estate migration · 280 VMs</div>
+        </div>
+        <div class="outcome-stat">
+          <div class="outcome-stat__value">40%</div>
+          <div class="outcome-stat__label">Workloads replatformed, not just rehosted</div>
+        </div>
+        <div class="outcome-stat">
+          <div class="outcome-stat__value">0</div>
+          <div class="outcome-stat__label">Unplanned outages during cutover</div>
+        </div>
+      </div>
+
+      <div class="outcome-quote">
+        <p class="outcome-quote__text">"We came for the cost saving. We left with a platform our engineers actually want to build on."</p>
+        <div class="outcome-quote__attr">
+          <strong>CTO</strong>
+          FTSE 250 logistics firm · VMware Exit, 2026
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     MARKETPLACE + FUNDING
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="marketplace">
+      <div>
+        <div class="eyebrow">Procurement</div>
+        <h3 style="margin-top: 1rem;">Buy it through AWS Marketplace.</h3>
+        <p class="marketplace__body">VMware Exit is a listed AWS Marketplace product. Procure it against your existing AWS commit, and it counts toward your spend. Most engagements qualify for AWS migration funding.</p>
+        <div class="marketplace__funding">
+          <strong>AWS funding:</strong> eligible under the Migration Acceleration Program (MAP). We handle the funding application as part of the Assess phase.
+        </div>
+      </div>
+      <div class="marketplace__actions">
+        <a href="#" class="btn btn--primary">View on AWS Marketplace ↗</a>
+        <a href="#" class="btn btn--ghost">Check funding eligibility ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FAQ · AEO centrepiece
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="eyebrow">Questions</div>
+      <h2>What CTOs ask before committing.</h2>
+      <p class="s__head-sub">Straight answers — also the questions search engines and AI assistants surface when someone's researching a VMware exit.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq">
+        <div class="faq__q"><span class="faq__q-mark">Q</span>How long does a VMware to AWS migration take?</div>
+        <div class="faq__a">For a typical mid-size estate (100–300 VMs), 3–6 months end to end. The Assess phase takes 2–4 weeks; the bulk of the time is in phased transition, where we move workloads in low-risk waves. Larger or more regulated estates take longer — we'll give you a real timeline after the assessment, not a sales figure.</div>
+      </div>
+      <div class="faq">
+        <div class="faq__q"><span class="faq__q-mark">Q</span>Is this just a lift-and-shift to EC2?</div>
+        <div class="faq__a">No — and that's the point. Lift-and-shift relocates your VMs and keeps every operational problem you had. We assess each workload for whether it should be rehosted, replatformed onto native AWS services, or retired entirely. Typically 30–40% of workloads are worth replatforming, which is where the long-term cost and capability gains come from.</div>
+      </div>
+      <div class="faq">
+        <div class="faq__q"><span class="faq__q-mark">Q</span>What happens to workloads that can't move easily?</div>
+        <div class="faq__a">Every estate has them — old dependencies, undocumented integrations, licensing tied to specific hardware. We surface these in the Assess phase rather than hitting them mid-migration. Some get rebuilt, some get retired, and occasionally the right answer is a hybrid approach for a specific workload. We're honest about the brownfield reality.</div>
+      </div>
+      <div class="faq">
+        <div class="faq__q"><span class="faq__q-mark">Q</span>How much does it cost, and is AWS funding available?</div>
+        <div class="faq__a">The engagement is procured through AWS Marketplace and scoped after the assessment. Most VMware Exit projects qualify for AWS Migration Acceleration Program (MAP) funding, which can offset a significant portion of migration cost. We handle the funding application as part of the engagement — it's not an afterthought.</div>
+      </div>
+      <div class="faq">
+        <div class="faq__q"><span class="faq__q-mark">Q</span>Where does the AI actually help, versus marketing spin?</div>
+        <div class="faq__a">AWS Transform does the discovery and dependency mapping across thousands of workloads — work that would take a human team weeks, done in days and more thoroughly. Claude drafts migration runbooks and infrastructure-as-code. What the AI doesn't do is decide your target architecture or sequence the migration waves — those are judgment calls our senior engineers make, reading the tooling's output critically.</div>
+      </div>
+      <div class="faq">
+        <div class="faq__q"><span class="faq__q-mark">Q</span>What do we get at handover?</div>
+        <div class="faq__a">The estate lands in your own AWS accounts — fully documented, observable, with runbooks and the architecture decisions written down. Your team can run it, or we can through our AWS Managed Service. There's no Steamhaus control plane to stay locked into; it's standard AWS underneath.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content: center; display: inline-flex;">Start here</div>
+    <h2>See whether a VMware exit pays for your estate.</h2>
+    <p class="cta-band__sub">The AI-Readiness Assessment includes a costed VMware Exit path if it's right for you — fixed-price, ~3 weeks, with AWS funding eligibility checked.</p>
+    <div class="cta-band__actions">
+      <a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a>
+      <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="container">
+    © Steamhaus · Manchester · UK
+  </div>
+</footer>
+
+</body>
+</html>

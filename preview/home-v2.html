@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Home v2 (editorial)</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --brand-darkest: #00160e;
+    --brand-darker: #001b12;
+    --brand: #002f1e;
+    --brand-dark: #152023;
+    --brand-light: #334941;
+    --brand-lighter: #667671;
+    --brand-lightest: #e6e8e7;
+    --peach: #e7a38b;
+    --peach-darker: #d68f76;
+    --white: #ffffff;
+    --mid-gray-1: #dfddd6;
+    --mid-gray-2: #888680;
+    --ease: cubic-bezier(0.625, 0.05, 0, 1);
+
+    --max-w: 1280px;
+    --pad-x: 2.5rem;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--brand-darker);
+    color: var(--brand-lightest);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding-left: var(--pad-x);
+    padding-right: var(--pad-x);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--peach);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 0.4em; height: 0.4em;
+    background: var(--peach);
+    border-radius: 50%;
+  }
+  .eyebrow.no-dot::before { display: none; }
+  h1, h2, h3, h4 {
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  h1 { font-size: clamp(2.4rem, 4.6vw, 4.5rem); }
+  h2 { font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1.08; }
+  h3 { font-size: 1.4rem; line-height: 1.18; }
+  h4 { font-size: 1.1rem; line-height: 1.25; }
+  p { margin: 0; }
+
+  /* ── Buttons ─────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--white);
+    transition: all 250ms var(--ease);
+    cursor: pointer;
+  }
+  .btn:hover { border-color: rgba(255,255,255,0.45); }
+  .btn--primary {
+    background: var(--peach);
+    color: var(--brand-darkest);
+    border-color: var(--peach);
+  }
+  .btn--primary:hover { background: var(--peach-darker); border-color: var(--peach-darker); }
+  .btn--ghost { background: transparent; }
+
+  /* ── Header / Nav ────────────────────────────────────── */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: rgba(0, 22, 14, 0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem var(--pad-x);
+    max-width: var(--max-w); margin: 0 auto;
+  }
+  .nav__logo {
+    font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em;
+  }
+  .nav__links {
+    display: flex; gap: 2rem; align-items: center;
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+  }
+  .nav__link { transition: color 250ms var(--ease); cursor: pointer; }
+  .nav__link:hover { color: var(--peach); }
+  .nav__link .caret { margin-left: 0.3em; opacity: 0.6; }
+  .nav__cta { padding: 0.7rem 1.1rem; font-size: 0.72rem; }
+
+  /* ── Hero (editorial) ────────────────────────────────── */
+  section.hero {
+    padding: 6rem 0 5rem;
+    background:
+      radial-gradient(80% 60% at 80% 0%, rgba(231,163,139,0.06), transparent 60%),
+      linear-gradient(to bottom, var(--brand-darker), var(--brand));
+  }
+  .hero__grid {
+    max-width: 56rem;
+  }
+  .hero__copy h1 {
+    margin: 1.5rem 0;
+    max-width: 22ch;
+  }
+  .hero__sub {
+    color: rgba(255,255,255,0.7);
+    font-size: 1.15rem;
+    line-height: 1.55;
+    max-width: 36rem;
+    margin-bottom: 2.5rem;
+  }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.85rem; }
+  .hero__meta {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; gap: 2rem;
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .hero__meta span:first-child { color: var(--peach); }
+
+  /* Pull quote */
+  .hero__quote {
+    border-left: 2px solid var(--peach);
+    padding: 1rem 0 1rem 2rem;
+    margin-top: 4rem;
+  }
+  .hero__quote-mark {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 3.5rem; line-height: 1;
+    color: var(--peach);
+    margin-bottom: -0.8rem;
+    display: block;
+  }
+  .hero__quote-text {
+    font-size: 1.4rem; line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.92);
+    margin-bottom: 1.5rem;
+  }
+  .hero__quote-text em {
+    color: var(--peach); font-style: normal;
+  }
+  .hero__quote-attr {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── Proof band ──────────────────────────────────────── */
+  section.proof {
+    padding: 4rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--brand-darkest);
+  }
+  .proof__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+  }
+  .proof__logos {
+    display: flex; flex-wrap: wrap; gap: 2rem 3rem;
+    align-items: center;
+  }
+  .proof__logo {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .proof__stat {
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 2rem;
+  }
+  .proof__stat-value {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--peach);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .proof__stat-label {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .proof__claude {
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .proof__claude-dot {
+    width: 8px; height: 8px;
+    background: var(--peach);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(231,163,139,0.18);
+  }
+  .proof__claude-text {
+    font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+  }
+  .proof__claude-text small {
+    display: block;
+    color: rgba(255,255,255,0.45);
+    margin-top: 0.25rem;
+    font-size: 0.65rem;
+  }
+
+  /* ── Section base ────────────────────────────────────── */
+  section.s {
+    padding: 7rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .s__head {
+    display: flex; justify-content: space-between; align-items: end;
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+  .s__head-left { max-width: 40rem; }
+  .s__head h2 { margin-top: 1rem; }
+  .s__head-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    margin-top: 1.25rem;
+    max-width: 36rem;
+  }
+
+  /* ── Three pillars ───────────────────────────────────── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .pillar {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: flex; flex-direction: column;
+    gap: 1.25rem;
+    transition: all 300ms var(--ease);
+    cursor: pointer;
+  }
+  .pillar:hover {
+    border-color: rgba(231,163,139,0.5);
+    background: rgba(231,163,139,0.04);
+  }
+  .pillar__num {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--peach);
+    text-transform: uppercase;
+  }
+  .pillar__verb {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.55);
+    font-family: ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+  }
+  .pillar h3 {
+    color: var(--white);
+    font-size: 1.85rem;
+    line-height: 1.1;
+  }
+  .pillar__body {
+    color: rgba(255,255,255,0.6);
+    flex-grow: 1;
+    line-height: 1.55;
+  }
+  .pillar__proof {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .pillar__proof strong {
+    color: var(--peach);
+    font-weight: 500;
+  }
+  .pillar__link {
+    color: var(--peach);
+    font-family: ui-monospace, monospace;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    display: inline-flex; gap: 0.3em;
+  }
+
+  /* ── Differentiators ─────────────────────────────────── */
+  .diffs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .diff {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 3rem;
+    background:
+      radial-gradient(80% 80% at 0% 0%, rgba(231,163,139,0.04), transparent 60%),
+      rgba(255,255,255,0.02);
+  }
+  .diff h3 {
+    font-size: 2rem;
+    margin: 1.25rem 0 1rem;
+    line-height: 1.1;
+  }
+  .diff__body {
+    color: rgba(255,255,255,0.65);
+    line-height: 1.55;
+    margin-bottom: 2rem;
+  }
+  .diff__proof {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: end;
+    gap: 1rem;
+  }
+  .diff__proof-stat {
+    font-size: 2.2rem; font-weight: 600;
+    color: var(--peach); letter-spacing: -0.02em; line-height: 1;
+  }
+  .diff__proof-label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-align: right;
+    max-width: 14rem;
+    line-height: 1.4;
+  }
+
+  /* ── Case studies ────────────────────────────────────── */
+  .cases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .case {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: all 300ms var(--ease);
+    cursor: pointer;
+  }
+  .case:hover { border-color: rgba(231,163,139,0.4); }
+  .case__client {
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .case__arc {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+  .case__arc-line {
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+  .case__arc-line span {
+    color: var(--peach);
+    margin-right: 0.6em;
+    font-weight: 500;
+  }
+  .case h3 {
+    color: var(--white);
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+  .case__metric {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.25rem;
+    margin-top: auto;
+    display: flex; justify-content: space-between; align-items: end;
+  }
+  .case__metric-value {
+    font-size: 2rem;
+    color: var(--peach);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .case__metric-label {
+    font-family: ui-monospace, monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-align: right;
+  }
+
+  /* ── Two ways in (wedges) ────────────────────────────── */
+  .wedges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .wedge {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 3rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+    transition: all 300ms var(--ease);
+  }
+  .wedge--proactive {
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(231,163,139,0.10), transparent 70%),
+      rgba(255,255,255,0.02);
+    border-color: rgba(231,163,139,0.3);
+  }
+  .wedge--proactive:hover { border-color: rgba(231,163,139,0.55); }
+  .wedge--reactive {
+    background: rgba(255,255,255,0.02);
+  }
+  .wedge h3 {
+    font-size: 2rem; line-height: 1.1;
+  }
+  .wedge__body {
+    color: rgba(255,255,255,0.65);
+    line-height: 1.55;
+    flex-grow: 1;
+  }
+  .wedge__meta {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    display: flex; gap: 1.5rem;
+  }
+  .wedge__meta strong { color: var(--peach); font-weight: 500; }
+
+  /* ── Community standing ──────────────────────────────── */
+  .community {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+  .com-block {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    min-height: 18rem;
+  }
+  .com-block__role {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--peach);
+  }
+  .com-block__name {
+    font-size: 1.35rem; font-weight: 600; color: var(--white);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .com-block__desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  .com-block__meta {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1rem;
+    display: flex; flex-direction: column; gap: 0.4rem;
+  }
+  .com-block__meta-row {
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    display: flex; justify-content: space-between;
+  }
+  .com-block__meta-row strong { color: var(--peach); font-weight: 500; }
+
+  /* ── CTA band ────────────────────────────────────────── */
+  .cta-band {
+    padding: 5rem 0;
+    background: var(--brand-darkest);
+    border-top: 1px solid rgba(231,163,139,0.15);
+    text-align: center;
+  }
+  .cta-band h2 {
+    margin: 1rem 0 1rem;
+    max-width: 40rem; margin-left: auto; margin-right: auto;
+  }
+  .cta-band__sub {
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+    max-width: 36rem;
+    margin-left: auto; margin-right: auto;
+  }
+
+  /* ── Footer skeleton ─────────────────────────────────── */
+  footer {
+    padding: 3rem 0;
+    background: var(--brand-darkest);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-family: ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+
+  /* ── Notes overlay (pre-build) ───────────────────────── */
+  .note {
+    position: relative;
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    background: rgba(231,163,139,0.05);
+    border-left: 2px solid var(--peach);
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+  .note strong { color: var(--peach); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HEADER · sticky · persistent Assessment CTA
+     ═══════════════════════════════════════════════════════════════════════ -->
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HERO · editorial · the outcome
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <div class="eyebrow no-dot">AWS Advanced Tier · AWS AI Competency</div>
+        <h1>The AWS estate that turns AI investment into value.</h1>
+        <p class="hero__sub">Whether AI investment pays is decided by the estate it runs on, not the AI itself. We build, modernise and operate AI-ready AWS estates — so AI turns into working systems, not stalled pilots.</p>
+        <div class="hero__ctas">
+          <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+          <a href="#" class="btn btn--ghost">Read the thesis ↗</a>
+        </div>
+        <div class="hero__meta">
+          <span>A decade AWS-only</span>
+          <span>Claude in production</span>
+          <span>Manchester · UK</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PROOF BAND · client logos + DORA delta + Claude in production
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="proof">
+  <div class="container">
+    <div class="proof__grid">
+
+      <div class="proof__logos">
+        <div class="proof__logo">SperryRail</div>
+        <div class="proof__logo">Thredd</div>
+        <div class="proof__logo">addresscloud</div>
+        <div class="proof__logo">Auden</div>
+        <div class="proof__logo">Paytrix</div>
+        <div class="proof__logo">NCC Group</div>
+      </div>
+
+      <div class="proof__stat">
+        <div class="proof__stat-value">14×</div>
+        <div class="proof__stat-label">Deploy frequency uplift<br>Sperry Rail · 12mo · DORA</div>
+      </div>
+
+      <div class="proof__claude">
+        <div class="proof__claude-dot"></div>
+        <div class="proof__claude-text">
+          Claude · in production
+          <small>Not a partner badge — running in our managed service since 2026</small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     THE THREE PILLARS · Build it · Modernise it · Run it
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">What we do</div>
+        <h2>Build it.<br>Modernise it.<br>Run it.</h2>
+      </div>
+      <p class="s__head-sub">The estate is a system, not a project. Three pillars get an AWS estate AI-ready — and keep it there as the platform underneath keeps moving.</p>
+    </div>
+
+    <div class="pillars">
+
+      <a href="#" class="pillar">
+        <div class="pillar__num">01 / Pillar</div>
+        <div class="pillar__verb">Build it</div>
+        <h3>Platform</h3>
+        <p class="pillar__body">The governed AWS foundation AI and engineers can build on. Landing zone, container platforms, an internal developer platform, governance, operational maturity.</p>
+        <div class="pillar__proof">
+          <span>5 Foundations · fixed-price</span>
+          <span class="pillar__link">Explore →</span>
+        </div>
+      </a>
+
+      <a href="#" class="pillar">
+        <div class="pillar__num">02 / Pillar</div>
+        <div class="pillar__verb">Modernise it</div>
+        <h3>Modernisation</h3>
+        <p class="pillar__body">Judgment-led modernisation, delivered through AI-driven Accelerators. Across infrastructure, applications and data — the decomposition decisions hold the value.</p>
+        <div class="pillar__proof">
+          <span>2 Accelerators live</span>
+          <span class="pillar__link">Explore →</span>
+        </div>
+      </a>
+
+      <a href="#" class="pillar">
+        <div class="pillar__num">03 / Pillar</div>
+        <div class="pillar__verb">Run it</div>
+        <h3>AWS Managed Service</h3>
+        <p class="pillar__body">AI-native, consumption-priced. Frontier agents and Claude do the work, senior engineers over the top. Not a ticket queue.</p>
+        <div class="pillar__proof">
+          <span>2 tiers · Optimise + Operate</span>
+          <span class="pillar__link">Explore →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     DIFFERENTIATORS · hardest-to-copy
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Why Steamhaus</div>
+        <h2>Two things almost nobody else does.</h2>
+      </div>
+      <p class="s__head-sub">Most AWS consultancies sell either a platform with lock-in, or a staffed pod that scales with headcount. We're neither.</p>
+    </div>
+
+    <div class="diffs">
+
+      <div class="diff">
+        <div class="eyebrow">01 — Run by agents</div>
+        <h3>An AI-native managed service.</h3>
+        <p class="diff__body">Priced on AWS consumption, not headcount. Agents and Claude do the work. A fee tied to consumption is only possible because agents deliver it — try repeating that with humans.</p>
+        <div class="diff__proof">
+          <div class="diff__proof-stat">~30%</div>
+          <div class="diff__proof-label">Of operational toil handled by agents in production today</div>
+        </div>
+      </div>
+
+      <div class="diff">
+        <div class="eyebrow">02 — No lock-in</div>
+        <h3>Neither a platform, nor a pod.</h3>
+        <p class="diff__body">Not a vendor product you can't leave. Not a staffed pod priced on heads. Judgment-led tool orchestration: senior engineers picking the right AWS-native + AI tooling for the estate in front of them.</p>
+        <div class="diff__proof">
+          <div class="diff__proof-stat">100%</div>
+          <div class="diff__proof-label">Client-owned AWS accounts. No proprietary control plane to escape.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     CASE STUDIES · problem → decision → outcome → metric
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Proof</div>
+        <h2>The estate decides whether AI pays.<br>Here's what that looks like.</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">See all work ↗</a>
+    </div>
+
+    <div class="cases">
+
+      <a href="#" class="case">
+        <div class="case__client">Sperry Rail · Rail safety · UK</div>
+        <h3>Cloud-native delivery for safety-critical signalling.</h3>
+        <div class="case__arc">
+          <div class="case__arc-line"><span>Problem</span>Legacy delivery — quarterly releases, change risk concentrated</div>
+          <div class="case__arc-line"><span>Decision</span>Container platform + governed CI/CD, IDP for product teams</div>
+          <div class="case__arc-line"><span>Outcome</span>Daily deploys, change-failure rate halved</div>
+        </div>
+        <div class="case__metric">
+          <div class="case__metric-value">14×</div>
+          <div class="case__metric-label">Deploy frequency<br>uplift · 12mo</div>
+        </div>
+      </a>
+
+      <a href="#" class="case">
+        <div class="case__client">Thredd · Issuer processor · UK</div>
+        <h3>From an opaque platform to an AI-actionable estate.</h3>
+        <div class="case__arc">
+          <div class="case__arc-line"><span>Problem</span>Modernisation stalled — apps too entangled for AI tooling</div>
+          <div class="case__arc-line"><span>Decision</span>Decomposition-led modernisation with AWS Transform + Claude</div>
+          <div class="case__arc-line"><span>Outcome</span>9 services extracted, AI tooling now operating at cleavage points</div>
+        </div>
+        <div class="case__metric">
+          <div class="case__metric-value">62%</div>
+          <div class="case__metric-label">Time-to-MR<br>reduction</div>
+        </div>
+      </a>
+
+      <a href="#" class="case">
+        <div class="case__client">addresscloud · Geospatial · UK</div>
+        <h3>An AWS estate ready for the next product line.</h3>
+        <div class="case__arc">
+          <div class="case__arc-line"><span>Problem</span>Estate not ready for new market — observability gaps, no IDP</div>
+          <div class="case__arc-line"><span>Decision</span>Platform engineering engagement + landing zone hardening</div>
+          <div class="case__arc-line"><span>Outcome</span>New product launched in 4mo on the same platform</div>
+        </div>
+        <div class="case__metric">
+          <div class="case__metric-value">4mo</div>
+          <div class="case__metric-label">New product line<br>shipped</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TWO WAYS IN · wedges (Assessment + Migration Rescue)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">How to start</div>
+        <h2>Two ways in.<br>Pick the one that fits.</h2>
+      </div>
+    </div>
+
+    <div class="wedges">
+
+      <div class="wedge wedge--proactive">
+        <div class="eyebrow">Proactive — primary route</div>
+        <h3>The AI-Readiness Assessment.</h3>
+        <p class="wedge__body">A fixed-price read on whether your AWS estate can turn AI investment into value — and what it would take to get there. You leave with a plan, decision-ready.</p>
+        <div class="wedge__meta">
+          <div><strong>Fixed price</strong> · not a free check</div>
+          <div><strong>~3 weeks</strong></div>
+        </div>
+        <div>
+          <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+        </div>
+      </div>
+
+      <div class="wedge wedge--reactive">
+        <div class="eyebrow">Reactive — for stalled programmes</div>
+        <h3>Migration Rescue.</h3>
+        <p class="wedge__body">For the programme that's stalled, with budget already spent. Senior judgment plus AI-native diagnosis to find what went wrong, fast — and a path to keep going.</p>
+        <div class="wedge__meta">
+          <div><strong>No blame</strong> · reassurance, not alarm</div>
+          <div><strong>Days, not weeks</strong></div>
+        </div>
+        <div>
+          <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     COMMUNITY STANDING · branded blocks (replaces logo wall)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Community standing</div>
+        <h2>We don't just attend the AWS community.<br>We run it.</h2>
+      </div>
+      <p class="s__head-sub">Standing in the UK AWS community isn't a marketing line for us — it's load-bearing for what we sell. Here's where we sit.</p>
+    </div>
+
+    <div class="community">
+
+      <div class="com-block">
+        <div class="com-block__role">We host it</div>
+        <div class="com-block__name">ComSum</div>
+        <p class="com-block__desc">The UK's AWS Community Summit. Steamhaus founded it and continues to organise.</p>
+        <div class="com-block__meta">
+          <div class="com-block__meta-row"><span>Next edition</span><strong>Sept 2026</strong></div>
+          <div class="com-block__meta-row"><span>Attendees</span><strong>800+</strong></div>
+        </div>
+      </div>
+
+      <div class="com-block">
+        <div class="com-block__role">We host it</div>
+        <div class="com-block__name">Manchester AWS User Group</div>
+        <p class="com-block__desc">Monthly meetup since 2018. Senior engineers, real talks, no vendor pitches.</p>
+        <div class="com-block__meta">
+          <div class="com-block__meta-row"><span>Next meetup</span><strong>26 Jun</strong></div>
+          <div class="com-block__meta-row"><span>Avg attendance</span><strong>120</strong></div>
+        </div>
+      </div>
+
+      <div class="com-block">
+        <div class="com-block__role">We're recognised in it</div>
+        <div class="com-block__name">APN Ambassadors</div>
+        <p class="com-block__desc">AWS's highest peer recognition. 3 ambassadors on the team — out of ~120 in the UK.</p>
+        <div class="com-block__meta">
+          <div class="com-block__meta-row"><span>On the team</span><strong>3</strong></div>
+          <div class="com-block__meta-row"><span>See profiles</span><strong>→</strong></div>
+        </div>
+      </div>
+
+      <div class="com-block">
+        <div class="com-block__role">We're recognised in it</div>
+        <div class="com-block__name">AWS Community Builders</div>
+        <p class="com-block__desc">AWS's developer-recognition programme for technical contribution and community work.</p>
+        <div class="com-block__meta">
+          <div class="com-block__meta-row"><span>On the team</span><strong>5</strong></div>
+          <div class="com-block__meta-row"><span>See profiles</span><strong>→</strong></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     CTA BAND · persistent Assessment reinforced
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content: center; display: inline-flex;">Ready?</div>
+    <h2>Find out where your AWS estate sits.</h2>
+    <p class="cta-band__sub">A fixed-price assessment. ~3 weeks. You leave with a plan you can take to your exec team.</p>
+    <a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a>
+  </div>
+</section>
+
+
+<footer>
+  <div class="container">
+    © Steamhaus · Manchester · UK
+  </div>
+</footer>
+
+</body>
+</html>

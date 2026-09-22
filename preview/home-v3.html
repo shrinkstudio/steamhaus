@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Home v3 (end to end)</title>
+<link rel="stylesheet" href="/_shared.css" />
+<style>
+  /* ── Hero (editorial) ── */
+  .hero__grid { max-width: 58rem; }
+  .hero h1 { max-width: 20ch; }
+  .hero__meta strong { color: var(--peach); font-weight: 500; }
+
+  /* ── Proof band ── */
+  section.proof { padding: 3.5rem 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); background: var(--brand-darkest); }
+  .proof__grid { display: grid; grid-template-columns: 2fr 1fr 1fr; align-items: center; gap: 3rem; }
+  .proof__logos { display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem; align-items: center; }
+  .proof__logo { font-family: ui-monospace, monospace; font-size: 0.95rem; color: rgba(255,255,255,0.5); font-weight: 500; }
+  .proof__stat { border-left: 1px solid rgba(255,255,255,0.1); padding-left: 2rem; }
+  .proof__stat-value { font-size: 2.4rem; font-weight: 600; color: var(--peach); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.5rem; }
+  .proof__stat-label { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); line-height: 1.4; }
+  .proof__claude { border-left: 1px solid rgba(255,255,255,0.1); padding-left: 2rem; display: flex; align-items: center; gap: 1rem; }
+  .proof__claude-dot { width: 8px; height: 8px; background: var(--peach); border-radius: 50%; box-shadow: 0 0 0 4px rgba(231,163,139,0.18); flex-shrink: 0; }
+  .proof__claude-text { font-family: ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.85); line-height: 1.4; }
+  .proof__claude-text small { display: block; color: rgba(255,255,255,0.45); margin-top: 0.25rem; font-size: 0.62rem; text-transform: none; letter-spacing: 0; }
+
+  /* ── Problem statement ── */
+  .problem__points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 3rem; }
+  .problem__point-num { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--peach); margin-bottom: 1rem; }
+  .problem__point h3 { font-size: 1.2rem; color: var(--white); margin-bottom: 0.6rem; }
+  .problem__point p { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.5; }
+
+  /* ── Pillars ── */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .pillar { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 2rem; display: flex; flex-direction: column; gap: 1.1rem; transition: all 300ms var(--ease); cursor: pointer; }
+  .pillar:hover { border-color: rgba(231,163,139,0.5); background: rgba(231,163,139,0.04); }
+  .pillar__head { display: flex; justify-content: space-between; font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .pillar__num { color: var(--peach); }
+  .pillar__verb { color: rgba(255,255,255,0.45); }
+  .pillar h3 { color: var(--white); font-size: 1.85rem; line-height: 1.1; }
+  .pillar__body { color: rgba(255,255,255,0.6); flex-grow: 1; line-height: 1.55; }
+  .pillar__link { color: var(--peach); font-family: ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; }
+
+  /* ── Why Steamhaus ── */
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .why-card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 2.5rem; transition: all 300ms var(--ease); }
+  .why-card:hover { border-color: rgba(231,163,139,0.4); background: rgba(231,163,139,0.03); }
+  .why-card__num { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--peach); margin-bottom: 1.25rem; }
+  .why-card h3 { font-size: 1.6rem; color: var(--white); margin-bottom: 0.85rem; line-height: 1.1; }
+  .why-card p { color: rgba(255,255,255,0.6); line-height: 1.55; }
+  .badges { margin-top: 2.5rem; padding-top: 2.5rem; border-top: 1px solid rgba(255,255,255,0.08); }
+  .badges__label { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 1.5rem; }
+  .badges__row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+  .badge { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.6rem; padding: 1.25rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; min-height: 6rem; background: rgba(255,255,255,0.02); }
+  .badge__icon { width: 1.75rem; height: 1.75rem; border-radius: 0.35rem; background: rgba(231,163,139,0.15); border: 1px solid rgba(231,163,139,0.3); }
+  .badge__name { font-family: ui-monospace, monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.7); line-height: 1.3; text-align: center; }
+
+  /* ── Case slider (static representation in the flow) ── */
+  .caseflow { position: relative; height: 88vh; min-height: 600px; overflow: hidden; }
+  .caseflow__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .caseflow__scrim { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,22,14,0.85), rgba(0,22,14,0.4) 45%, rgba(0,22,14,0.15)), linear-gradient(to top, rgba(0,22,14,0.75), transparent 45%); }
+  .caseflow__inner { position: relative; z-index: 2; max-width: var(--max-w); margin: 0 auto; height: 100%; padding: 0 var(--pad-x); display: flex; flex-direction: column; justify-content: center; }
+  .caseflow__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: start; }
+  .caseflow h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); color: #fff; margin: 1.25rem 0; max-width: 18ch; }
+  .caseflow__desc { color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.5; max-width: 32rem; margin-bottom: 2rem; }
+  .caseflow__stats { display: flex; gap: 1rem; }
+  .caseflow__stat { background: rgba(0,22,14,0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1.25rem 1.5rem; min-width: 9rem; }
+  .caseflow__stat-value { font-size: 2rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.5rem; }
+  .caseflow__stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .caseflow__tabs { position: absolute; left: 0; right: 0; bottom: 2.5rem; z-index: 3; max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad-x); display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.5rem; }
+  .caseflow__tab { padding: 0.75rem 0 0; color: rgba(255,255,255,0.55); font-family: ui-monospace, monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; position: relative; }
+  .caseflow__tab.on { color: #fff; }
+  .caseflow__tab-track { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.15); overflow: hidden; }
+  .caseflow__tab-fill { position: absolute; inset: 0; background: var(--peach); transform-origin: left; }
+
+  /* ── Wedges ── */
+  .wedges { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .wedge { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 3rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .wedge--proactive { background: radial-gradient(120% 100% at 50% 0%, rgba(231,163,139,0.10), transparent 70%), rgba(255,255,255,0.02); border-color: rgba(231,163,139,0.3); }
+  .wedge h3 { font-size: 2rem; line-height: 1.1; }
+  .wedge__body { color: rgba(255,255,255,0.65); line-height: 1.55; flex-grow: 1; }
+  .wedge__meta { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); display: flex; gap: 1.5rem; }
+  .wedge__meta strong { color: var(--peach); font-weight: 500; }
+
+  /* ── Community ── */
+  .community { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .com-block { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; min-height: 17rem; }
+  .com-block__role { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--peach); }
+  .com-block__name { font-size: 1.35rem; font-weight: 600; color: var(--white); line-height: 1.15; }
+  .com-block__desc { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.5; flex-grow: 1; }
+  .com-block__meta { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .com-block__meta-row { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); display: flex; justify-content: space-between; }
+  .com-block__meta-row strong { color: var(--peach); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 1 · HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div class="eyebrow no-dot">AWS Advanced Tier · AWS AI Competency</div>
+      <h1>The AWS estate that turns AI investment into value.</h1>
+      <p class="hero__sub">Whether AI investment pays is decided by the estate it runs on, not the AI itself. We build, modernise and operate AI-ready AWS estates — so AI turns into working systems, not stalled pilots.</p>
+      <div class="hero__ctas">
+        <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+        <a href="#" class="btn btn--ghost">Read the thesis ↗</a>
+      </div>
+      <div class="hero__meta">
+        <span><strong>A decade</strong> AWS-only</span>
+        <span>Claude in production</span>
+        <span>Manchester · UK</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · PROOF BAND -->
+<section class="proof">
+  <div class="container">
+    <div class="proof__grid">
+      <div class="proof__logos">
+        <div class="proof__logo">Sperry Rail</div>
+        <div class="proof__logo">Thredd</div>
+        <div class="proof__logo">addresscloud</div>
+        <div class="proof__logo">Modulr</div>
+        <div class="proof__logo">Auden</div>
+        <div class="proof__logo">NCC Group</div>
+      </div>
+      <div class="proof__stat">
+        <div class="proof__stat-value">14×</div>
+        <div class="proof__stat-label">Deploy frequency uplift<br>Sperry Rail · DORA</div>
+      </div>
+      <div class="proof__claude">
+        <div class="proof__claude-dot"></div>
+        <div class="proof__claude-text">Claude · in production<small>Not a partner badge — running in our managed service</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · PROBLEM STATEMENT (new) -->
+<section class="s" style="border-top:none;">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The problem</div>
+        <h2>Most AWS estates weren't built for what's being asked of them now.</h2>
+      </div>
+      <p class="s__head-sub">Years of incremental decisions leave platforms fragmented and applications entangled. It slows delivery, inflates cost — and quietly caps what AI can do on top.</p>
+    </div>
+    <div class="problem__points">
+      <div class="problem__point"><div class="problem__point-num">01</div><h3>Fragmented platforms</h3><p>Accounts, networking and governance that grew by accretion, not design. Every change is slower and riskier than it should be.</p></div>
+      <div class="problem__point"><div class="problem__point-num">02</div><h3>Entangled applications</h3><p>Monoliths and legacy stacks that resist change — and that AI tooling can't usefully act on until they're modernised.</p></div>
+      <div class="problem__point"><div class="problem__point-num">03</div><h3>Cloud spend without control</h3><p>Bills that climb faster than the value they return, with no clear line between what's essential and what's drift.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · THREE PILLARS -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">What we do</div>
+        <h2>Build it. Modernise it. Run it.</h2>
+      </div>
+      <p class="s__head-sub">The estate is a system, not a project. Three pillars get it AI-ready — and keep it there as the platform underneath keeps moving.</p>
+    </div>
+    <div class="pillars">
+      <a href="#" class="pillar"><div class="pillar__head"><span class="pillar__num">01</span><span class="pillar__verb">Build it</span></div><h3>Platform</h3><p class="pillar__body">The governed AWS foundation AI and engineers build on. Landing zone, containers, an IDP, governance, ops maturity.</p><span class="pillar__link">Explore Platform →</span></a>
+      <a href="#" class="pillar"><div class="pillar__head"><span class="pillar__num">02</span><span class="pillar__verb">Modernise it</span></div><h3>Modernisation</h3><p class="pillar__body">Judgment-led modernisation through AI-driven Accelerators. Across infrastructure, applications and data.</p><span class="pillar__link">Explore Modernisation →</span></a>
+      <a href="#" class="pillar"><div class="pillar__head"><span class="pillar__num">03</span><span class="pillar__verb">Run it</span></div><h3>AWS Managed Service</h3><p class="pillar__body">AI-native, consumption-priced. Agents and Claude do the work, senior engineers over the top. Not a ticket queue.</p><span class="pillar__link">Explore Managed Service →</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · WHY STEAMHAUS (new) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Why Steamhaus</div>
+        <h2>Four things that set us apart.</h2>
+      </div>
+      <p class="s__head-sub">Not what we do — how having all of it, done right, changes the outcome.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-card__num">01</div><h3>Foundations, built right</h3><p>The governed AWS platform everything else stands on. Built once, built properly.</p></div>
+      <div class="why-card"><div class="why-card__num">02</div><h3>End-to-end modernisation</h3><p>Infrastructure, applications and data — not just app modernisation. The whole estate.</p></div>
+      <div class="why-card"><div class="why-card__num">03</div><h3>AI-native, senior-led</h3><p>Agents and Claude do the volume; senior engineers make the calls. Judgment over the top.</p></div>
+      <div class="why-card"><div class="why-card__num">04</div><h3>AWS-native by design</h3><p>A decade AWS-only. The depth of one platform, no proprietary lock-in to escape.</p></div>
+    </div>
+    <div class="badges">
+      <div class="badges__label">Partnerships & credentials</div>
+      <div class="badges__row">
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">AWS Advanced Tier</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">Anthropic · Claude</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">ISO 27001</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">CNCF · Kubernetes</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">FSQS Registered</div></div>
+        <div class="badge"><div class="badge__icon"></div><div class="badge__name">B Corp</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · CASE STUDY SLIDER (static representation) -->
+<section class="caseflow">
+  <img class="caseflow__bg" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2000&auto=format&fit=crop" alt="" />
+  <div class="caseflow__scrim"></div>
+  <div class="caseflow__inner">
+    <div class="caseflow__top">
+      <div>
+        <div class="eyebrow">Utilities Business</div>
+        <h2>Giving frontline agents instant, AI-powered customer insights</h2>
+        <p class="caseflow__desc">A next-generation utility business uses IoT-connected solar and digital services to reach hundreds of thousands of households.</p>
+        <a href="#" class="btn btn--ghost">Read the case study ↗</a>
+      </div>
+      <div class="caseflow__stats">
+        <div class="caseflow__stat"><div class="caseflow__stat-value">14×</div><div class="caseflow__stat-label">Deploy frequency uplift</div></div>
+        <div class="caseflow__stat"><div class="caseflow__stat-value">11</div><div class="caseflow__stat-label">Product teams on the IDP</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="caseflow__tabs">
+    <div class="caseflow__tab on"><span class="caseflow__tab-track"><span class="caseflow__tab-fill" style="transform:scaleX(0.55)"></span></span>Utilities Business</div>
+    <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill" style="transform:scaleX(0)"></span></span>Modulr Finance</div>
+    <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill" style="transform:scaleX(0)"></span></span>Sperry Rail</div>
+    <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill" style="transform:scaleX(0)"></span></span>Auden</div>
+  </div>
+</section>
+
+<!-- 7 · TWO WAYS IN -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">How to start</div>
+        <h2>Two ways in. Pick the one that fits.</h2>
+      </div>
+    </div>
+    <div class="wedges">
+      <div class="wedge wedge--proactive">
+        <div class="eyebrow">Proactive — primary route</div>
+        <h3>The AI-Readiness Assessment.</h3>
+        <p class="wedge__body">A fixed-price read on whether your AWS estate can turn AI investment into value — and what it would take. You leave with a plan.</p>
+        <div class="wedge__meta"><div><strong>Fixed price</strong> · not free</div><div><strong>~3 weeks</strong></div></div>
+        <div><a href="#" class="btn btn--primary">Book the Assessment ↗</a></div>
+      </div>
+      <div class="wedge">
+        <div class="eyebrow">Reactive — for stalled programmes</div>
+        <h3>Migration Rescue.</h3>
+        <p class="wedge__body">For the programme that's stalled, budget already spent. Senior judgment plus AI-native diagnosis to find what went wrong, fast.</p>
+        <div class="wedge__meta"><div><strong>No blame</strong></div><div><strong>Days, not weeks</strong></div></div>
+        <div><a href="#" class="btn btn--ghost">Talk to us ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · COMMUNITY STANDING -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Community standing</div>
+        <h2>We don't just attend the AWS community. We run it.</h2>
+      </div>
+      <p class="s__head-sub">Standing in the UK AWS community is load-bearing for what we sell. Here's where we sit.</p>
+    </div>
+    <div class="community">
+      <div class="com-block"><div class="com-block__role">We host it</div><div class="com-block__name">ComSum</div><p class="com-block__desc">The UK's AWS Community Summit. Steamhaus founded it and organises it.</p><div class="com-block__meta"><div class="com-block__meta-row"><span>Next</span><strong>Sept 2026</strong></div><div class="com-block__meta-row"><span>Attendees</span><strong>800+</strong></div></div></div>
+      <div class="com-block"><div class="com-block__role">We host it</div><div class="com-block__name">Manchester AWS UG</div><p class="com-block__desc">Monthly meetup since 2018. Senior engineers, real talks, no vendor pitches.</p><div class="com-block__meta"><div class="com-block__meta-row"><span>Next</span><strong>26 Jun</strong></div><div class="com-block__meta-row"><span>Avg</span><strong>120</strong></div></div></div>
+      <div class="com-block"><div class="com-block__role">Recognised in it</div><div class="com-block__name">APN Ambassadors</div><p class="com-block__desc">AWS's highest peer recognition. On the team, out of ~120 in the UK.</p><div class="com-block__meta"><div class="com-block__meta-row"><span>On the team</span><strong>3</strong></div><div class="com-block__meta-row"><span>Profiles</span><strong>→</strong></div></div></div>
+      <div class="com-block"><div class="com-block__role">Recognised in it</div><div class="com-block__name">Community Builders</div><p class="com-block__desc">AWS's developer-recognition programme for technical contribution.</p><div class="com-block__meta"><div class="com-block__meta-row"><span>On the team</span><strong>5</strong></div><div class="com-block__meta-row"><span>Profiles</span><strong>→</strong></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · CTA BAND -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content:center; display:inline-flex;">Ready?</div>
+    <h2>Find out where your AWS estate sits.</h2>
+    <p class="cta-band__sub">A fixed-price assessment. ~3 weeks. You leave with a plan you can take to your exec team.</p>
+    <div class="cta-band__actions"><a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a></div>
+  </div>
+</section>
+
+<footer><div class="container">© Steamhaus · Manchester · UK</div></footer>
+
+</body>
+</html>

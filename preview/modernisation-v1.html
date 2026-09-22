@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Modernisation v1</title>
+<link rel="stylesheet" href="/_shared.css" />
+<style>
+  /* ── Three layers manifesto ── */
+  .layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 3rem; }
+  .layer { padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; background: rgba(255,255,255,0.02); }
+  .layer__num { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--peach); margin-bottom: 0.75rem; }
+  .layer__name { font-size: 1.2rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+  .layer__desc { color: rgba(255,255,255,0.55); font-size: 0.92rem; line-height: 1.5; }
+
+  /* ── Architecture statement ── */
+  .arch { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .arch__statement { font-size: 1.7rem; line-height: 1.3; letter-spacing: -0.01em; color: var(--white); }
+  .arch__statement em { color: var(--peach); font-style: normal; }
+  .arch__body { color: rgba(255,255,255,0.65); line-height: 1.6; }
+  .arch__body p { margin-bottom: 1rem; }
+
+  /* ── Accelerator hub grid ── */
+  .accelerators { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .acc {
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem; padding: 2rem; display: flex; flex-direction: column; gap: 1rem;
+    transition: all 300ms var(--ease); cursor: pointer;
+  }
+  .acc:hover { border-color: rgba(231,163,139,0.4); background: rgba(231,163,139,0.02); }
+  .acc--coming { opacity: 0.55; cursor: default; }
+  .acc--coming:hover { border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.025); }
+  .acc__top { display: flex; justify-content: space-between; align-items: center; }
+  .acc__status { font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .acc__status.live { color: var(--peach); }
+  .acc__status.coming { color: rgba(255,255,255,0.4); }
+  .acc__pain { font-family: ui-monospace, monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+  .acc h3 { color: var(--white); font-size: 1.5rem; }
+  .acc__outcome { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.5; flex-grow: 1; }
+  .acc__link { color: var(--peach); font-family: ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; gap: 0.3em; }
+
+  /* ── Engine + driver ── */
+  .engine-driver { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .ed { border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 2.5rem; }
+  .ed--engine { background: radial-gradient(80% 80% at 0% 0%, rgba(231,163,139,0.04), transparent 60%), rgba(255,255,255,0.02); }
+  .ed__label { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--peach); margin-bottom: 1rem; }
+  .ed h3 { font-size: 1.6rem; margin-bottom: 1rem; }
+  .ed__body { color: rgba(255,255,255,0.65); line-height: 1.55; margin-bottom: 1.75rem; }
+  .ed__tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tool-pill { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.08em; padding: 0.4rem 0.8rem; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+  .ed__principle { display: grid; gap: 1rem; }
+  .ed__principle-item { display: flex; gap: 0.75rem; font-size: 0.92rem; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .ed__principle-item::before { content: "→"; color: var(--peach); }
+
+  /* ── case feature ── */
+  .case-feature { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 3rem; align-items: center; }
+  .case-feature__client { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--peach); margin-bottom: 1rem; }
+  .case-feature h3 { font-size: 1.8rem; line-height: 1.15; margin-bottom: 1.5rem; }
+  .case-feature__arc { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
+  .case-feature__arc-line { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+  .case-feature__arc-line span { color: var(--peach); font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; margin-right: 0.6em; font-weight: 500; }
+  .case-feature__stats { display: grid; gap: 1.5rem; }
+  .case-feature__stat { padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .case-feature__stat:last-child { border: none; padding-bottom: 0; }
+  .case-feature__stat-value { font-size: 2.5rem; font-weight: 600; color: var(--peach); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.5rem; }
+  .case-feature__stat-label { font-family: ui-monospace, monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<div class="crumbs">
+  <div class="container">What We Do · <span>Modernisation</span></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow no-dot">Pillar 02 · Modernisation</div>
+    <h1>Modernisation, decided by judgment.</h1>
+    <p class="hero__sub">Modernisation is an architecture problem before it's a code problem. The decomposition decisions hold the value — and AI tooling can't make them for you. We drive; the AI accelerates. Across infrastructure, applications and data.</p>
+    <div class="hero__ctas">
+      <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+      <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+    </div>
+    <div class="hero__meta">
+      <span><strong>2</strong> Accelerators live</span>
+      <span>Infrastructure · Apps · Data</span>
+      <span>AWS funding eligible</span>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE PROBLEM -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The premise</div>
+        <h2>An architecture problem, not a code problem.</h2>
+      </div>
+      <p class="s__head-sub">Anyone can throw an AI tool at a codebase. The value is in deciding what to decompose, what to keep, and what to retire — decisions that need judgment, across all three layers.</p>
+    </div>
+
+    <div class="arch">
+      <div class="arch__statement">
+        Modernisation that starts with code starts in the wrong place. The <em>decomposition decisions</em> — what becomes a service, what stays, what dies — are where the value is won or lost.
+      </div>
+      <div class="arch__body">
+        <p>A monolith broken apart badly is just a distributed monolith — slower, harder to operate, no more AI-actionable than before. The architecture call comes first.</p>
+        <p>We work across all three layers: <strong style="color:var(--brand-lightest)">infrastructure</strong> (the estate itself), <strong style="color:var(--brand-lightest)">applications</strong> (the services that run on it), and <strong style="color:var(--brand-lightest)">data</strong> (the stores and pipelines underneath). Modernise one and ignore the others, and the gains leak away.</p>
+      </div>
+    </div>
+
+    <div class="layers">
+      <div class="layer">
+        <div class="layer__num">Layer 01</div>
+        <div class="layer__name">Infrastructure</div>
+        <div class="layer__desc">Data-centre exits, VMware estates, cloud-to-cloud moves. Get onto AWS in a shape that's worth building on.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">Layer 02</div>
+        <div class="layer__name">Applications</div>
+        <div class="layer__desc">Breaking apart monoliths, upgrading frameworks, extracting services. Making the portfolio AI-actionable.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">Layer 03</div>
+        <div class="layer__name">Data</div>
+        <div class="layer__desc">Modernising databases, untangling pipelines, getting data into a state AI tooling and analytics can use.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCELERATORS HUB -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">The Accelerators</div>
+        <h2>Named transformation journeys.</h2>
+      </div>
+      <p class="s__head-sub">Each Accelerator is a specific transformation with a known shape. We ship them as case studies land — real proof before we put a name on the menu.</p>
+    </div>
+
+    <div class="accelerators">
+      <a href="/accelerator-vmware-exit-v1.html" class="acc">
+        <div class="acc__top"><span class="acc__pain">Infrastructure</span><span class="acc__status live">● Live</span></div>
+        <h3>VMware Exit</h3>
+        <p class="acc__outcome">Exit the Broadcom licensing tax. Land cleanly on AWS — modernised where it matters, not just relocated.</p>
+        <span class="acc__link">View Accelerator →</span>
+      </a>
+      <a href="#" class="acc">
+        <div class="acc__top"><span class="acc__pain">Applications</span><span class="acc__status live">● Live</span></div>
+        <h3>.NET &amp; SQL Modernisation</h3>
+        <p class="acc__outcome">Break the Microsoft licensing dependency. Move .NET and SQL Server workloads to modern, open, AWS-native stacks.</p>
+        <span class="acc__link">View Accelerator →</span>
+      </a>
+      <div class="acc acc--coming">
+        <div class="acc__top"><span class="acc__pain">Infrastructure</span><span class="acc__status coming">Coming</span></div>
+        <h3>Mainframe Exit</h3>
+        <p class="acc__outcome">Retire the mainframe on a defensible timeline. Shipping as a named journey once the case study lands.</p>
+        <span class="acc__link" style="color:rgba(255,255,255,0.35)">As case studies land</span>
+      </div>
+      <div class="acc acc--coming">
+        <div class="acc__top"><span class="acc__pain">Data</span><span class="acc__status coming">Coming</span></div>
+        <h3>Oracle Modernisation</h3>
+        <p class="acc__outcome">Move off Oracle licensing onto AWS-native data platforms. Shipping as a named journey once the case study lands.</p>
+        <span class="acc__link" style="color:rgba(255,255,255,0.35)">As case studies land</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENGINE + DRIVER -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">How acceleration works</div>
+        <h2>AI is the engine. We drive.</h2>
+      </div>
+      <p class="s__head-sub">The "AI-driven" part isn't a label on a pod. Here's exactly what the tooling does, and exactly where judgment makes the call. This is the AI-in-delivery proof, made concrete.</p>
+    </div>
+
+    <div class="engine-driver">
+      <div class="ed ed--engine">
+        <div class="ed__label">The engine — AWS AI tooling</div>
+        <h3>What the tooling does</h3>
+        <p class="ed__body">AWS Transform analyses estates and codebases at a depth and speed no human team matches — dependency graphs, modernisation-fit scoring, migration planning across thousands of components. Claude drafts the refactors, the IaC, the runbooks.</p>
+        <div class="ed__tools">
+          <span class="tool-pill">AWS Transform</span>
+          <span class="tool-pill">Amazon Q Developer</span>
+          <span class="tool-pill">Claude</span>
+          <span class="tool-pill">Bedrock</span>
+        </div>
+      </div>
+      <div class="ed">
+        <div class="ed__label">The driver — Steamhaus judgment</div>
+        <h3>Where we make the call</h3>
+        <div class="ed__principle">
+          <div class="ed__principle-item">The decomposition strategy — what becomes a service, what stays, what's retired.</div>
+          <div class="ed__principle-item">The target architecture — what "good" looks like for this estate, not a generic reference.</div>
+          <div class="ed__principle-item">Sequencing and risk — what moves first, what's reversible, where the brownfield mess hides.</div>
+          <div class="ed__principle-item">Reading the AI critically — knowing when the tooling's recommendation is wrong.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE FEATURE -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">In practice</div>
+        <h2>The Modernisation story.</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">All case studies ↗</a>
+    </div>
+
+    <div class="case-feature">
+      <div>
+        <div class="case-feature__client">Thredd · Issuer processor · UK</div>
+        <h3>From an opaque platform to an AI-actionable estate.</h3>
+        <div class="case-feature__arc">
+          <div class="case-feature__arc-line"><span>Problem</span>A decade-old payments monolith — too entangled for AI tooling to operate on, too critical to rewrite from scratch.</div>
+          <div class="case-feature__arc-line"><span>Decision</span>Decomposition-led modernisation. We mapped the seams, extracted services at the right boundaries, kept the core stable throughout.</div>
+          <div class="case-feature__arc-line"><span>Outcome</span>9 services extracted at clean boundaries. AI tooling now operates at the cleavage points it couldn't touch before.</div>
+        </div>
+        <a href="#" class="btn btn--ghost">Read the case study ↗</a>
+      </div>
+      <div class="case-feature__stats">
+        <div class="case-feature__stat"><div class="case-feature__stat-value">9</div><div class="case-feature__stat-label">Services extracted at clean boundaries</div></div>
+        <div class="case-feature__stat"><div class="case-feature__stat-value">62%</div><div class="case-feature__stat-label">Reduction in time-to-merge</div></div>
+        <div class="case-feature__stat"><div class="case-feature__stat-value">0</div><div class="case-feature__stat-label">Customer-facing outages during decomposition</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content: center; display: inline-flex;">Ready?</div>
+    <h2>Find out which transformation fits.</h2>
+    <p class="cta-band__sub">The AI-Readiness Assessment looks at your estate across all three layers and tells you where modernisation pays — and which Accelerator, if any, is the right next step.</p>
+    <div class="cta-band__actions">
+      <a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a>
+      <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="container">© Steamhaus · Manchester · UK</div></footer>
+</body>
+</html>

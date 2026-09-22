@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Platform v2 (from Figma)</title>
+<link rel="stylesheet" href="/_shared.css" />
+<style>
+  .hero h1 { max-width: 20ch; }
+  .hero__meta strong { color: var(--peach); font-weight: 500; }
+
+  /* ── Five things (5 cards + image, 3-col) ── */
+  .fivethings { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 1fr; gap: 1.25rem; }
+  .ft-card {
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem; padding: 2rem; display: flex; flex-direction: column; gap: 0.6rem;
+    transition: border-color 300ms var(--ease);
+  }
+  .ft-card:hover { border-color: rgba(231,163,139,0.4); }
+  .ft-card__num { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--peach); margin-bottom: 0.75rem; }
+  .ft-card h3 { font-size: 1.3rem; color: var(--white); line-height: 1.15; }
+  .ft-card p { color: rgba(255,255,255,0.6); font-size: 0.92rem; line-height: 1.5; }
+  .ft-image { grid-row: span 1; border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); position: relative; min-height: 14rem; }
+  .ft-image img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+
+  /* ── Yours. Not ours. (compare) ── */
+  .anti-vendor { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 4rem; display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start; }
+  .anti-vendor__left h2 { margin-bottom: 1rem; }
+  .anti-vendor__left p { color: rgba(255,255,255,0.65); line-height: 1.55; }
+  .anti-vendor__compare { display: grid; gap: 0.75rem; }
+  .anti-vendor__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .anti-vendor__row:last-child { border-bottom: none; }
+  .anti-vendor__cell { font-size: 0.92rem; line-height: 1.4; }
+  .anti-vendor__cell.them { color: rgba(255,255,255,0.4); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.2); }
+  .anti-vendor__cell.us { color: var(--peach); }
+  .anti-vendor__cell.us::before { content: "✓ "; font-weight: 600; }
+
+  /* ── The Platform story (case slider static) ── */
+  .caseflow { position: relative; height: 82vh; min-height: 560px; overflow: hidden; border-radius: 0.75rem; }
+  .caseflow__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .caseflow__scrim { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,22,14,0.85), rgba(0,22,14,0.4) 45%, rgba(0,22,14,0.15)), linear-gradient(to top, rgba(0,22,14,0.75), transparent 45%); }
+  .caseflow__inner { position: relative; z-index: 2; height: 100%; padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
+  .caseflow__top { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: start; }
+  .caseflow h3 { font-size: clamp(1.8rem, 3vw, 2.8rem); color: #fff; margin: 1.25rem 0; max-width: 18ch; line-height: 1.1; }
+  .caseflow__desc { color: rgba(255,255,255,0.8); font-size: 1.05rem; line-height: 1.5; max-width: 30rem; margin-bottom: 2rem; }
+  .caseflow__stats { display: flex; gap: 1rem; }
+  .caseflow__stat { background: rgba(0,22,14,0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 1.25rem 1.5rem; min-width: 9rem; }
+  .caseflow__stat-value { font-size: 2rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.5rem; }
+  .caseflow__stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .caseflow__tabs { position: absolute; left: 3rem; right: 3rem; bottom: 2.5rem; z-index: 3; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.5rem; }
+  .caseflow__tab { padding: 0.75rem 0 0; color: rgba(255,255,255,0.55); font-family: ui-monospace, monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; position: relative; }
+  .caseflow__tab.on { color: #fff; }
+  .caseflow__tab-track { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.15); overflow: hidden; }
+  .caseflow__tab-fill { position: absolute; inset: 0; background: var(--peach); transform-origin: left; }
+
+  /* ── FAQ ── */
+  .faq-list { display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .faq { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1.75rem 0; }
+  .faq__q { font-size: 1.2rem; font-weight: 600; color: var(--white); letter-spacing: -0.01em; margin-bottom: 1rem; display: flex; gap: 1rem; }
+  .faq__q-mark { font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--peach); padding-top: 0.2rem; }
+  .faq__a { color: rgba(255,255,255,0.7); line-height: 1.6; padding-left: 2.1rem; max-width: 54rem; }
+
+  /* ── Newsletter + footer ── */
+  .newsletter { padding: 4rem 0; background: var(--brand-darkest); border-top: 1px solid rgba(255,255,255,0.06); }
+  .newsletter__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .newsletter h3 { font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem; }
+  .newsletter p { color: rgba(255,255,255,0.55); font-size: 0.95rem; }
+  .newsletter__form { display: flex; gap: 0.75rem; }
+  .newsletter__input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 0.9rem 1.4rem; color: #fff; font-size: 0.95rem; }
+  .site-footer { padding: 5rem 0 3rem; background: var(--brand-darkest); border-top: 1px solid rgba(255,255,255,0.06); }
+  .site-footer__top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .site-footer h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); max-width: 12ch; margin-bottom: 1.5rem; }
+  .site-footer__col-label { font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 1.25rem; }
+  .site-footer__links { display: grid; gap: 0.75rem; }
+  .site-footer__links a { color: rgba(255,255,255,0.7); font-size: 0.95rem; transition: color 200ms var(--ease); }
+  .site-footer__links a:hover { color: var(--peach); }
+  .site-footer__legal { padding-top: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: ui-monospace, monospace; font-size: 0.68rem; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); }
+
+  @media (max-width: 900px) {
+    .fivethings { grid-template-columns: 1fr 1fr; }
+    .anti-vendor, .newsletter__grid, .caseflow__top { grid-template-columns: 1fr; }
+    .site-footer__top { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">Steamhaus</div>
+    <nav class="nav__links">
+      <span class="nav__link active">What we do <span class="caret">▾</span></span>
+      <span class="nav__link">Our work</span>
+      <span class="nav__link">Insights</span>
+      <span class="nav__link">About</span>
+      <a href="#" class="btn btn--primary nav__cta">Book the Assessment ↗</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 1 · HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow no-dot">Platform</div>
+    <h1>The AWS foundation AI and engineers can build on.</h1>
+    <p class="hero__sub">An AI-ready platform isn't a feature — it's the ground everything stands on. Landing zone, container platforms, an internal developer platform, governance, operational maturity. Five productised, fixed-price engagements that get the platform built right.</p>
+    <div class="hero__ctas">
+      <a href="#" class="btn btn--primary">Book the Assessment ↗</a>
+      <a href="#" class="btn btn--ghost">Talk to us ↗</a>
+    </div>
+    <div class="hero__meta">
+      <span><strong>5</strong> Foundations · fixed-price</span>
+      <span>Live on AWS Marketplace</span>
+      <span>AWS funding eligible</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · FIVE THINGS -->
+<section class="s" style="border-top:none;">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">What it means</div>
+        <h2>Five things, working together.</h2>
+      </div>
+      <p class="s__head-sub">An AI-ready platform isn't one thing — it's a system. Get any one of these wrong and the rest stops working. We build them as a set.</p>
+    </div>
+    <div class="fivethings">
+      <div class="ft-card"><div class="ft-card__num">01</div><h3>Secure landing zone</h3><p>Multi-account governance, networking, identity. The structural floor of the estate.</p></div>
+      <div class="ft-card"><div class="ft-card__num">02</div><h3>Container platforms</h3><p>EKS or ECS — chosen for what you ship, not what we resell. Production-grade from day one.</p></div>
+      <div class="ft-image"><img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?q=80&w=1200&auto=format&fit=crop" alt="" /></div>
+      <div class="ft-card"><div class="ft-card__num">03</div><h3>Internal developer platform</h3><p>A paved road for engineering teams. Self-serve, opinionated, governed by default.</p></div>
+      <div class="ft-card"><div class="ft-card__num">04</div><h3>Governance &amp; policy</h3><p>SCPs, IAM, audit. The controls AI tooling needs to operate safely.</p></div>
+      <div class="ft-card"><div class="ft-card__num">05</div><h3>Operational maturity</h3><p>Observability, incident response, capacity. The estate stays running while AI builds on top.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · YOURS. NOT OURS. -->
+<section class="s">
+  <div class="container">
+    <div class="anti-vendor">
+      <div class="anti-vendor__left">
+        <div class="eyebrow">Why not a vendor platform</div>
+        <h2 style="margin-top:1rem;">Yours. Not ours.</h2>
+        <p>The platform we build for you is yours. AWS-native, in your accounts, on your control plane. When the engagement ends, you're not locked into a Steamhaus product or paying for a control plane you didn't build.</p>
+      </div>
+      <div class="anti-vendor__compare">
+        <div class="anti-vendor__row"><div class="anti-vendor__cell them">Proprietary control plane</div><div class="anti-vendor__cell us">AWS-native, in your accounts</div></div>
+        <div class="anti-vendor__row"><div class="anti-vendor__cell them">Per-seat or per-app pricing</div><div class="anti-vendor__cell us">Fixed-price engagement, then yours</div></div>
+        <div class="anti-vendor__row"><div class="anti-vendor__cell them">Renewal pressure forever</div><div class="anti-vendor__cell us">You can walk away. The platform stays.</div></div>
+        <div class="anti-vendor__row"><div class="anti-vendor__cell them">Black-box opinions</div><div class="anti-vendor__cell us">Documented decisions, defensible to your CTO</div></div>
+        <div class="anti-vendor__row"><div class="anti-vendor__cell them">Migration tax to leave</div><div class="anti-vendor__cell us">No tax — it's standard AWS underneath</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · CTA BAND (platform) -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content:center; display:inline-flex;">Ready?</div>
+    <h2>Find out where your platform sits.</h2>
+    <p class="cta-band__sub">A fixed-price assessment. You leave with a plan you can take to your exec team — and a clear next Foundation, if one's right for you.</p>
+    <div class="cta-band__actions"><a href="#" class="btn btn--primary">Book your AI-Readiness Assessment ↗</a></div>
+  </div>
+</section>
+
+<!-- 5 · THE PLATFORM STORY (case slider) -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">In practice</div>
+        <h2>The Platform story.</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">All case studies ↗</a>
+    </div>
+    <div class="caseflow">
+      <img class="caseflow__bg" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2000&auto=format&fit=crop" alt="" />
+      <div class="caseflow__scrim"></div>
+      <div class="caseflow__inner">
+        <div class="caseflow__top">
+          <div>
+            <div class="eyebrow">Utilities Business</div>
+            <h3>Giving frontline agents instant, AI-powered customer insights</h3>
+            <p class="caseflow__desc">A next-generation utility business uses IoT-connected solar and digital services to reach hundreds of thousands of households and small businesses.</p>
+            <a href="#" class="btn btn--ghost">Read the case study ↗</a>
+          </div>
+          <div class="caseflow__stats">
+            <div class="caseflow__stat"><div class="caseflow__stat-value">14×</div><div class="caseflow__stat-label">Deploy frequency uplift</div></div>
+            <div class="caseflow__stat"><div class="caseflow__stat-value">11</div><div class="caseflow__stat-label">Product teams now on the IDP</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="caseflow__tabs">
+        <div class="caseflow__tab on"><span class="caseflow__tab-track"><span class="caseflow__tab-fill" style="transform:scaleX(0.5)"></span></span>Utilities Business</div>
+        <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill"></span></span>Modulr Finance</div>
+        <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill"></span></span>Sperry Rail</div>
+        <div class="caseflow__tab"><span class="caseflow__tab-track"><span class="caseflow__tab-fill"></span></span>Auden</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · FAQ -->
+<section class="s">
+  <div class="container">
+    <div class="s__head">
+      <div class="s__head-left">
+        <div class="eyebrow">Questions</div>
+        <h2>What CTOs ask before committing.</h2>
+      </div>
+      <p class="s__head-sub">Straight answers — also the questions search and AI assistants surface when someone's researching this work.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>How long does a VMware to AWS migration take?</div><div class="faq__a">For a typical mid-size estate (100–300 VMs), 3–6 months end to end. The Assess phase takes 2–4 weeks; the bulk of the time is phased transition. Larger or more regulated estates take longer — we'll give you a real timeline after the assessment, not a sales figure.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>Is this just a lift-and-shift to EC2?</div><div class="faq__a">No — and that's the point. Lift-and-shift relocates your VMs and keeps every operational problem you had. We assess each workload for whether it should be rehosted, replatformed onto native AWS services, or retired entirely. Typically 30–40% of workloads are worth replatforming, which is where the long-term cost and capability gains come from.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>What happens to workloads that can't move easily?</div><div class="faq__a">Every estate has them — old dependencies, undocumented integrations, licensing tied to specific hardware. We surface these in the Assess phase rather than hitting them mid-migration. Some get rebuilt, some get retired, and occasionally the right answer is a hybrid approach for a specific workload. We're honest about the brownfield reality.</div></div>
+      <div class="faq"><div class="faq__q"><span class="faq__q-mark">Q</span>How much does it cost, and is AWS funding available?</div><div class="faq__a">The engagement is procured through AWS Marketplace and scoped after the assessment. Most projects qualify for AWS Migration Acceleration Program (MAP) funding, which can offset a significant portion of the cost. We handle the funding application as part of the engagement — it's not an afterthought.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · CTA BAND (estate) -->
+<section class="cta-band">
+  <div class="container">
+    <div class="eyebrow no-dot" style="justify-content:center; display:inline-flex;">Ready?</div>
+    <h2>Find out where your AWS estate sits.</h2>
+    <p class="cta-band__sub">A fixed-price assessment. ~3 weeks. You leave with a plan you can take to your exec team.</p>
+    <div class="cta-band__actions"><a href="#" class="btn btn--primary">Book the AI-Readiness Assessment ↗</a></div>
+  </div>
+</section>
+
+<!-- 8 · NEWSLETTER -->
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter__grid">
+      <div>
+        <div class="eyebrow" style="margin-bottom:1rem;">Stay in the loop</div>
+        <h3>Join our newsletter</h3>
+        <p>The occasional note on AWS, modernisation and the AI-readiness conversation.</p>
+      </div>
+      <div>
+        <form class="newsletter__form" onsubmit="return false">
+          <input class="newsletter__input" type="email" placeholder="Enter your email" />
+          <button class="btn btn--primary" type="submit">Subscribe ↗</button>
+        </form>
+        <p style="margin-top:0.85rem; font-size:0.8rem; color:rgba(255,255,255,0.4);">By subscribing you agree to our Privacy Policy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <h2>Let's build something great together</h2>
+        <a href="#" class="btn btn--ghost">Contact us ↗</a>
+      </div>
+      <div>
+        <div class="site-footer__col-label">What we do</div>
+        <div class="site-footer__links">
+          <a href="#">AWS Migration</a>
+          <a href="#">AWS Modernisation</a>
+          <a href="#">Cloud native</a>
+          <a href="#">Landing zone</a>
+        </div>
+      </div>
+      <div>
+        <div class="site-footer__col-label">Our work</div>
+        <div class="site-footer__links">
+          <a href="#">Lumina Learning</a>
+          <a href="#">Sperry Rail</a>
+          <a href="#">Modulr Finance</a>
+        </div>
+      </div>
+      <div>
+        <div class="site-footer__col-label">Company</div>
+        <div class="site-footer__links">
+          <a href="#">AWS Partnership</a>
+          <a href="#">Meet the team</a>
+          <a href="#">Terms &amp; Conditions</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__legal">
+      <span>© Steamhaus Ltd · Registered in England &amp; Wales · company number 09735923</span>
+      <span>Amazon Web Services partner since 2016</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
