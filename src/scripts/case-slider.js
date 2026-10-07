@@ -2,30 +2,94 @@
 // CASE SLIDER — full-screen case-study slider (GSAP line reveal + autoplay tabs)
 // -----------------------------------------
 // Osmo-style line reveal (SplitText, masked lines) for the text, image
-// crossfade for the background, and a custom tab nav where each tab's
-// underline fills over the autoplay duration. Matches the Shrink Studio
-// testimonial transition. Requires GSAP + SplitText (loaded on the site).
+// crossfade for the background, and a tab row where each tab's underline
+// fills over the autoplay duration. Matches the Shrink Studio testimonial
+// transition. Requires GSAP + SplitText (loaded on the site).
 //
 // Structure:
 //   [data-case-slider]  data-case-delay="6000"
 //     [data-case-list]
 //       [data-case-item]           × N   (stacked; active visible)
 //         [data-case-bg]                 — bg image (crossfades)
-//         [data-case-split]        × M   — text that line-reveals (eyebrow/headline/desc)
-//         [data-case-fade]         × ?   — extra content that fades up (stats/button)
-//     [data-case-tabs]
-//       [data-case-tab]            × N   (same count/order as items)
-//         [data-case-tab-progress]       — fill (scaleX, origin left)
+//         [data-case-split]        × M   — text that line-reveals (headline/desc)
+//         [data-case-fade]         × ?   — content that fades up (eyebrow/stats/button)
+//     [data-case-tabs]  (optional)       — tab row container
+//       [data-case-tab]            × N   — authored tabs, OR omit entirely and the
+//         [data-case-tab-progress]         tabs are GENERATED from the items
+//
+// Generated tabs (single source of truth = the slides):
+//   label  = data-case-tab-label attr on the item → [data-case-tab-label] child
+//            → [data-case-eyebrow] / .eyebrow-component → first heading → index
+//   classes default to the Steamhaus build; override on the wrap with
+//   data-case-tabs-class, data-case-tabs-list-class, data-case-tab-class,
+//   data-case-tab-progress-class, data-case-tab-label-class
 
 let instances = [];
+
+// Tab label for a slide: attr → explicit child → eyebrow → heading → index
+function labelFor(item, i) {
+  const attr = item.getAttribute('data-case-tab-label');
+  if (attr && attr.trim()) return attr.trim();
+  const pick = (sel) => {
+    const el = item.querySelector(sel);
+    return el ? el.textContent.trim() : '';
+  };
+  return (
+    pick('[data-case-tab-label]') ||
+    pick('[data-case-eyebrow], .eyebrow-component') ||
+    pick('h1, h2, h3') ||
+    String(i + 1).padStart(2, '0')
+  );
+}
+
+// Build the tab row from the slides so there is one source of truth
+function buildTabs(wrap, items) {
+  const cls = (k, d) => wrap.getAttribute(k) || d;
+  let container = wrap.querySelector('[data-case-tabs]');
+  const createdContainer = !container;
+  if (createdContainer) {
+    container = document.createElement('div');
+    container.className = cls('data-case-tabs-class', 'case-slider__tabs');
+    container.setAttribute('data-case-tabs', '');
+    wrap.appendChild(container);
+  }
+  const list = document.createElement('div');
+  list.className = cls('data-case-tabs-list-class', 'case-slider__tabs-list');
+  list.setAttribute('role', 'tablist');
+  const tabs = items.map((item, i) => {
+    const tab = document.createElement('div');
+    tab.className = cls('data-case-tab-class', 'case-slider__tab');
+    tab.setAttribute('data-case-tab', '');
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('tabindex', '0');
+    const bar = document.createElement('span');
+    bar.className = cls('data-case-tab-progress-class', 'case-slider__tab-progress');
+    bar.setAttribute('data-case-tab-progress', '');
+    const label = document.createElement('span');
+    label.className = cls('data-case-tab-label-class', 'case-slider__tab-label');
+    label.textContent = labelFor(item, i);
+    tab.append(bar, label);
+    list.appendChild(tab);
+    return tab;
+  });
+  container.appendChild(list);
+  return { tabs, list, container, createdContainer };
+}
 
 function initInstance(wrap) {
   const list = wrap.querySelector('[data-case-list]');
   if (!list || typeof gsap === 'undefined') return null;
 
   const items = Array.from(list.querySelectorAll('[data-case-item]'));
-  const tabs = Array.from(wrap.querySelectorAll('[data-case-tab]'));
   if (items.length < 2) return null;
+
+  // Use authored tabs if present, otherwise build them from the slides
+  let tabs = Array.from(wrap.querySelectorAll('[data-case-tab]'));
+  let generated = null;
+  if (!tabs.length) {
+    generated = buildTabs(wrap, items);
+    tabs = generated.tabs;
+  }
 
   const hasSplit = typeof SplitText !== 'undefined';
   const duration = (parseInt(wrap.getAttribute('data-case-delay'), 10) || 6000) / 1000;
@@ -78,6 +142,7 @@ function initInstance(wrap) {
       const on = k === i;
       tab.classList.toggle('is-active', on);
       tab.setAttribute('aria-current', on ? 'true' : 'false');
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
       if (progressEls[k] && !on) gsap.set(progressEls[k], { scaleX: 0 });
     });
   }
@@ -148,11 +213,15 @@ function initInstance(wrap) {
     if (inc.fadeEls.length) tl.to(inc.fadeEls, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '<+0.15');
   }
 
-  // Tabs
+  // Tabs (click + keyboard)
   tabs.forEach((tab, i) => {
     const fn = () => goTo(i);
+    const key = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); }
+    };
     tab.addEventListener('click', fn);
-    listeners.push({ el: tab, type: 'click', fn });
+    tab.addEventListener('keydown', key);
+    listeners.push({ el: tab, type: 'click', fn }, { el: tab, type: 'keydown', fn: key });
   });
 
   // Pause when off-screen
@@ -175,6 +244,10 @@ function initInstance(wrap) {
     if (progressTween) progressTween.kill();
     if (scrollTrigger) scrollTrigger.kill();
     slides.forEach((s) => s.splits.forEach((sp) => sp.revert && sp.revert()));
+    if (generated) {
+      generated.list.remove();
+      if (generated.createdContainer) generated.container.remove();
+    }
   };
 }
 
