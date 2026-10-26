@@ -80,6 +80,11 @@ function initInstance(wrap) {
   // Panels: lift bgs into the media layer, wire up a11y, build tabs
   const panels = panelEls.map((panel, i) => {
     const bg = panel.querySelector('[data-cases-bg]');
+    // Heading component puts the attr on its wrapper: split the heading itself
+    const titleEl = panel.querySelector('[data-cases-title]');
+    const title = titleEl && !titleEl.matches('h1, h2, h3, h4, h5, h6')
+      ? titleEl.querySelector('h1, h2, h3, h4, h5, h6') || titleEl
+      : titleEl;
     const bgHome = bg ? { parent: bg.parentNode, next: bg.nextSibling } : null;
     if (bg) media.appendChild(bg);
 
@@ -107,7 +112,7 @@ function initInstance(wrap) {
       tab,
       fill: tab.querySelector('[data-cases-tab-fill]'),
       eyebrow: panel.querySelector('[data-cases-eyebrow]'),
-      title: panel.querySelector('[data-cases-title]'),
+      title,
       fades: Array.from(panel.querySelectorAll('[data-cases-fade]')),
       stats: Array.from(panel.querySelectorAll('[data-cases-stat]')),
       counts,
