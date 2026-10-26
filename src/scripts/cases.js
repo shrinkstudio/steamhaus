@@ -149,6 +149,17 @@ function initInstance(wrap) {
       p.tab.tabIndex = isOn ? 0 : -1;
       if (!isOn && p.fill) gsap.set(p.fill, { scaleX: 0 });
     });
+    revealTab(panels[index].tab);
+  }
+
+  // Tablet/mobile: the tab row scrolls, so keep the active tab centred (row only, never the page)
+  function revealTab(tab) {
+    if (tablist.scrollWidth <= tablist.clientWidth) return;
+    const listBox = tablist.getBoundingClientRect();
+    const tabBox = tab.getBoundingClientRect();
+    const max = tablist.scrollWidth - tablist.clientWidth;
+    const left = Math.max(0, Math.min(max, tablist.scrollLeft + tabBox.left - listBox.left - (listBox.width - tabBox.width) / 2));
+    gsap.to(tablist, { scrollLeft: left, duration: reduce ? 0 : 0.8, ease, overwrite: true });
   }
 
   function showPanel(p, visible) {
@@ -302,7 +313,10 @@ function initInstance(wrap) {
 
   // Swipe between cases on touch
   let touch = null;
-  on(wrap, 'touchstart', (e) => { touch = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
+  on(wrap, 'touchstart', (e) => {
+    // Swiping the tab row scrolls it, not the cases
+    touch = tablist.contains(e.target) ? null : { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: true });
   on(wrap, 'touchend', (e) => {
     if (!touch) return;
     const dx = e.changedTouches[0].clientX - touch.x;

@@ -151,16 +151,14 @@
     .cases_panel { grid-template-columns: minmax(0, 1fr); }
     .cases_stats { margin-top: 2.5rem; }
     .cases_stat { flex: 1 1 0; width: auto; max-width: 18rem; }
-    .cases_tablist { align-items: end; }
-    .cases_tab { padding-inline: .5rem; }
-    .cases_tab_label { white-space: normal; text-wrap: balance; }
+    /* Tab row scrolls sideways, names stay; edges fade */
+    .cases_tablist { overflow-x: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, transparent, black 1.5rem, black calc(100% - 1.5rem), transparent); mask-image: linear-gradient(90deg, transparent, black 1.5rem, black calc(100% - 1.5rem), transparent); }
+    .cases_tablist::-webkit-scrollbar { display: none; }
+    .cases_tab { flex: 1 0 auto; min-width: 8rem; padding-inline: .75rem; }
   }
   /* Mobile: tabs become story bars, eyebrow already names the client */
   @container (width < 40em) {
     .cases_contain { gap: 3rem; }
-    .cases_tablist { gap: .5rem; }
-    .cases_tab { padding: 1rem 0; }
-    .cases_tab_label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .cases_stats { gap: .75rem; margin-top: 2rem; }
     .cases_stat { gap: 1rem; padding: .875rem; }
     .cases_stat_value { font-size: 1.375rem; }

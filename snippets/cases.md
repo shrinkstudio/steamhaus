@@ -25,6 +25,8 @@ html.wf-design-mode .cases_item:not(:first-child) { display: none; }
 .cases_stat_value { font-variant-numeric: tabular-nums; }
 .cases_tab:hover .cases_tab_label, .cases_tab.is-active .cases_tab_label { opacity: 1; }
 .cases_tab:focus-visible { outline: 2px solid var(--_color---secondary--peach); outline-offset: 2px; }
+.cases_tablist { scrollbar-width: none; }
+.cases_tablist::-webkit-scrollbar { display: none; }
 
 /* Designer only: tabs are built by the script, so preview the template tab in place */
 html.wf-design-mode .cases_template { display: flex; position: absolute; left: 0; right: 0; bottom: var(--_components---section--padding); width: 100%; max-width: var(--_components---container--max-width); margin-inline: auto; padding-inline: var(--_components---container--gutter); }
@@ -38,4 +40,4 @@ html.wf-design-mode .cases_template .cases_tab_fill { transform: scaleX(.5); }
 - Underline fill = the autoplay timer (default 7s, `data-cases-duration`). Pauses on tab hover, keyboard focus, off-screen, hidden tab.
 - Click / arrow keys / Home / End switch cases; swipe on touch.
 - Reduced motion: crossfade, no autoplay.
-- Tablet (≤991): stats under the copy, tab labels wrap. Mobile (≤767): tabs become bars, labels screen-reader only.
+- Tablet + mobile (≤991): stats under the copy; the tab row scrolls sideways with names kept (min 8rem a tab, faded edges), and the script centres the active tab (GSAP scrollLeft tween, row only). Swiping the row scrolls it; swiping the panel changes case.
