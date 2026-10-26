@@ -11,6 +11,7 @@ import { initTOC, destroyTOC } from './toc.js';
 import { initSocialShare, destroySocialShare } from './social-share.js';
 import { initContentReveal, destroyContentReveal } from './content-reveal.js';
 import { initCaseSlider, destroyCaseSlider } from './case-slider.js';
+import { initCases, destroyCases } from './cases.js';
 import { initCopyClip, destroyCopyClip } from './copy-clip.js';
 import { initDotField, destroyDotField } from './dot-field.js';
 import { initLogoWall, destroyLogoWall } from './logo-wall.js';
@@ -78,6 +79,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-nest="target"]')) initCmsNest(nextPage);
   if (has('[data-list-load]')) initListLoad(nextPage);
   if (has('[data-case-slider]')) initCaseSlider(nextPage);
+  if (has('[data-cases]')) initCases(nextPage);
   if (has('[data-copy="trigger"], [data-copy="link"]')) initCopyClip(nextPage);
   if (has('[data-dot-field]')) initDotField(nextPage);
   if (has('[data-logo-wall-cycle-init]')) initLogoWall(nextPage);
@@ -220,6 +222,7 @@ barba.hooks.afterLeave(() => {
   destroyCmsNest();
   destroyListLoad();
   destroyCaseSlider();
+  destroyCases();
   destroyCopyClip();
   destroyDotField();
   destroyLogoWall();

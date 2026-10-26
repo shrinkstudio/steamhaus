@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Cases (tabbed case studies)</title>
+<!-- Live Webflow CSS so every token, font and utility matches staging -->
+<link rel="stylesheet" href="https://cdn.prod.website-files.com/69c4098abe013253584446a0/css/steamhaus-2026.webflow.shared.cbdd61a01.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Manrope:400,500,600,700%7CSpace+Mono:400,700&display=swap" />
+<style>
+  body { margin: 0; background-color: var(--_color---primary--brand-darkest); }
+  .demo_spacer { height: 60vh; display: flex; align-items: center; justify-content: center; color: var(--_color---primary--brand-lighter); font-family: var(--_typography---fonts--secondary-font); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+</style>
+
+<!-- ============ COMPONENT CSS (hand to Ben as the "Cases" embed / Designer classes) ============ -->
+<style>
+  .cases_wrap {
+    --cases-dot: var(--_color---secondary--peach);
+    --cases-track: color-mix(in srgb, var(--_color---neutral--white) 55%, transparent);
+    --cases-glass: color-mix(in srgb, var(--_color---primary--brand-darkest) 50%, transparent);
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+    background-color: var(--_color---primary--brand-darkest);
+    color: var(--_color---neutral--white);
+  }
+
+  /* Media layer: bgs are moved in here by the script */
+  .cases_media { position: absolute; inset: 0; z-index: -2; padding: 0; }
+  .cases_bg_img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 50%; will-change: transform, clip-path; }
+  .cases_scrim { position: absolute; inset: 0; z-index: -1; padding: 0; pointer-events: none; background-image: linear-gradient(180deg, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, .35) 55%, rgba(0, 0, 0, .55) 100%); }
+  .cases_blur { position: absolute; inset: auto 0 0 0; height: 30%; z-index: -1; padding: 0; pointer-events: none; backdrop-filter: blur(2.5px); -webkit-mask-image: linear-gradient(0deg, black 40%, transparent); mask-image: linear-gradient(0deg, black 40%, transparent); }
+
+  .cases_contain {
+    container-type: inline-size;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5rem;
+    width: calc(100% - var(--_components---container--gutter) * 2);
+    max-width: var(--_components---container--max-width);
+    margin-inline: auto;
+  }
+
+  /* Panels stack in one grid cell: height = tallest case, tabs stay in flow */
+  .cases_list { display: grid; }
+  .cases_panel {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-columns: minmax(0, 48rem) auto;
+    grid-template-rows: auto auto;
+    justify-content: space-between;
+    column-gap: 2rem;
+    align-content: start;
+  }
+  .cases_panel:not(:first-child) { visibility: hidden; }
+
+  .cases_eyebrow { grid-column: 1 / -1; display: flex; align-items: center; gap: .5rem; margin-bottom: 2rem; }
+  .cases_eyebrow_dot { flex-shrink: 0; width: .375rem; aspect-ratio: 1 / 1; padding: 0; border-radius: 2px; background-color: var(--cases-dot); }
+  .cases_eyebrow_text, .cases_tab_label, .cases_button_text {
+    font-family: var(--_typography---fonts--secondary-font);
+    font-size: .875rem;
+    line-height: 1.5;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .cases_eyebrow_text { color: color-mix(in srgb, var(--_color---neutral--white) 96%, transparent); }
+
+  .cases_content { min-width: 0; }
+  .cases_title {
+    margin: 0 0 2rem;
+    font-family: var(--_typography---fonts--primary-font);
+    font-size: calc(var(--_typography---h2--font-size) * .92);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+    color: inherit;
+  }
+  .cases_line { padding-bottom: .12em; margin-bottom: -.12em; }
+  .cases_text {
+    max-width: 44rem;
+    margin: 0 0 2rem;
+    font-size: 1.125rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: clip;
+  }
+
+  .cases_button {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--_color---neutral--white) 14%, transparent);
+    border-radius: var(--_components---button--border-radius);
+    background-color: var(--cases-glass);
+    backdrop-filter: blur(3px);
+    color: var(--_color---neutral--white);
+    text-decoration: none;
+    transition: background-color 400ms cubic-bezier(.625, .05, 0, 1), border-color 400ms cubic-bezier(.625, .05, 0, 1);
+  }
+  .cases_button_icon { flex-shrink: 0; width: .78rem; aspect-ratio: 1 / 1; transition: transform 400ms cubic-bezier(.625, .05, 0, 1); }
+  .cases_button:hover { background-color: color-mix(in srgb, var(--_color---primary--brand-darkest) 80%, transparent); border-color: var(--cases-dot); }
+  .cases_button:hover .cases_button_icon { transform: translateX(.2rem); }
+
+  .cases_stats { display: flex; gap: 1.5rem; align-items: stretch; align-self: start; }
+  .cases_stat {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 15rem;
+    padding: 1rem;
+    border-radius: .5rem;
+    background-color: rgba(0, 0, 0, .25);
+    backdrop-filter: blur(3px);
+  }
+  .cases_stat_value { font-family: var(--_typography---fonts--primary-font); font-size: 1.75rem; font-weight: 700; line-height: 1.3; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .cases_stat_label { max-width: 11em; font-size: 1.125rem; line-height: 1.4; }
+
+  /* Tabs */
+  .cases_tablist { display: flex; gap: 1rem; }
+  .cases_tab {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 1rem 2rem;
+    border: 0;
+    background-color: transparent;
+    color: var(--_color---neutral--white);
+    text-align: center;
+    cursor: pointer;
+  }
+  .cases_tab_label { display: block; color: color-mix(in srgb, var(--_color---neutral--white) 70%, transparent); white-space: nowrap; overflow: clip; text-overflow: ellipsis; transition: color 300ms; }
+  .cases_tab:hover .cases_tab_label, .cases_tab.is-active .cases_tab_label { color: var(--_color---neutral--white); }
+  .cases_tab_track { position: absolute; inset: auto 0 0 0; height: 2px; padding: 0; background-color: var(--cases-track); overflow: clip; }
+  .cases_tab_fill { position: absolute; inset: 0; padding: 0; background-color: var(--cases-dot); transform: scaleX(0); transform-origin: 0 50%; }
+  .cases_tab:focus-visible { outline: 2px solid var(--cases-dot); outline-offset: 2px; }
+  .cases_template { display: none; }
+
+  /* Tablet: stats drop under the copy */
+  @container (width < 62em) {
+    .cases_panel { grid-template-columns: minmax(0, 1fr); }
+    .cases_stats { margin-top: 2.5rem; }
+    .cases_stat { flex: 1 1 0; width: auto; max-width: 18rem; }
+    .cases_tablist { align-items: end; }
+    .cases_tab { padding-inline: .5rem; }
+    .cases_tab_label { white-space: normal; text-wrap: balance; }
+  }
+  /* Mobile: tabs become story bars, eyebrow already names the client */
+  @container (width < 40em) {
+    .cases_contain { gap: 3rem; }
+    .cases_tablist { gap: .5rem; }
+    .cases_tab { padding: 1rem 0; }
+    .cases_tab_label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .cases_stats { gap: .75rem; margin-top: 2rem; }
+    .cases_stat { gap: 1rem; padding: .875rem; }
+    .cases_stat_value { font-size: 1.375rem; }
+    .cases_stat_label { font-size: 1rem; }
+    .cases_text { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo_spacer">Scroll ↓ (intro plays on enter)</div>
+
+<!-- ============ COMPONENT MARKUP (mirrors the Webflow CMS structure) ============ -->
+<section class="cases_wrap" data-cases data-cases-duration="7" aria-label="Case studies">
+  <div class="cases_media" data-cases-media></div>
+  <div class="cases_scrim" aria-hidden="true"></div>
+  <div class="cases_blur" aria-hidden="true"></div>
+
+  <div class="cases_contain">
+    <div class="cases_list_wrap w-dyn-list">
+      <div class="cases_list w-dyn-items" role="list" data-cases-panels>
+
+        <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
+          <img class="cases_bg_img" data-cases-bg alt="" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc8615da834f98667bbfeb_67a11d4b430d160e839de75d_sperry-rail.CrT4gBKp.webp" />
+          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Sperry Rail</div></div>
+          <div class="cases_content">
+            <h2 class="cases_title" data-cases-title>Making the world's railways safer</h2>
+            <p class="cases_text" data-cases-fade>Sperry Rail partnered with Steamhaus and AWS to accelerate and de-risk their Digital Transformation journey, building Cloud Native products that unlock the true value of their data.</p>
+            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/sperry-rail"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
+          </div>
+          <div class="cases_stats">
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>~35%</div><div class="cases_stat_label">Reduced monthly cost</div></div>
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>50%</div><div class="cases_stat_label">Fewer false positives</div></div>
+          </div>
+        </div>
+
+        <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
+          <img class="cases_bg_img" data-cases-bg alt="" loading="lazy" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc86676a2c235fba883fbd_67a527fbd1be325c4f9ac098_thredd.webp" />
+          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Thredd</div></div>
+          <div class="cases_content">
+            <h2 class="cases_title" data-cases-title>Modernising ways of working with cloud-native capabilities</h2>
+            <p class="cases_text" data-cases-fade>Financial services firm Thredd worked closely with Steamhaus to transform to cloud-native ways of working, streamline its complex network architecture, containerise applications, and modernise with infrastructure as code.</p>
+            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/thredd"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
+          </div>
+          <div class="cases_stats">
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>GitOps</div><div class="cases_stat_label">Workflows</div></div>
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>Daily</div><div class="cases_stat_label">Deployments, up from manual</div></div>
+          </div>
+        </div>
+
+        <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
+          <img class="cases_bg_img" data-cases-bg alt="" loading="lazy" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc869d33e4659229f2c5fb_697a1598654ef0a2a7608a80_pexels-julien-goettelmann-44396125-29792898.jpeg" />
+          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Pole Star</div></div>
+          <div class="cases_content">
+            <h2 class="cases_title" data-cases-title>Powering reliable, agile maritime solutions on AWS</h2>
+            <p class="cases_text" data-cases-fade>Pole Star Global needed to modernise its application environment to reduce risk and increase operational efficiency. Working with Steamhaus, it moved critical applications to AWS and now releases daily instead of annually.</p>
+            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/pole-star-global-works-with-steamhaus-to-power-reliable-agile-maritime-solutions-on-aws"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
+          </div>
+          <div class="cases_stats">
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>99.99%</div><div class="cases_stat_label">Uptime</div></div>
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>15 min</div><div class="cases_stat_label">To deploy, down from 12 hrs</div></div>
+          </div>
+        </div>
+
+        <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
+          <img class="cases_bg_img" data-cases-bg alt="" loading="lazy" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc8600dc943b9b3c6c4910_68f8c3a61eed5f32e1b03087_dimitris-chapsoulas-CQFT1j8Ig30-unsplash.jpeg" />
+          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Capital Markets Business</div></div>
+          <div class="cases_content">
+            <h2 class="cases_title" data-cases-title>Speeding the analysis of a FTSE 250 firm’s apps using expertise and AI</h2>
+            <p class="cases_text" data-cases-fade>What began as fixing authentication on a trading platform became a cloud platform on AWS, and a migration of 1,600+ apps from on premises, analysed with the Steamhaus Modernisation Engine.</p>
+            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/speeding-the-analysis-of-a-ftse-250-firms-apps-using-expertise-and-ai"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
+          </div>
+          <div class="cases_stats">
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>1,600+</div><div class="cases_stat_label">Apps assessed for migration</div></div>
+            <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>95%</div><div class="cases_stat_label">Faster app analysis</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cases_tablist" data-cases-tablist></div>
+  </div>
+
+  <!-- Tab template: Ben styles this one in the Designer, the script clones it per case -->
+  <div class="cases_template" data-cases-template>
+    <button class="cases_tab is-active" type="button" data-cases-tab>
+      <span class="cases_tab_track"><span class="cases_tab_fill" data-cases-tab-fill></span></span>
+      <span class="cases_tab_label" data-cases-tab-label>Label</span>
+    </button>
+  </div>
+</section>
+
+<div class="demo_spacer">End</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/SplitText.min.js"></script>
+<script type="module">
+  import { initCases } from '../src/scripts/cases.js';
+  gsap.registerPlugin(CustomEase, SplitText);
+  CustomEase.create('steamhaus', '0.625, 0.05, 0, 1');
+  document.fonts.ready.then(() => initCases(document));
+</script>
+</body>
+</html>
