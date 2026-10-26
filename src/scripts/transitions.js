@@ -19,6 +19,7 @@ import { initCmsNest, destroyCmsNest } from './cms-nest.js';
 import { initListLoad, destroyListLoad } from './list-load.js';
 import { initFilterBasic, destroyFilterBasic } from './filter-basic.js';
 import { initFormValidate, destroyFormValidate } from './form-validate.js';
+import { initHubspot, destroyHubspot } from './hubspot.js';
 import { initHeroVisual, destroyHeroVisual } from './hero-visual.js';
 import { initMegaNav, destroyMegaNav } from './mega-nav.js';
 import { initNavScrollHide, destroyNavScrollHide } from './nav.js';
@@ -85,6 +86,7 @@ function initAfterEnterFunctions(next) {
   if (has('[data-logo-wall-cycle-init]')) initLogoWall(nextPage);
   if (has('[data-filter-group]')) initFilterBasic(nextPage);
   if (has('[data-form-validate]')) initFormValidate(nextPage);
+  if (has('form[data-hubspot-form]')) initHubspot(nextPage);
   if (has('[data-hero-visual]')) initHeroVisual(nextPage);
 
   // Nav lives inside the Barba container (swapped each nav), so re-init per page
@@ -228,6 +230,7 @@ barba.hooks.afterLeave(() => {
   destroyLogoWall();
   destroyFilterBasic();
   destroyFormValidate();
+  destroyHubspot();
   destroyHeroVisual();
 
   if (hasScrollTrigger) {
