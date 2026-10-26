@@ -25,6 +25,12 @@ html.wf-design-mode .cases_item:not(:first-child) { display: none; }
 .cases_stat_value { font-variant-numeric: tabular-nums; }
 .cases_tab:hover .cases_tab_label, .cases_tab.is-active .cases_tab_label { opacity: 1; }
 .cases_tab:focus-visible { outline: 2px solid var(--_color---secondary--peach); outline-offset: 2px; }
+
+/* Designer only: tabs are built by the script, so preview the template tab in place */
+html.wf-design-mode .cases_template { display: flex; position: absolute; left: 0; right: 0; bottom: var(--_components---section--padding); width: 100%; max-width: var(--_components---container--max-width); margin-inline: auto; padding-inline: var(--_components---container--gutter); }
+html.wf-design-mode .cases_template .cases_tab { flex: 0 1 25%; }
+html.wf-design-mode .cases_template .cases_tab_label { opacity: 1; }
+html.wf-design-mode .cases_template .cases_tab_fill { transform: scaleX(.5); }
 </style>
 ```
 
