@@ -41,7 +41,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 5rem;
     width: calc(100% - var(--_components---container--gutter) * 2);
     max-width: var(--_components---container--max-width);
@@ -52,16 +52,18 @@
   .cases_list { display: grid; }
   .cases_panel {
     grid-area: 1 / 1;
-    display: grid;
-    grid-template-columns: minmax(0, 48rem) auto;
-    grid-template-rows: auto auto;
-    justify-content: space-between;
-    column-gap: 2rem;
-    align-content: start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 48rem;
   }
   .cases_panel:not(:first-child) { visibility: hidden; }
 
-  .cases_eyebrow { grid-column: 1 / -1; display: flex; align-items: center; gap: .5rem; margin-bottom: 2rem; }
+  .cases_head { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; max-width: 48rem; }
+  .cases_head_eyebrow { display: flex; align-items: center; gap: .5rem; }
+  .cases_head_title { margin: 0; font-family: var(--_typography---fonts--primary-font); font-size: var(--_typography---h2--font-size); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; text-wrap: balance; }
+  .cases_logo { display: flex; align-items: center; height: 2.5rem; margin-bottom: 2rem; }
+  .cases_logo_img { display: block; width: auto; height: 100%; max-width: 12rem; object-fit: contain; object-position: 0% 50%; filter: brightness(0) invert(1); }
   .cases_eyebrow_dot { flex-shrink: 0; width: .375rem; aspect-ratio: 1 / 1; padding: 0; border-radius: 2px; background-color: var(--cases-dot); }
   .cases_eyebrow_text, .cases_tab_label, .cases_button_text {
     font-family: var(--_typography---fonts--secondary-font);
@@ -72,11 +74,11 @@
   }
   .cases_eyebrow_text { color: color-mix(in srgb, var(--_color---neutral--white) 96%, transparent); }
 
-  .cases_content { min-width: 0; }
+  .cases_content { min-width: 0; width: 100%; }
   .cases_title {
     margin: 0 0 2rem;
     font-family: var(--_typography---fonts--primary-font);
-    font-size: calc(var(--_typography---h2--font-size) * .92);
+    font-size: calc(var(--_typography---h2--font-size) * .6);
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -.04em;
@@ -112,7 +114,7 @@
   .cases_button:hover { background-color: color-mix(in srgb, var(--_color---primary--brand-darkest) 80%, transparent); border-color: var(--cases-dot); }
   .cases_button:hover .cases_button_icon { transform: translateX(.2rem); }
 
-  .cases_stats { display: flex; gap: 1.5rem; align-items: stretch; align-self: start; }
+  .cases_stats { display: flex; gap: 1.5rem; align-items: stretch; align-self: start; margin-bottom: 2rem; }
   .cases_stat {
     display: flex;
     flex-direction: column;
@@ -127,7 +129,7 @@
   .cases_stat_label { max-width: 11em; font-size: 1.125rem; line-height: 1.4; }
 
   /* Tabs */
-  .cases_tablist { display: flex; gap: 1rem; }
+  .cases_tablist { display: flex; gap: 1rem; margin-top: auto; }
   .cases_tab {
     position: relative;
     flex: 1 1 0;
@@ -148,8 +150,6 @@
 
   /* Tablet: stats drop under the copy */
   @container (width < 62em) {
-    .cases_panel { grid-template-columns: minmax(0, 1fr); }
-    .cases_stats { margin-top: 2.5rem; }
     .cases_stat { flex: 1 1 0; width: auto; max-width: 18rem; }
     /* Tab row scrolls sideways, names stay; edges fade */
     .cases_tablist { overflow-x: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, transparent, black 1.5rem, black calc(100% - 1.5rem), transparent); mask-image: linear-gradient(90deg, transparent, black 1.5rem, black calc(100% - 1.5rem), transparent); }
@@ -159,11 +159,13 @@
   /* Mobile: tabs become story bars, eyebrow already names the client */
   @container (width < 40em) {
     .cases_contain { gap: 3rem; }
-    .cases_stats { gap: .75rem; margin-top: 2rem; }
+    .cases_stats { gap: .75rem; }
     .cases_stat { gap: 1rem; padding: .875rem; }
     .cases_stat_value { font-size: 1.375rem; }
     .cases_stat_label { font-size: 1rem; }
     .cases_text { font-size: 1rem; }
+    .cases_logo { height: 1.75rem; margin-bottom: 1.5rem; }
+    .cases_logo_img { max-width: 8rem; }
   }
 </style>
 </head>
@@ -178,63 +180,67 @@
   <div class="cases_blur" aria-hidden="true"></div>
 
   <div class="cases_contain">
+    <div class="cases_head">
+      <div class="cases_head_eyebrow"><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Case studies</div></div>
+      <h2 class="cases_head_title">Shipped, measured, still running.</h2>
+    </div>
     <div class="cases_list_wrap w-dyn-list">
       <div class="cases_list w-dyn-items" role="list" data-cases-panels>
 
         <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
           <img class="cases_bg_img" data-cases-bg alt="" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc8615da834f98667bbfeb_67a11d4b430d160e839de75d_sperry-rail.CrT4gBKp.webp" />
-          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Sperry Rail</div></div>
+          <div class="cases_logo" data-cases-eyebrow><img class="cases_logo_img" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc7e20ecc83685e323ac64_689ca35a7637606f6230cc7b_sperrylogo.svg" alt="Sperry Rail" /></div>
           <div class="cases_content">
-            <h2 class="cases_title" data-cases-title>Making the world's railways safer</h2>
+            <h3 class="cases_title" data-cases-title>Making the world's railways safer</h3>
             <p class="cases_text" data-cases-fade>Sperry Rail partnered with Steamhaus and AWS to accelerate and de-risk their Digital Transformation journey, building Cloud Native products that unlock the true value of their data.</p>
-            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/sperry-rail"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
           </div>
           <div class="cases_stats">
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>~35%</div><div class="cases_stat_label">Reduced monthly cost</div></div>
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>50%</div><div class="cases_stat_label">Fewer false positives</div></div>
           </div>
+          <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/sperry-rail"><span class="cases_button_text">View case study</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
         </div>
 
         <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
           <img class="cases_bg_img" data-cases-bg alt="" loading="lazy" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc86676a2c235fba883fbd_67a527fbd1be325c4f9ac098_thredd.webp" />
-          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Thredd</div></div>
+          <div class="cases_logo" data-cases-eyebrow><img class="cases_logo_img" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc7e21ecc83685e323ac80_67b2450373140b04379cbca2_thredd.svg" alt="Thredd" /></div>
           <div class="cases_content">
-            <h2 class="cases_title" data-cases-title>Modernising ways of working with cloud-native capabilities</h2>
+            <h3 class="cases_title" data-cases-title>Modernising ways of working with cloud-native capabilities</h3>
             <p class="cases_text" data-cases-fade>Financial services firm Thredd worked closely with Steamhaus to transform to cloud-native ways of working, streamline its complex network architecture, containerise applications, and modernise with infrastructure as code.</p>
-            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/thredd"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
           </div>
           <div class="cases_stats">
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>GitOps</div><div class="cases_stat_label">Workflows</div></div>
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>Daily</div><div class="cases_stat_label">Deployments, up from manual</div></div>
           </div>
+          <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/thredd"><span class="cases_button_text">View case study</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
         </div>
 
         <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
           <img class="cases_bg_img" data-cases-bg alt="" loading="lazy" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc869d33e4659229f2c5fb_697a1598654ef0a2a7608a80_pexels-julien-goettelmann-44396125-29792898.jpeg" />
-          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Pole Star</div></div>
+          <div class="cases_logo" data-cases-eyebrow><img class="cases_logo_img" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc7e0278bb9e9bffde8988_6979f68148d66d3645ac6c17_polestar%2520logo.png" alt="Pole Star" /></div>
           <div class="cases_content">
-            <h2 class="cases_title" data-cases-title>Powering reliable, agile maritime solutions on AWS</h2>
+            <h3 class="cases_title" data-cases-title>Powering reliable, agile maritime solutions on AWS</h3>
             <p class="cases_text" data-cases-fade>Pole Star Global needed to modernise its application environment to reduce risk and increase operational efficiency. Working with Steamhaus, it moved critical applications to AWS and now releases daily instead of annually.</p>
-            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/pole-star-global-works-with-steamhaus-to-power-reliable-agile-maritime-solutions-on-aws"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
           </div>
           <div class="cases_stats">
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>99.99%</div><div class="cases_stat_label">Uptime</div></div>
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>15 min</div><div class="cases_stat_label">To deploy, down from 12 hrs</div></div>
           </div>
+          <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/pole-star-global-works-with-steamhaus-to-power-reliable-agile-maritime-solutions-on-aws"><span class="cases_button_text">View case study</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
         </div>
 
         <div class="cases_panel w-dyn-item" role="listitem" data-cases-panel>
           <img class="cases_bg_img" data-cases-bg alt="" loading="lazy" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc8600dc943b9b3c6c4910_68f8c3a61eed5f32e1b03087_dimitris-chapsoulas-CQFT1j8Ig30-unsplash.jpeg" />
-          <div class="cases_eyebrow" data-cases-eyebrow><div class="cases_eyebrow_dot"></div><div class="cases_eyebrow_text">Capital Markets Business</div></div>
+          <div class="cases_logo" data-cases-eyebrow><img class="cases_logo_img" src="https://cdn.prod.website-files.com/69c4098cbe01325358444761/69fc7d9da9937a5275b3d607_68f8bef705ca998e365c0e4e_Ftse250_logo.svg.png" alt="Capital Markets Business" /></div>
           <div class="cases_content">
-            <h2 class="cases_title" data-cases-title>Speeding the analysis of a FTSE 250 firm’s apps using expertise and AI</h2>
+            <h3 class="cases_title" data-cases-title>Speeding the analysis of a FTSE 250 firm’s apps using expertise and AI</h3>
             <p class="cases_text" data-cases-fade>What began as fixing authentication on a trading platform became a cloud platform on AWS, and a migration of 1,600+ apps from on premises, analysed with the Steamhaus Modernisation Engine.</p>
-            <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/speeding-the-analysis-of-a-ftse-250-firms-apps-using-expertise-and-ai"><span class="cases_button_text">Read more</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
           </div>
           <div class="cases_stats">
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>1,600+</div><div class="cases_stat_label">Apps assessed for migration</div></div>
             <div class="cases_stat" data-cases-stat><div class="cases_stat_value" data-cases-count>95%</div><div class="cases_stat_label">Faster app analysis</div></div>
           </div>
+          <div data-cases-fade><a class="cases_button" href="https://steamhaus-2026.webflow.io/case-studies/speeding-the-analysis-of-a-ftse-250-firms-apps-using-expertise-and-ai"><span class="cases_button_text">View case study</span><img class="cases_button_icon" src="assets/case/arrow-bend-down-right.svg" alt="" /></a></div>
         </div>
 
       </div>

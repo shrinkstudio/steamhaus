@@ -12,7 +12,7 @@
 //     [data-cases-panels]                    — grid stack (the .w-dyn-items)
 //       [data-cases-panel]  × N              — .w-dyn-item, optional data-cases-label
 //         img [data-cases-bg]
-//         [data-cases-eyebrow]               — fades (keeps its dot attached)
+//         [data-cases-eyebrow]               — fades; text or a client logo (img alt = tab label)
 //         [data-cases-title]                 — masked line reveal (SplitText)
 //         [data-cases-fade]   × ?            — desc, button
 //         [data-cases-stat]   × ?            — stat card, staggers up
@@ -46,8 +46,15 @@ function formatCount(c, v) {
 function labelFor(panel, i) {
   const attr = panel.getAttribute('data-cases-label');
   if (attr && attr.trim()) return attr.trim();
+  // Eyebrow text, or a logo's alt text when the eyebrow is a client logo
   const eyebrow = panel.querySelector('[data-cases-eyebrow]');
-  return eyebrow ? eyebrow.textContent.trim() : String(i + 1).padStart(2, '0');
+  const text = eyebrow ? eyebrow.textContent.trim() : '';
+  if (text) return text;
+  const logo = eyebrow && eyebrow.querySelector('img[alt]');
+  const alt = logo ? logo.getAttribute('alt').trim() : '';
+  if (alt) return alt;
+  const title = panel.querySelector('[data-cases-title]');
+  return title && title.textContent.trim() ? title.textContent.trim() : String(i + 1).padStart(2, '0');
 }
 
 function initInstance(wrap) {

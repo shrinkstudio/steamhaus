@@ -4,11 +4,11 @@ Module: `src/scripts/cases.js`, auto-inits on `[data-cases]`. Replaces `case-sli
 Local demo: `preview/cases.html`.
 
 ## Components
-- **Case Panel** (CMS group, closed). Props: Client Label, Headline, Summary, Button Text, Link, Image, Image Alt, Show Stats, Stat 1/2 Value + Label. Inside: Image (Background), Eyebrow (Dot), Heading (H2), Plain Text (Paragraph LG), Button (Secondary, `ph ph-arrow-bend-down-right`), two `cases_stat` cards.
-- **[CMS] Case Study Tabs** (CMS group, closed). `section.cases_wrap[data-cases][data-cases-duration]` > media / scrim / blur > `cases_contain` > Collection List (Case Studies, Show on Slider? on, Display Order asc, limit 6) with a Case Panel per item > `cases_tablist`; hidden `cases_template` holds the one tab the script clones.
+- **Case Panel** (CMS group, closed). Props: Client Label, Logo, Headline, Summary, Button Text, Link, Image, Image Alt, Show Stats, Stat 1/2 Value + Label. Stacked top to bottom (Ally, 24 Nov, after createfuture.com): `cases_logo[data-cases-eyebrow]` > `img.cases_logo_img` (Logo prop, alt = Client Label, shown white via filter), Heading (h3 tag, H4 size), Plain Text, two `cases_stat` cards, Button (Secondary, `ph ph-arrow-bend-down-right`). Tab labels read the logo alt.
+- **[CMS] Case Study Tabs** (CMS group, closed). `section.cases_wrap[data-cases][data-cases-duration]` > media / scrim / blur > `cases_contain` > `cases_head` (Eyebrow (Dot) + Heading h2/H3 size, bound to Section Eyebrow / Section Heading props) > Collection List (Case Studies, Show on Slider? on, Display Order asc, limit 6) with a Case Panel per item > `cases_tablist`; hidden `cases_template` holds the one tab the script clones.
 
 ## Bindings (Case Panel instance in the list item)
-Client Label = Slider Label · Headline = Slider Headline · Summary = Summary · Image = Thumbnail Image (switch to Slider Image once populated) · Stat 1/2 = Stat #1/#2 fields · Link = current Case Study (Designer only).
+Client Label = Slider Label · Logo = Client: Logo · Headline = Slider Headline · Summary = Summary · Image = Thumbnail Image (switch to Slider Image once populated) · Stat 1/2 = Stat #1/#2 fields · Link = current Case Study (Designer only).
 
 ## CSS embed (Custom Code component, new "Case Study Tabs" group)
 Only what classes can't express. Everything else is on the classes, bound to variables.
@@ -19,7 +19,6 @@ Only what classes can't express. Everything else is on the classes, bound to var
 html.wf-design-mode .cases_item:not(:first-child) { display: none; }
 .cases_bg { will-change: transform, clip-path; }
 .cases_bg img { width: 100%; height: 100%; object-fit: cover; }
-.cases_title { font-size: calc(var(--_typography---h2--font-size) * .92); }
 .cases_line { padding-bottom: .12em; margin-bottom: -.12em; }
 .cases_text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: clip; }
 .cases_stat_value { font-variant-numeric: tabular-nums; }
