@@ -1,11 +1,10 @@
 {
   "name": "steamhaus",
   "version": "1.0.0",
-  "description": "Steamhaus Webflow site — JS bundle served via JSDelivr",
+  "description": "Steamhaus Webflow scripts. Source for the snippets pasted into Webflow; the site runs on the copies in Webflow.",
   "type": "module",
   "scripts": {
-    "build": "node build.js",
-    "watch": "node build.js --watch"
+    "build": "node webflow-build.js"
   },
   "devDependencies": {
     "esbuild": "^0.27.4"
