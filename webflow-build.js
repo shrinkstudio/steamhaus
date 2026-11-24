@@ -15,6 +15,7 @@ const features = {
   filter: ['Filter', 'filter-basic.js', 'initFilterBasic'],
   'dot-field': ['Dot field', 'dot-field.js', 'initDotField'],
   'form-validate': ['Form validation', 'form-validate.js', 'initFormValidate'],
+  hubspot: ['HubSpot', 'hubspot.js', 'initHubspot'],
 };
 
 const opts = (contents) => ({

@@ -1,0 +1,79 @@
+<!-- HubSpot -->
+<script>
+(() => {
+  var DEFAULT_PORTAL = "146587444";
+  var DEFAULT_REGION = "eu1";
+  var FIELD_MAP = {
+    "first-name": "firstname",
+    "last-name": "lastname",
+    email: "email",
+    message: "message",
+    company: "company",
+    "company-name": "company",
+    phone: "phone"
+  };
+  function endpoint(portal, region, guid) {
+    const host = region && region !== "na1" ? `api-${region}.hsforms.com` : "api.hsforms.com";
+    return `https://${host}/submissions/v3/integration/submit/${portal}/${guid}`;
+  }
+  function hutk() {
+    const m = document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/);
+    return m ? m[1] : void 0;
+  }
+  function labelText(input) {
+    const label = input.closest("label");
+    const span = label && label.querySelector(".w-form-label, .radiocheck-label");
+    return (span || label ? (span || label).textContent : input.name).replace(/\*/g, "").trim();
+  }
+  function collect(form) {
+    const fields = {};
+    const reasons = [];
+    form.querySelectorAll("input, textarea, select").forEach((el) => {
+      if (el.type === "submit" || el.type === "hidden") return;
+      const prop = el.getAttribute("data-hubspot-field") || FIELD_MAP[(el.name || "").toLowerCase()];
+      if (el.type === "checkbox" || el.type === "radio") {
+        if (!el.checked) return;
+        if (prop) fields[prop] = el.type === "checkbox" ? "true" : el.value;
+        else if (!/terms|consent|privacy/i.test(el.name)) reasons.push(labelText(el));
+        return;
+      }
+      if (prop && el.value.trim()) fields[prop] = el.value.trim();
+    });
+    if (reasons.length) {
+      const prefix = "Reason: " + reasons.join(", ");
+      fields.message = fields.message ? prefix + "\n\n" + fields.message : prefix;
+    }
+    return Object.keys(fields).map((name) => ({ name, value: fields[name] }));
+  }
+  function send(form) {
+    const guid = form.getAttribute("data-hubspot-form");
+    if (!guid) return;
+    const portal = form.getAttribute("data-hubspot-portal") || DEFAULT_PORTAL;
+    const region = form.getAttribute("data-hubspot-region") || DEFAULT_REGION;
+    const context = { pageUri: location.href, pageName: document.title };
+    const token = hutk();
+    if (token) context.hutk = token;
+    fetch(endpoint(portal, region, guid), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields: collect(form), context }),
+      keepalive: true
+    }).then((res) => {
+      if (!res.ok) res.text().then((t) => console.warn("[hubspot] rejected", res.status, t));
+    }).catch((err) => console.warn("[hubspot] failed", err));
+  }
+  function initHubspot(scope) {
+    (scope || document).querySelectorAll("form[data-hubspot-form]").forEach((form) => {
+      if (form.__hubspotInit) return;
+      form.__hubspotInit = true;
+      form.addEventListener("submit", () => send(form), true);
+    });
+  }
+
+  if (!window.__sh_hubspot) {
+    window.__sh_hubspot = true;
+    const run = () => initHubspot(document);
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", run) : run();
+  }
+})();
+</script>
