@@ -75,7 +75,7 @@ function findEl(scope, name, instance) {
   return scope.querySelector(sel);
 }
 
-function findMatchingList(doc, instance) {
+function findMatchingList(doc, instance, index) {
   var lists = doc.querySelectorAll('[data-list-load]');
   if (instance) {
     for (var i = 0; i < lists.length; i++) {
@@ -83,7 +83,8 @@ function findMatchingList(doc, instance) {
     }
     return null;
   }
-  return lists[0] || null;
+  // No instance set: match by position among the page's lists
+  return lists[index] || null;
 }
 
 function animateItems(items, staggerMs) {
@@ -103,7 +104,7 @@ function refreshLayout() {
   if (window.__steamhausLenis) window.__steamhausLenis.resize();
 }
 
-function initInstance(listEl, scope) {
+function initInstance(listEl, scope, index) {
   var mode = listEl.getAttribute('data-list-load');
 
   // Support attribute on .w-dyn-list (wrapper) OR .w-dyn-items (list itself)
@@ -169,7 +170,7 @@ function initInstance(listEl, scope) {
       .then(function (doc) {
         if (destroyed) return false;
 
-        var fetchedEl = findMatchingList(doc, instance);
+        var fetchedEl = findMatchingList(doc, instance, index);
         if (!fetchedEl) {
           nextUrl = null;
           return false;
@@ -220,7 +221,9 @@ function initInstance(listEl, scope) {
 
   // --- Mode: more ---
   if (mode === 'more') {
-    buttonEl = findEl(scope, 'button', instance);
+    // No instance set: use the button in this list's own section
+    var buttonScope = instance ? scope : (listEl.closest('section, .section') || scope);
+    buttonEl = findEl(buttonScope, 'button', instance);
 
     if (buttonEl) {
       if (!nextUrl) buttonEl.style.display = 'none';
@@ -287,8 +290,8 @@ export function initListLoad(scope) {
   if (!lists.length) return;
   injectSpinnerStyles();
 
-  lists.forEach(function (listEl) {
-    var cleanup = initInstance(listEl, scope);
+  lists.forEach(function (listEl, index) {
+    var cleanup = initInstance(listEl, scope, index);
     if (cleanup) cleanups.push(cleanup);
   });
 }
