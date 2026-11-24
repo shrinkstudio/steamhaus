@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steamhaus — Why Steamhaus layout options</title>
+<!-- Live Webflow CSS: MAST tokens, type, buttons and utilities match staging -->
+<link rel="stylesheet" href="https://cdn.prod.website-files.com/69c4098abe013253584446a0/css/steamhaus-2026.webflow.shared.9aef4471d.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Manrope:400,500,600,700%7CSpace+Mono:400,700&display=swap" />
+<style>
+  body { margin: 0; background-color: #f7f7f7; }
+  .demo_label { position: sticky; top: 0; z-index: 10; padding: .75rem 1.5rem; background: #00160e; color: #fff; font-family: var(--_typography---fonts--secondary-font); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+  .demo_label span { opacity: .6; }
+
+  /* ---------- shared: section shell + header (MAST classes, layout only here) ---------- */
+  .why_wrap { padding-block: var(--_components---section--padding, 7rem); background-color: #f7f7f7; color: var(--_color---primary--brand-darkest); }
+  .why_wrap.is-white { background-color: #fff; }
+  .why_contain { width: calc(100% - var(--_components---container--gutter, 1.5rem) * 2); max-width: var(--_components---container--max-width); margin-inline: auto; }
+  .why_head { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 4fr); gap: 2rem 4rem; align-items: end; margin-bottom: 4rem; }
+  .why_head .heading-text { margin: 0; }
+  .why_head_side .plain-text { margin-bottom: 1.5rem; }
+  .why_num { font-family: var(--_typography---fonts--secondary-font); font-size: .875rem; letter-spacing: .08em; color: var(--_color---secondary--peach-darker, #c46a4c); }
+  .why_title { margin: 0; font-family: var(--_typography---fonts--primary-font); font-size: 1.5rem; font-weight: 600; line-height: 1.2; letter-spacing: -.02em; text-wrap: balance; }
+  .why_text { margin: 0; font-size: 1.0625rem; line-height: 1.55; color: color-mix(in srgb, var(--_color---primary--brand-darkest) 70%, transparent); text-wrap: pretty; }
+  .why_logo { height: 3.5rem; width: auto; max-width: 7rem; object-fit: contain; }
+  .why_creds_label { font-family: var(--_typography---fonts--secondary-font); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: color-mix(in srgb, var(--_color---primary--brand-darkest) 55%, transparent); }
+
+  /* ---------- A: Bars (Create Future ref) ---------- */
+  .why-a_points { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem; }
+  .why-a_point { display: flex; flex-direction: column; gap: 1rem; padding-left: 1.5rem; border-left: 2px solid transparent; border-image: linear-gradient(180deg, var(--_color---secondary--peach, #f29b7c), color-mix(in srgb, var(--_color---secondary--peach, #f29b7c) 0%, transparent)) 1; }
+  .why-a_point .why_title { margin-top: 1.5rem; }
+  .why-a_bar { display: grid; grid-template-columns: 10rem repeat(7, minmax(0, 1fr)); align-items: center; margin-top: 5rem; padding: 1.5rem 2rem; border-radius: var(--_components---card--border-radius, 1rem); background: #fff; }
+  .why-a_bar > * { display: flex; justify-content: center; align-items: center; min-height: 4rem; }
+  .why-a_bar > *:not(:first-child) { border-left: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 10%, transparent); }
+  .why-a_bar > .why_creds_label { justify-content: flex-start; }
+
+  /* ---------- B: Editorial rows ---------- */
+  .why-b_grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 4rem; }
+  .why-b_side { position: sticky; top: 6rem; align-self: start; }
+  .why-b_side .heading-text { margin: 0 0 1.5rem; }
+  .why-b_side .plain-text { margin-bottom: 1.5rem; }
+  .why-b_rows { border-top: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 14%, transparent); }
+  .why-b_row { display: grid; grid-template-columns: 4rem minmax(0, 5fr) minmax(0, 6fr); gap: 2rem; padding-block: 2.25rem; border-bottom: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 14%, transparent); }
+  .why-b_row .why_num { padding-top: .35rem; }
+  .why-b_creds { display: flex; flex-wrap: wrap; align-items: center; gap: 2rem 3rem; margin-top: 3rem; }
+  .why-b_creds .why_creds_label { flex-basis: 100%; }
+
+  /* ---------- C: 2x2 split with hairlines ---------- */
+  .why-c_grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .why-c_cell { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 1.5rem; padding: 3rem 3rem 3rem 0; }
+  .why-c_cell:nth-child(even) { padding: 3rem 0 3rem 3rem; border-left: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 14%, transparent); }
+  .why-c_cell:nth-child(n+3) { border-top: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 14%, transparent); }
+  .why-c_big { grid-row: span 2; font-family: var(--_typography---fonts--primary-font); font-size: 3.5rem; font-weight: 600; line-height: 1; letter-spacing: -.04em; color: var(--_color---primary--brand-light, #3c6e57); }
+  .why-c_cell .why_title { margin-bottom: .75rem; }
+  .why-c_creds { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: center; justify-items: center; gap: 2rem; margin-top: 3rem; padding-top: 3rem; border-top: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 14%, transparent); }
+  .why-c_creds .why_creds_label { grid-column: 1 / -1; justify-self: start; }
+
+  /* ---------- tablet / mobile ---------- */
+  @media (max-width: 991px) {
+    .why_head, .why-b_grid { grid-template-columns: minmax(0, 1fr); }
+    .why-b_side { position: static; }
+    .why-a_points { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem 2rem; }
+    .why-a_bar { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 1rem; }
+    .why-a_bar > .why_creds_label { grid-column: 1 / -1; }
+    .why-a_bar > *:nth-child(5n+2) { border-left: 0; }
+    .why-c_creds { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: 767px) {
+    .why-a_points, .why-c_grid { grid-template-columns: minmax(0, 1fr); }
+    .why-c_cell, .why-c_cell:nth-child(even) { padding: 2rem 0; border-left: 0; }
+    .why-c_cell:nth-child(n+2) { border-top: 1px solid color-mix(in srgb, var(--_color---primary--brand-darkest) 14%, transparent); }
+    .why-b_row { grid-template-columns: 2.5rem minmax(0, 1fr); }
+    .why-b_row .why_text { grid-column: 2; }
+    .why-a_bar, .why-c_creds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .why-a_bar > * { border-left: 0 !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Shared header, cloned per option by the script at the bottom -->
+<template id="why-head">
+  <div class="why_head">
+    <div>
+      <div class="eyebrow-component cc-eyebrow-dot"><div class="u-d-flex cc-eyebrow-dot"><div class="eyebrow-dot"></div><div class="eyebrow u-mb-0">Why Steamhaus</div></div></div>
+      <div class="heading-component"><h2 class="heading-text w-variant-70c6f07f-bb2a-4ede-3aeb-15ccf0589766">Expertise that stays with your team.</h2></div>
+    </div>
+    <div class="why_head_side">
+      <div class="plain-text-component"><div class="plain-text">Not what we do — how having all of it, done right, changes the outcome.</div></div>
+      <a href="#" class="button w-variant-dbdbbc75-03f4-075f-db6d-0a209c7382f0 w-inline-block"><div class="btn-text">What we do</div></a>
+    </div>
+  </div>
+</template>
+
+<!-- ======================= A: BARS ======================= -->
+<div class="demo_label">Option A · Bars <span>(Create Future "Frontier thinking" ref: rules not boxes, logos in one divided bar)</span></div>
+<section class="why_wrap" aria-label="Why Steamhaus">
+  <div class="why_contain">
+    <div data-head></div>
+    <div class="why-a_points" data-points="a"></div>
+    <div class="why-a_bar"><div class="why_creds_label">Partnerships &amp;<br />credentials</div></div>
+  </div>
+</section>
+
+<!-- ======================= B: EDITORIAL ROWS ======================= -->
+<div class="demo_label">Option B · Editorial rows <span>(heading holds left, four points read as a list with hairlines)</span></div>
+<section class="why_wrap is-white" aria-label="Why Steamhaus">
+  <div class="why_contain">
+    <div class="why-b_grid">
+      <div class="why-b_side" data-head-stack></div>
+      <div>
+        <div class="why-b_rows" data-points="b"></div>
+        <div class="why-b_creds"><div class="why_creds_label">Partnerships &amp; credentials</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= C: 2x2 SPLIT ======================= -->
+<div class="demo_label">Option C · 2×2 split <span>(big index numbers, hairline cross, logos as a static grid)</span></div>
+<section class="why_wrap" aria-label="Why Steamhaus">
+  <div class="why_contain">
+    <div data-head></div>
+    <div class="why-c_grid" data-points="c"></div>
+    <div class="why-c_creds"><div class="why_creds_label">Partnerships &amp; credentials</div></div>
+  </div>
+</section>
+
+<script>
+  const points = [
+    ['AWS foundations, built right', 'Platforms that are secure and resilient from day one, built on more than a decade of work on AWS.'],
+    ['Senior-led, AI accelerated', 'Experienced engineers make every decision, and AI-native delivery gets results into production sooner.'],
+    ['Outcome-focused delivery', 'Every engagement is measured by real progress against the result it’s meant to deliver, not by time logged.'],
+    ['Embedded with your team', 'We work as part of your team from day one, building side by side and leaving you with a platform your engineers can own and extend.'],
+  ];
+  const B = 'https://cdn.prod.website-files.com/69c4098cbe01325358444761/';
+  const logos = [
+    ['AWS Advanced Tier Services Partner', '69fc7e44d152c061ecd3b3de_690c6e9c5a64afc0bed2a4c6_tiered%2520badge.svg'],
+    ['Anthropic', '6ae36334f2449c22d6ab2fcb_anthropic-logo-icon-freelogovectors.net_%20(1).png'],
+    ['ISO 27001', '6ae363acb56234823b82bc89_iso%2027001%20cert.png'],
+    ['FSQS Registered', '6ae3642b97e51452ca82d2e6_fsqs%20registered%20logo.png'],
+    ['Certified B Corporation', '6ae361f3088783836f8abb70_Certified_B_Corporation_B_Corp_Logo_2022_Black_RGB.svg.webp'],
+    ['Kubernetes certified', '6ae4b1ff90db32ad2b0f1630_kubernetes%20logo%20(1).png'],
+    ['Cloud Native Computing Foundation', '6ae4b1ec72bc95a5d3805efb_cloud%20native%20computing%20logo%20(1).png'],
+  ];
+  const n = (i) => String(i + 1).padStart(2, '0');
+  const head = document.getElementById('why-head').content;
+
+  document.querySelectorAll('[data-head]').forEach((el) => el.replaceWith(head.cloneNode(true)));
+  document.querySelectorAll('[data-head-stack]').forEach((el) => {
+    const h = head.cloneNode(true).querySelector('.why_head');
+    el.append(...h.children[0].childNodes, ...h.children[1].childNodes);
+  });
+
+  const tpl = {
+    a: ([t, d], i) => `<div class="why-a_point"><div class="why_num">${n(i)}</div><h3 class="why_title">${t}</h3><p class="why_text">${d}</p></div>`,
+    b: ([t, d], i) => `<div class="why-b_row"><div class="why_num">${n(i)}</div><h3 class="why_title">${t}</h3><p class="why_text">${d}</p></div>`,
+    c: ([t, d], i) => `<div class="why-c_cell"><div class="why-c_big">${n(i)}</div><h3 class="why_title">${t}</h3><p class="why_text">${d}</p></div>`,
+  };
+  document.querySelectorAll('[data-points]').forEach((el) => (el.innerHTML = points.map(tpl[el.dataset.points]).join('')));
+
+  const logoHTML = (wrap) => logos.map(([alt, f]) => `${wrap ? '<div>' : ''}<img class="why_logo" src="${B + f}" alt="${alt}" />${wrap ? '</div>' : ''}`).join('');
+  document.querySelector('.why-a_bar').insertAdjacentHTML('beforeend', logoHTML(true));
+  document.querySelector('.why-b_creds').insertAdjacentHTML('beforeend', logoHTML(false));
+  document.querySelector('.why-c_creds').insertAdjacentHTML('beforeend', logoHTML(false));
+</script>
+</body>
+</html>
