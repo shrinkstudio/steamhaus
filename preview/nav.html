@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nav dropdown preview</title>
+<link rel="stylesheet" href="https://cdn.prod.website-files.com/69c4098abe013253584446a0/css/steamhaus-2026.webflow.shared.077f5c0bd.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+  /* Mirrors the new Webflow classes until they're published */
+  .mega-nav__nav-link { position: relative; }
+  .nav-drop { position: absolute; top: calc(100% + .5rem); left: 0; z-index: 5; min-width: 100%; width: max-content; padding: .375em; border-radius: .25em; background: #fff; color: var(--_color---primary--brand); opacity: 0; visibility: hidden; }
+  .nav-drop__list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+  .nav-drop__link { display: block; padding: .5em .75em; border-radius: .25em; color: inherit; text-decoration: none; white-space: nowrap; font-size: 1rem; line-height: 1.3; transition: background-color .2s ease; }
+  .nav-drop__link:hover { background: rgba(0,22,14,.06); }
+  @media (max-width: 991px) {
+    .nav-drop { position: static; width: 100%; height: 0; overflow: hidden; padding: 0; background: transparent; color: inherit; opacity: 1; visibility: visible; }
+    .nav-drop__list { padding-bottom: .75em; }
+    .nav-drop__link { padding: .625em 0 .625em 1em; white-space: normal; font-size: 1.125rem; }
+  }
+  [data-menu-wrap] { --nav-height: 4em; }
+  .mega-nav__bar-link-icon.is--dropdown { transition: transform .3s ease; }
+  [aria-expanded='true'] .mega-nav__bar-link-icon.is--dropdown { transform: rotate(180deg); }
+  body { background: var(--_color---primary--brand); min-height: 200vh; }
+</style>
+</head>
+<body>
+<nav aria-label="Main" data-menu-wrap data-menu-open="false" class="mega-nav__wrap">
+  <div class="mega-nav__bar">
+    <div class="mega-nav__container">
+      <div class="mega-nav__bar-start">
+        <a aria-label="Steamhaus home" href="#" class="mega-nav__bar-logo"><strong style="color:#fff">STEAMHAUS</strong></a>
+        <div data-nav-list data-mobile-nav class="mega-nav__bar-inner">
+          <ul class="mega-nav__bar-list">
+            <li data-nav-list-item data-nav-drop class="mega-nav__nav-link">
+              <button type="button" data-nav-drop-toggle aria-controls="nav-drop-services" aria-expanded="false" class="mega-nav__bar-link is--dropdown">
+                <span class="mega-nav__bar-link-label">What We Do</span>
+                <div class="icon-color mega-nav__bar-link-icon is--dropdown"><span class="icon ph ph-arrow-elbow-right-down"></span></div>
+              </button>
+              <div id="nav-drop-services" data-nav-drop-panel class="nav-drop">
+                <div class="w-dyn-list"><div role="list" class="nav-drop__list w-dyn-items">
+                  <div role="listitem" class="w-dyn-item"><a href="#platform" class="nav-drop__link"><span class="nav-drop__text">Platform Engineering</span></a></div>
+                  <div role="listitem" class="w-dyn-item"><a href="#modernisation" class="nav-drop__link"><span class="nav-drop__text">Modernisation</span></a></div>
+                  <div role="listitem" class="w-dyn-item"><a href="#aws" class="nav-drop__link"><span class="nav-drop__text">AWS Managed Service</span></a></div>
+                  <div role="listitem" class="w-dyn-item"><a href="#ai" class="nav-drop__link"><span class="nav-drop__text">AI Engineering</span></a></div>
+                </div></div>
+              </div>
+            </li>
+            <li data-nav-list-item class="mega-nav__nav-link"><a href="#" class="mega-nav__bar-link"><span class="mega-nav__bar-link-label">Our Work</span></a></li>
+            <li data-nav-list-item class="mega-nav__nav-link"><a href="#" class="mega-nav__bar-link"><span class="mega-nav__bar-link-label">About</span></a></li>
+            <li data-nav-list-item class="mega-nav__nav-link"><a href="#" class="mega-nav__bar-link"><span class="mega-nav__bar-link-label">Insights</span></a></li>
+            <li data-nav-list-item class="mega-nav__nav-link"><a href="#" class="mega-nav__bar-link"><span class="mega-nav__bar-link-label">Careers</span></a></li>
+          </ul>
+        </div>
+        <div class="mega-nav__bar-end">
+          <button data-burger-toggle aria-label="toggle menu" aria-expanded="false" class="mega-nav__burger">
+            <span data-burger-line="top" class="mega-nav__burger-line"></span>
+            <span data-burger-line="mid" class="mega-nav__burger-line"></span>
+            <span data-burger-line="bot" class="mega-nav__burger-line"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+<script src="../dist/index.min.js"></script>
+</body>
+</html>
